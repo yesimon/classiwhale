@@ -1,0 +1,45 @@
+{% extends "base.html" %} 
+{% block title%}
+Contact Us
+{% endblock %} 
+
+{% block content %}
+
+<h1>Contact us</h1>
+{% if form.errors %}
+
+<p style="color: red;">
+Please correct the error
+{{ form.errors|pluralize }} below.
+</p>
+
+{% endif %}
+
+<form action="" method="post">
+<div class="field">
+	{{ form.subject.errors }}
+	<label for="id_subject">Subject:</label>
+	{{ form.subject }}
+</div>
+
+<div class="field">
+	{{ form.email.errors }}
+	<label for="id_email">Your e-mail address:</label>
+	{{ form.email }}
+</div>
+
+<div class="field{% if form.message.errors %} errors{% endif %}">
+{% if form.message.errors %}
+<ul>
+	{% for error in form.message.errors %}
+	<li><strong>{{ error }}</strong></li>
+	{% endfor %}
+</ul>
+{% endif %}
+<label for="id_message">Message:</label> {{ form.message }}
+</div>
+<input type="submit" value="Submit"></form>
+
+
+
+{% endblock %}
