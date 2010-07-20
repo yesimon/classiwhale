@@ -1,0 +1,54 @@
+* { margin: 0; padding: 0; }
+
+body {
+	font: 13px/20px "Lucida Grande", Arial, Sans-serif;
+	margin: 5px 5px 5px 5px;
+}
+
+div {
+	margin: 2px 2px 2px 2px;
+	padding: 2px 2px 2px 2px;
+	display: block;
+}
+
+#header {
+	width: 98%;
+	margin-bottom: 20px;
+}
+
+#header .logo {
+	height: 30px;
+	font-size: 30px;
+}
+
+#middle {
+	width: 98%;
+}
+
+form {
+	height: 80px;
+	width: auto;
+}
+
+#sidenav {
+	float: left;
+	width: 140px;
+}
+
+#sidenav ul {
+	display: block;
+	list-style-type: none;
+	width: 150px;
+}
+
+#content {
+	margin-left: 160px;
+	color: #333333 !important;
+	font-weight: normal;
+	text-align: left;
+	flush: left;
+}
+
+#footer {
+	width: 98%;
+}

@@ -1,0 +1,67 @@
+a.hilite {
+	background: yellow;
+	cursor: pointer;
+}
+
+.entry {
+	border-top: 1px solid #EEEEEE;
+	padding: 8px 0;
+	overflow: hidden;
+}
+
+.tweet-usr-profile {
+	height: 48px;
+	margin-bottom: 5px;
+	width: 48px;
+	display: block;
+	float: left;
+	overflow: hidden;
+	position: relative;
+	top: 2px;
+}
+
+.tweet-usr-profile img {
+	height: 48px;
+	width: 48px;
+	border-color: transparent;
+	border-width: 0;
+}
+
+.tweet-body {
+	margin-left: 58px;
+	opacity: 1;
+}
+
+.tweet-body p {
+	line-height: 18px !important;
+	color: #333333 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	width: auto !important;
+}
+
+#content a {
+	text-decoration: none !important;
+}
+
+.tweet-body a {
+	color: #2276BB !important;
+}
+
+.twtr-user {
+	display: inline;
+	font-weight: bold;
+}
+
+#content i {
+	display: block;
+	color: #999999 !important;
+	font-size: 11px;
+	line-height: 20px;
+	margin-top: 0;
+	font-style: normal;
+}
+
+.rate-link {
+	clear: both;
+}
