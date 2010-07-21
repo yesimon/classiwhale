@@ -44,6 +44,7 @@ def rate(request):
         details = StatusDetails.objects.get(user_profile=prof, status=s)
     except:
         details = StatusDetails.objects.create(status=s, user_profile=prof, rating=0)
+    
     if rating == u"up":
         details.rating=1
     elif rating == u"down":
