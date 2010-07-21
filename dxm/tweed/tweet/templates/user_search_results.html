@@ -1,0 +1,52 @@
+{% block extra_js %}
+<script type="text/javascript">
+	function rate(kind, foundid) {
+	  $.getJSON("/twitter/rate/", { rating: kind, id: foundid }, function(json){
+		alert("Was successful?: " + json['success']);
+	  });
+	}
+	function addClickHandlers() {
+		$(".like").click( function () { rate("up", $(this).closest(".entry").attr("id")); $(this).slideUp(); $(this).siblings().hide();});
+		$(".like").hover(function () { 
+			$(this).addClass("hilite");
+			}, function () {
+			$(this).removeClass("hilite") });
+		$(".dislike").click( function() { rate("down", $(this).closest(".entry").attr("id")); $(this).slideUp(); $(this).siblings().hide();}).hover(function () { 
+			$(this).addClass("hilite");
+			}, function () {
+			$(this).removeClass("hilite") });
+	}
+	$(document).ready(addClickHandlers);
+</script>
+{% endblock %}
+
+{% block content %}
+
+{% for status in user_statuses %}
+<div class="entry" id="{{ status.GetId }}">
+
+<div class="tweet-usr-profile"><a
+	href="http://twitter.com/{{ status.GetUser.GetScreenName }}"> <img
+	class="photo" width="48" height="48"
+	src="{{ status.GetUser.GetProfileImageUrl }}"
+	alt="{{ status.GetUser.GetName }} " /> </a></div>
+
+<div class="tweet-body">
+<p><a class="twtr-user"
+	href="http://twitter.com/{{ status.GetUser.GetScreenName }}">
+	{{ status.GetUser.GetScreenName }}</a> {{ status.GetText }} <a
+	class="tweet-hlink" href="http://twitpic.com/20seue" target="_blank"></a>
+
+<i> <a class="tweet-timestamp"
+	href="http://twitter.com/{{ status.GetUser.GetScreenName }}/status/{{ status.GetId }}"
+	target="_blank">{{ status.GetRelativeCreatedAt }}</a> </i></p>
+</div>
+<div class="rate-link"><a class="like">Like</a> <a class="dislike">Dislike</a>
+</div>
+</div>
+{% empty %}
+<div class="note">Your search yielded no results</div>
+{% endfor %}
+
+{% endblock %}
+
