@@ -1,4 +1,4 @@
-# Django settings for tweed project.
+# Django settings for dxm project.
 import os.path
 
 DEBUG = True
@@ -77,7 +77,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.csrf.middleware.CsrfMiddleware',
 )
 
-ROOT_URLCONF = 'tweed.urls'
+ROOT_URLCONF = 'dxm.urls'
 
 
 TEMPLATE_DIRS = (
@@ -93,6 +93,6 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'tweed.accounts',
-    'tweed.tweet'
+    'dxm.accounts',
+    'dxm.tweet'
     )

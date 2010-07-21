@@ -18,22 +18,22 @@ urlpatterns = patterns('',
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    (r'^$', 'tweed.tweet.views.list_statuses'),
+    (r'^$', 'dxm.tweet.views.list_statuses'),
     (r'^admin/', include(admin.site.urls)),
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': './static/'}),
     (r'^about/$', direct_to_template, {'template': 'about.html' }),
     (r'^about/(\w+)/$', 'about_pages'),
     (r'^accounts/login/$',  login, {'template_name': 'login.html'}),
     (r'^accounts/logout/$', logout, {'template_name': 'logged_out.html'}),
-    (r'^accounts/register/$', 'tweed.accounts.views.register'),
-    (r'^twitter/recent/$', 'tweed.tweet.views.RecentPublicPosts'),
-    (r'^twitter/rate/$', 'tweed.tweet.views.rate'),
-    (r'^twitter/$', 'tweed.tweet.views.list_statuses'),
-    (r'^twitter/search/$', 'tweed.tweet.views.user_search_index'),
-    (r'^twitter/search/user/$', 'tweed.tweet.views.ajax_user_search'),
+    (r'^accounts/register/$', 'dxm.accounts.views.register'),
+    (r'^twitter/recent/$', 'dxm.tweet.views.RecentPublicPosts'),
+    (r'^twitter/rate/$', 'dxm.tweet.views.rate'),
+    (r'^twitter/$', 'dxm.tweet.views.list_statuses'),
+    (r'^twitter/search/$', 'dxm.tweet.views.user_search_index'),
+    (r'^twitter/search/user/$', 'dxm.tweet.views.ajax_user_search'),
 )
 
-urlpatterns += patterns('tweed.contact.views',
+urlpatterns += patterns('dxm.contact.views',
     (r'^contact/$', 'contact'),
 )
 

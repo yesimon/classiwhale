@@ -2,12 +2,12 @@ from django.http import HttpResponse, Http404, HttpResponseBadRequest
 from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic import list_detail
 from django.core.exceptions import ObjectDoesNotExist
-from tweed.tweet.models import Status
+from dxm.tweet.models import Status
 from django.views.generic.simple import direct_to_template
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from tweed.accounts.models import UserProfile, StatusDetails
+from dxm.accounts.models import UserProfile, StatusDetails
 import twitter
 import json
 import time
@@ -102,3 +102,8 @@ def ajax_user_search(request):
             return render_to_response(template, data, 
                                        context_instance=RequestContext(request))
         
+def twitter_login(request):
+    pass
+
+def twitter_user_sync(request):
+    pass
