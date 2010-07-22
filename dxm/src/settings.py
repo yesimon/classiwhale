@@ -93,6 +93,6 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'dxm.accounts',
-    'dxm.tweet'
+    'accounts',
+    'tweet'
     )

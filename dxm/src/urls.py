@@ -25,15 +25,15 @@ urlpatterns = patterns('',
     (r'^about/(\w+)/$', 'about_pages'),
     (r'^accounts/login/$',  login, {'template_name': 'login.html'}),
     (r'^accounts/logout/$', logout, {'template_name': 'logged_out.html'}),
-    (r'^accounts/register/$', 'dxm.accounts.views.register'),
-    (r'^twitter/recent/$', 'dxm.tweet.views.RecentPublicPosts'),
-    (r'^twitter/rate/$', 'dxm.tweet.views.rate'),
-    (r'^twitter/$', 'dxm.tweet.views.list_statuses'),
-    (r'^twitter/search/$', 'dxm.tweet.views.user_search_index'),
-    (r'^twitter/search/user/$', 'dxm.tweet.views.ajax_user_search'),
+    (r'^accounts/register/$', 'accounts.views.register'),
+    (r'^twitter/recent/$', 'tweet.views.RecentPublicPosts'),
+    (r'^twitter/rate/$', 'tweet.views.rate'),
+    (r'^twitter/$', 'tweet.views.list_statuses'),
+    (r'^twitter/search/$', 'tweet.views.user_search_index'),
+    (r'^twitter/search/user/$', 'tweet.views.ajax_user_search'),
 )
 
-urlpatterns += patterns('dxm.contact.views',
+urlpatterns += patterns('contact.views',
     (r'^contact/$', 'contact'),
 )
 

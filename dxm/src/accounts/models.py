@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from dxm.tweet.models import Status
+from tweet.models import Status
 
 class UserProfile(models.Model):
     user = models.ForeignKey(User, unique=True)

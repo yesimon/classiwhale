@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
-from dxm.accounts.models import UserProfile
+from accounts.models import UserProfile
 
 
 

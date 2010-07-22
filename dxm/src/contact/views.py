@@ -1,7 +1,7 @@
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
-from dxm.contact.forms import ContactForm
+from contact.forms import ContactForm
 
 def contact(request):
     if request.method == 'POST':
