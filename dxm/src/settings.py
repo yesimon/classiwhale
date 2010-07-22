@@ -77,7 +77,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.csrf.middleware.CsrfMiddleware',
 )
 
-ROOT_URLCONF = 'dxm.urls'
+ROOT_URLCONF = 'urls'
 
 
 TEMPLATE_DIRS = (
