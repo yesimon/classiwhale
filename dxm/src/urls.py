@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    (r'^$', 'dxm.tweet.views.list_statuses'),
+    (r'^$', 'tweet.views.list_statuses'),
     (r'^admin/', include(admin.site.urls)),
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': './static/'}),
     (r'^about/$', direct_to_template, {'template': 'about.html' }),
