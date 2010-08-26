@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+Sync Twitter Account
+{% endblock %}
+ 
+{% block extra_js %}
+{% endblock %}
+
+{% block content %}
+
+
+{% if form.errors %}
+<p style="color: red;">
+Please correct the error
+{{ form.errors|pluralize }} below.
+</p>
+{% endif %}
+
+<form action="" method="post">
+<div class="field">
+	{{ form.t_username.errors }}
+	<label for="id_subject">Twitter Username:</label>
+	{{ form.t_username }}
+</div>
+
+<div class="field">
+	{{ form.t_pw.errors }}
+	<label for="id_email">Twitter Password:</label>
+	{{ form.t_pw }}
+</div>
+
+<input type="submit" value="Submit"></form>
+
+
+
+
+{% endblock %}

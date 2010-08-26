@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: oauth-python-twitter
+Version: 1.0
+Summary: OAuth implementation for python-twitter
+Home-page: http://code.google.com/p/oauth-python-twitter/
+Author: hameed.u.khan
+Author-email: hameed.u.khan@gmail.com
+License: Apache
+Description: UNKNOWN
+Keywords: oauth,python,twitter,django
+Platform: UNKNOWN
