@@ -4,6 +4,7 @@ from django.contrib.auth.views import login, logout
 from django.views.generic.simple import direct_to_template
 from django.views.generic import list_detail
 
+
 URL_LIST = {
     'About'     : 'about/',
     'Home'      : 'twitter/',
@@ -25,13 +26,12 @@ urlpatterns = patterns('',
     (r'^about/(\w+)/$', 'about_pages'),
     (r'^login/$', 'twitterauth.views.twitter_signin'),
     (r'^return/$', 'twitterauth.views.twitter_return'),
-    (r'^twitter/recent/$', 'tweet.views.RecentPublicPosts'),
-    (r'^twitter/rate/$', 'tweet.views.rate'),
-    (r'^twitter/$', 'tweet.views.list_statuses'),
-    (r'^twitter/search/$', 'tweet.views.user_search_index'),
-    (r'^twitter/search/user/$', 'tweet.views.ajax_user_search'),
-    (r'^twitter/login/$', 'tweet.views.twitter_login'),
-    (r'^twitter/sync/$', 'tweet.views.twitter_user_sync'),
+    #(r'^twitter/recent/$', 'tweet.views.RecentPublicPosts'),
+    #(r'^twitter/rate/$', 'tweet.views.rate'),
+    #(r'^twitter/$', 'tweet.views.list_statuses'),
+    #(r'^twitter/search/$', 'tweet.views.user_search_index'),
+    #(r'^twitter/search/user/$', 'tweet.views.ajax_user_search'),
+    (r'^twitter_app/', include('twitter_app.urls')),
 )
 
 urlpatterns += patterns('contact.views',

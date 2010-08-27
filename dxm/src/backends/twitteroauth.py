@@ -15,11 +15,12 @@ The profile models should have following fields:
 from django.conf import settings
 from django.contrib.auth.models import User
 
+
 import oauthtwitter
 
 
-CONSUMER_KEY = getattr(settings, 'CONSUMER_KEY', 'YOUR_KEY')
-CONSUMER_SECRET = getattr(settings, 'CONSUMER_SECRET', 'YOUR_SECRET')
+CONSUMER_KEY = getattr(settings, 'CONSUMER_KEY')
+CONSUMER_SECRET = getattr(settings, 'CONSUMER_SECRET')
 
 
 
@@ -36,9 +37,9 @@ class TwitterBackend:
             # If we cannot get the user information, user cannot be authenticated
             return None
 
-        screen_name = userinfo.screen_name
+        userid = userinfo.GetId()
 
-        user, created = User.objects.get_or_create(username=screen_name)
+        user, created = User.objects.get_or_create(username=userid)
         if created:
             # create and set a random password so user cannot login using django built-in authentication
             temp_password = User.objects.make_random_password(length=12)
@@ -49,7 +50,8 @@ class TwitterBackend:
 
         # Get the user profile
         userprofile = user.get_profile()
-        userprofile.access_token = access_token
+        userprofile.screen_name = user.GetScreenName()
+        userprofile.access_token = access_token.to_string()
         userprofile.url = userinfo.url
         userprofile.location = userinfo.location
         userprofile.description = userinfo.description

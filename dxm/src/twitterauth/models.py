@@ -4,8 +4,9 @@ from django.contrib.auth.models import User
 from tweet.models import Status
 
 class UserProfile(models.Model):
-    user = models.ForeignKey(User)
+    user = models.OneToOneField(User)
     access_token = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    screen_name = models.CharField(max_length=30, blank=True, null=True)
     profile_image_url = models.URLField(blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
     url = models.URLField(blank=True, null=True)

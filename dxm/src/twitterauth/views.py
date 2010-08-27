@@ -2,8 +2,8 @@ from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import login, authenticate
 
-from oauthtwitter import OAuthApi
-import oauth
+#from oauthtwitter import OAuthApi
+#import oauth.oauth as oauth
 
 CONSUMER_KEY = getattr(settings, 'CONSUMER_KEY', 'YOUR_KEY')
 CONSUMER_SECRET = getattr(settings, 'CONSUMER_SECRET', 'YOUR_SECRET')
