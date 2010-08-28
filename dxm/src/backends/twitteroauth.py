@@ -15,14 +15,26 @@ The profile models should have following fields:
 from django.conf import settings
 from django.contrib.auth.models import User
 
+import twitter
 
-import oauthtwitter
+import os
+import sys
 
+# parse_qsl moved to urlparse module in v2.6
+try:
+    from urlparse import parse_qsl
+except:
+    from cgi import parse_qsl
+
+import oauth2 as oauth
 
 CONSUMER_KEY = getattr(settings, 'CONSUMER_KEY')
 CONSUMER_SECRET = getattr(settings, 'CONSUMER_SECRET')
 
-
+REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token'
+ACCESS_TOKEN_URL  = 'https://api.twitter.com/oauth/access_token'
+AUTHORIZATION_URL = 'https://api.twitter.com/oauth/authorize'
+SIGNIN_URL        = 'https://api.twitter.com/oauth/authenticate'
 
 class TwitterBackend:
     """TwitterBackend for authentication
@@ -30,9 +42,12 @@ class TwitterBackend:
     def authenticate(self, access_token):
         '''authenticates the token by requesting user information from twitter
         '''
-        twitter = oauthtwitter.OAuthApi(CONSUMER_KEY, CONSUMER_SECRET, access_token)
+        twitter = twitter.Api(username=CONSUMER_KEY, password=CONSUMER_SECRET)
+        twitter.SetCredentials(username=CONSUMER_KEY, password=CONSUMER_SECRET, 
+                                access_token_key=access_token.key,
+                                access_token_secret=access_token.secret)
         try:
-            userinfo = twitter.GetUserInfo()
+            userinfo = twitter.VerifyCredentials()
         except:
             # If we cannot get the user information, user cannot be authenticated
             return None
