@@ -22,15 +22,15 @@ class Tweet(object):
 class Filter(object):
 
     def __init__(self, cluster = False, 
-                       discount = True, 
+                       discount = False, 
                        up_multiplier = 1,
                        down_multiplier = 1,
                        threshold = 0): 
         self.tweets = set() # tweets ::= set<(body, user, timestamp)>
         self.users = { }    # users ::= map<name, map<tweetName, rating>>
         self.learned = False
-        self.cluster = cluster # doesn't do anything right now
-        self.discount = discount
+        self.cluster = cluster      # doesn't do anything right now
+        self.discount = discount    # also doesn't do anything right now
         self.up = up_multiplier
         self.down = down_multiplier
         self.threshold = threshold

@@ -1,7 +1,5 @@
 from django.http import HttpResponse, Http404, HttpResponseBadRequest
-from django.shortcuts import render_to_response, get_object_or_404
-from django.views.generic import list_detail
-from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render_to_response 
 from tweet.models import Status
 from django.views.generic.simple import direct_to_template
 from django.template import RequestContext
@@ -11,8 +9,6 @@ from accounts.models import UserProfile, StatusDetails
 import twitter
 import json
 import time
-
-
 
 def RecentPublicPosts(request):
     api = twitter.Api()
