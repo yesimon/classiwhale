@@ -10,5 +10,7 @@
 </pydev_variables_property>
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
 <path>/dxm</path>
+<path>/dxm/src</path>
+<path>/dxm/src/twitter_app</path>
 </pydev_pathproperty>
 </pydev_project>

@@ -4,6 +4,7 @@ from django.contrib.auth.views import login, logout
 from django.views.generic.simple import direct_to_template
 from django.views.generic import list_detail
 
+
 URL_LIST = {
     'About'     : 'about/',
     'Home'      : 'twitter/',
@@ -23,14 +24,14 @@ urlpatterns = patterns('',
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': './static/'}),
     (r'^about/$', direct_to_template, {'template': 'about.html' }),
     (r'^about/(\w+)/$', 'about_pages'),
-    (r'^accounts/login/$',  login, {'template_name': 'login.html'}),
-    (r'^accounts/logout/$', logout, {'template_name': 'logged_out.html'}),
-    (r'^accounts/register/$', 'accounts.views.register'),
-    (r'^twitter/recent/$', 'tweet.views.RecentPublicPosts'),
-    (r'^twitter/rate/$', 'tweet.views.rate'),
-    (r'^twitter/$', 'tweet.views.list_statuses'),
-    (r'^twitter/search/$', 'tweet.views.user_search_index'),
-    (r'^twitter/search/user/$', 'tweet.views.ajax_user_search'),
+    (r'^login/$', 'twitterauth.views.twitter_signin'),
+    (r'^return/$', 'twitterauth.views.twitter_return'),
+    #(r'^twitter/recent/$', 'tweet.views.RecentPublicPosts'),
+    #(r'^twitter/rate/$', 'tweet.views.rate'),
+    #(r'^twitter/$', 'tweet.views.list_statuses'),
+    #(r'^twitter/search/$', 'tweet.views.user_search_index'),
+    #(r'^twitter/search/user/$', 'tweet.views.ajax_user_search'),
+    (r'^twitter_app/', include('twitter_app.urls')),
 )
 
 urlpatterns += patterns('contact.views',

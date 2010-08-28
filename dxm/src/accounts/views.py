@@ -6,15 +6,17 @@ from accounts.models import UserProfile
 
 
 
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            new_user = form.save()
-            UserProfile.objects.create(user=new_user)
-            return HttpResponseRedirect("/twitter/")
-    else:
-        form = UserCreationForm()
-    return render_to_response("register.html", {
-        'form': form, 
-    })
+#===============================================================================
+# def register(request):
+#    if request.method == 'POST':
+#        form = UserCreationForm(request.POST)
+#        if form.is_valid():
+#            new_user = form.save()
+#            UserProfile.objects.create(user=new_user)
+#            return HttpResponseRedirect("/twitter/")
+#    else:
+#        form = UserCreationForm()
+#    return render_to_response("register.html", {
+#        'form': form, 
+#    })
+#===============================================================================

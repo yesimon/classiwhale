@@ -51,7 +51,18 @@ ADMIN_MEDIA_PREFIX = '/media/'
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '=xleed6svvm^c8r(3ufrm6)ke%)f&+38g7t+zluth9=ap7i%gc'
 
-AUTH_PROFILE_MODULE = 'accounts.UserProfile'
+CONSUMER_KEY = 'H3jdfPuU3srfX2uo7LFQ1w'
+
+CONSUMER_SECRET = 'Fe0iHcfi8nubMBzjbcUuf6zRW8Nn9VgMJkiHcCdKwSw'
+
+AUTHENTICATION_BACKENDS = (
+    'backends.twitteroauth.TwitterBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+AUTH_PROFILE_MODULE = 'twitterauth.UserProfile'
+
+LOGIN_URL = '/login/'
 
 LOGIN_REDIRECT_URL = '/twitter/'
 
@@ -94,5 +105,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'accounts',
-    'tweet'
+    'tweet',
+    'twitter_app',
     )
