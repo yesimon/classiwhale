@@ -74,7 +74,7 @@ def twitter_return(request):
     # Comment out verifier if broken - doesn't seemed to be used by other implemenations
     request_token.set_verifier(request.GET.get('oauth_verifier')
 
-    'Generating and signing request for an access token'
+    # Generating and signing request for an access token
     access_token = _get_access_token(request_token)
 
 #    twitter = OAuthApi(CONSUMER_KEY, CONSUMER_SECRET, token)       Example code
