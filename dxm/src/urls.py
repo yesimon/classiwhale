@@ -31,7 +31,7 @@ urlpatterns = patterns('',
     #(r'^twitter/$', 'tweet.views.list_statuses'),
     #(r'^twitter/search/$', 'tweet.views.user_search_index'),
     #(r'^twitter/search/user/$', 'tweet.views.ajax_user_search'),
-    (r'^twitter_app/', include('twitter_app.urls')),
+    #(r'^twitter_app/', include('twitter_app.urls')),
 )
 
 urlpatterns += patterns('contact.views',
