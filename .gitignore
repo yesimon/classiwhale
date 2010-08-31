@@ -2,6 +2,7 @@ mydb.db
 .project
 .pydevproject
 *.pyc
+*.egg
 *~
 *.7z
 *.dmg
@@ -12,6 +13,7 @@ mydb.db
 *.tar
 *.zip
 
+*.wsgi
 *.log
 *.sql
 *.sqlite

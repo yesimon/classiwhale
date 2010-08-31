@@ -613,7 +613,6 @@ class Client(httplib2.Http):
             if not force_auth_header:
                 # don't call update twice.
                 headers.update(req.to_header())
-        print 'Headers: ' + str(headers)
         return httplib2.Http.request(self, uri, method=method, body=body, 
             headers=headers, redirections=redirections, 
             connection_type=connection_type)
@@ -674,8 +673,6 @@ class SignatureMethod_HMAC_SHA1(SignatureMethod):
     def sign(self, request, consumer, token):
         """Builds the base signature string."""
         key, raw = self.signing_base(request, consumer, token)
-        print 'signing base: ' + raw
-        print 'signing key: ' + key
         # HMAC object.
         try:
             import hashlib # 2.5
