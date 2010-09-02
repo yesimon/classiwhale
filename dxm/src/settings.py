@@ -22,7 +22,7 @@ DATABASE_PORT = ''             # Set to empty string for default. Not used with 
 # although not all choices may be available on all operating systems.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Vancouver'
+TIME_ZONE = 'America/Los_Angeles'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -34,6 +34,10 @@ SITE_ID = 1
 # to load the internationalization machinery.
 USE_I18N = True
 
+# Absolute root url of the site
+ROOT_URL = 'http://109.169.56.133/'
+
+
 # Absolute path to the directory that holds media. (this actually means uploaded media)
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = ''
@@ -41,7 +45,9 @@ MEDIA_ROOT = ''
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = '/static/'
+
+STATIC_DOC_ROOT = '/var/www/tweed/dxm/src/static/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -62,7 +68,9 @@ AUTHENTICATION_BACKENDS = (
 
 AUTH_PROFILE_MODULE = 'twitterauth.UserProfile'
 
-LOGIN_URL = '/login/'
+# These login urls require the path relative to the direct mount of / on the ip
+# address. This is a django restriction.
+LOGIN_URL = '/twitterauth/login/'
 
 LOGIN_REDIRECT_URL = '/twitter/'
 
@@ -104,7 +112,6 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'accounts',
     'tweet',
     'twitterauth',
     'backends',

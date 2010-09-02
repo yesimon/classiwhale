@@ -10,6 +10,7 @@ The profile models should have following fields:
         location
         description
         profile_image_url
+        screen_name
 """
 
 from django.conf import settings
@@ -42,16 +43,14 @@ class TwitterBackend:
     def authenticate(self, access_token):
         '''authenticates the token by requesting user information from twitter
         '''
-        twitter = twitter.Api(username=CONSUMER_KEY, password=CONSUMER_SECRET)
-        twitter.SetCredentials(username=CONSUMER_KEY, password=CONSUMER_SECRET, 
-                                access_token_key=access_token.key,
-                                access_token_secret=access_token.secret)
+        twitter_api = twitter.Api(username=CONSUMER_KEY, password=CONSUMER_SECRET,
+                                  access_token_key=access_token.key,
+                                  access_token_secret=access_token.secret)
         try:
-            userinfo = twitter.VerifyCredentials()
+            userinfo = twitter_api.VerifyCredentials()
         except:
             # If we cannot get the user information, user cannot be authenticated
             return None
-
         userid = userinfo.GetId()
 
         user, created = User.objects.get_or_create(username=userid)
@@ -65,7 +64,7 @@ class TwitterBackend:
 
         # Get the user profile
         userprofile = user.get_profile()
-        userprofile.screen_name = user.GetScreenName()
+        userprofile.screen_name = userinfo.GetScreenName()
         userprofile.access_token = access_token.to_string()
         userprofile.url = userinfo.url
         userprofile.location = userinfo.location

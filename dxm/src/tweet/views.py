@@ -14,7 +14,7 @@ import time
 
 
 
-def RecentPublicPosts(request):
+def recent_public_posts(request):
     api = twitter.Api()
     recentStatuses = api.GetPublicTimeline()
     statusJson = recentStatuses[0].AsJsonString()

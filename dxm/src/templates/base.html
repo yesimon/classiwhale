@@ -21,39 +21,44 @@
 
 <body>
 
+<div id="nav">
+<ul>
+{% if user.is_authenticated %}
+    <li id="nav-logout"><a href="{% url twitterauth.views.twitter_logout %}">Logout</a></i>
+{% else %}
+    <li id="nav-login"><a href="{% url twitterauth.views.twitter_login %}">Login</a></li>
+{% endif %}
+    <li id="nav-about"><a href="/about">About</a></li>
+    <li id="nav-ratings"><a href="#">Ratings</a></li>
+    <li id="nav-recent"><a href="{% url tweet.views.recent_public_posts %}">Recent</a></li>
+    <li id="nav-search"><a href="{% url tweet.views.user_search_index %}">Search</a></li>
+    <li id="nav-home"><a href="{% url tweet.views.list_statuses %}">Home</a></li>
+{% if user.is_authenticated %}
+    <li id="nav-profile"><a href="#">{{ user.get_profile.screen_name }}</a></li>
+{% endif %}
+</ul>
+</div>
+
+<div style="clear: both;"></div>
+
 <div id="header">
 	<div class="logo">Tweed</div>
 </div>
 
 
+
+
 <div id="middle">
 
-<div id="sidenav">
-<ul>
-	<li><a href="{% url tweet.views.list_statuses %}">Home</a></li>
-	<li><a href="{% url tweet.views.RecentPublicPosts %}">Recent</a></li>
-	<li><a href="{% url tweet.views.user_search_index %}">Search</a></li>
-	<li><a href="/about">About</a></li>
-</ul>
-
-</div>
 <div id="content">
 {% block content %}
 {% endblock %}
 </div>
 
 </div>
+
 <div id="footer">
 {% block footer %}
-<hr>
-
-{% if user.is_authenticated %} Welcome {{ user.username }}
-<a href="/accounts/logout/">Logout</a>
-{% else %}
-<a href="/accounts/login/">Login</a>
-<a href="/accounts/register/">Registration</a>
-{% endif %} 
-
 {% endblock %}
 </div>
 

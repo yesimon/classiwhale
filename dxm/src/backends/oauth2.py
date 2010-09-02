@@ -414,6 +414,8 @@ class Request(dict):
  
         if token:
             parameters['oauth_token'] = token.key
+        if token.verifier:
+            parameters['oauth_verifier'] = token.verifier
  
         return Request(http_method, http_url, parameters)
  
