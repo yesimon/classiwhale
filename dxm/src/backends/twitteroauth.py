@@ -18,24 +18,8 @@ from django.contrib.auth.models import User
 
 import twitter
 
-import os
-import sys
-
-# parse_qsl moved to urlparse module in v2.6
-try:
-    from urlparse import parse_qsl
-except:
-    from cgi import parse_qsl
-
-import oauth2 as oauth
-
 CONSUMER_KEY = getattr(settings, 'CONSUMER_KEY')
 CONSUMER_SECRET = getattr(settings, 'CONSUMER_SECRET')
-
-REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token'
-ACCESS_TOKEN_URL  = 'https://api.twitter.com/oauth/access_token'
-AUTHORIZATION_URL = 'https://api.twitter.com/oauth/authorize'
-SIGNIN_URL        = 'https://api.twitter.com/oauth/authenticate'
 
 class TwitterBackend:
     """TwitterBackend for authentication
@@ -55,9 +39,8 @@ class TwitterBackend:
 
         user, created = User.objects.get_or_create(username=userid)
         if created:
-            # create and set a random password so user cannot login using django built-in authentication
-            temp_password = User.objects.make_random_password(length=12)
-            user.set_password(temp_password)
+            # no password set since we validating through twitter oauth
+            user.set_unusable_password()
 
         user.first_name = userinfo.name
         user.save()

@@ -5,9 +5,13 @@ body {
 }
 
 div {
-	margin: 2px 2px 2px 2px;
-	padding: 2px 2px 2px 2px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 	display: block;
+}
+
+form {
+	display: inline;
 }
 
 #nav {
@@ -21,48 +25,82 @@ div {
 
 #nav li {
 	display: inline;
-	padding: 0;
-	margin: 0;
+	float: right;
+}
+
+#nav a,
+#nav li.searchContainer {
+	display: inline;
+	height: 20px;
+	padding: 4px 6px 4px 6px;
+	float: right;
+	border-right: 1px solid #000000;
+}
+
+#nav li.searchContainer {
+
+}
+
+#nav li.searchContainer div {
+	background-color: #FFFFFF;
+	display: inline;
+	padding: 2px 2px 2px 2px;
 }
 
 #nav a:link,
 #nav a:visited {
 	color: #FFD96A;
 	background: #0C6651;
-	padding: 4px 6px 4px 6px;
 	float: right;
 	width: auto;
-	border-right: 1px solid #000000;
 	text-decoration: none;
 }
 
 
 
 #nav a:hover,
-#nav a:focus {
+#nav a:focus,
+#nav #logo a:hover,
+#nav #logo a:focus {
 	color: #FFFFFF;
 	background: #001F11;
 }
 
-
-#header {
-	width: 98%;
-	margin: 5px 0px 20px 5px;
+#nav li.active a:link,
+#nav li.active a:visited {
+	color: #FFFFFF !important;
+	background: #001F11 !important;
 }
 
-#header .logo {
-	height: 30px;
-	font-size: 30px;
+.searchContainer div form input[type="text"] { 
+	border: none;
+}
+
+#nav li.searchContainer div form input[type="submit"]{
+	background: url(/static/magnifier.png) no-repeat;
+	width: 18px;
+	height: 20px;
+	border: none;
+	vertical-align: text-top; 
+	cursor: pointer;
+	text-indent: -9999px; /* hide text on button */
+	display: inline;
+}
+
+#nav #logo a {
+	border: none;
+	color: #FFD96A;
+	background: #0C6651;
+	padding: 4px 6px 4px 6px;
+	font: bold 13px/20px "Lucida Grande", Arial, Sans-serif;
+	float: left;
 }
 
 #middle {
 	width: 98%;
 }
 
-form {
-	height: 80px;
-	width: auto;
-}
+
 
 #sidenav {
 	float: left;

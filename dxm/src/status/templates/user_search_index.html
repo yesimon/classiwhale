@@ -13,7 +13,7 @@ $( document ).ready(
 				q = $('#q').val();
 				$('#results')
 					.html('&nbsp;')
-					.load('/twitter/search/user/?q=' + encodeURI(q));
+					.load('{% url search.views.user_search %}?q=' + encodeURI(q));
 			}
 		);
 		$( '#spinner' ).hide();
@@ -34,7 +34,7 @@ $( document ).ajaxStart(
 
 {% block content %}
 <div>
-	<input id="q" type="text" />
+	<input id="query" type="text" />
 	<input id="searchSubmit" type="submit" value="Search" />
 	<br />
 	

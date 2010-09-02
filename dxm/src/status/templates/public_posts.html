@@ -9,7 +9,7 @@ Recent Public Posts
 <script type="text/javascript">
 	function rate(kind, foundid) {
 	  $.post(
-        "/twitter/rate/", 
+        "{% url status.views.ajax_rate %}", 
         { rating: kind, id: foundid }
       );
 	}

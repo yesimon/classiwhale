@@ -1,0 +1,51 @@
+{% load base_extras %}
+
+<div id="topbar">
+
+
+
+<div id="nav">
+<div id="logo">
+    <a href="{% url status.views.list_statuses %}">Tweed</a>
+</div>
+<ul>
+{% if user.is_authenticated %}
+    <li>
+    <a href="{% url twitterauth.views.twitter_logout %}">Logout</a>
+    </li>
+{% else %}
+    <li>
+    <a href="{% url twitterauth.views.twitter_login %}">Login</a>
+    </li>
+{% endif %}
+    <li class="{% navactive request 'django.views.generic.simple.direct_to_template' %}">
+    <a href="/about">About</a>
+    </li>
+<!--    <li id="nav-ratings">
+    <a href="#">Ratings</a>
+-->
+    </li>
+    <li class="{% navactive request 'status.views.recent_public_posts' %}">
+    <a href="{% url status.views.recent_public_posts %}">Recent</a>
+    </li>
+    <li class="{% navactive request 'status.views.list_statuses' %}">
+    <a href="{% url status.views.list_statuses %}">Home</a>
+    </li>
+    <li class="searchContainer">
+    <div>
+    <form action="{% url search.views.user_search_index %}" method="get">
+    <input type="text" id="q" name="q"/>
+    <input type="submit" id="searchSubmit" alt="Search" />
+    </form>
+    </div>
+    </li>
+{% if user.is_authenticated %}
+    <li class="{% navactive request '' %}">
+    <a href="#">{{ user.get_profile.screen_name }}</a>
+    </li>
+{% endif %}
+</ul>
+</div>
+</div>
+
+<div style="clear: both;"></div>
