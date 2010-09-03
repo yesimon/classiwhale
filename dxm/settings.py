@@ -1,5 +1,10 @@
 # Django settings for dxm project.
 import os.path
+import sys
+from glob import glob
+
+for p in glob('../lib/*'):
+    sys.path.insert(0, p)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -37,7 +42,7 @@ USE_I18N = True
 # Absolute root url of the site
 ROOT_URL = 'http://109.169.56.133/'
 
-ROOT_PROJECT_PATH = '/var/www/tweed/dxm/src/'
+ROOT_PROJECT_PATH = '.'
 
 # Absolute path to the directory that holds media. (this actually means uploaded media)
 # Example: "/home/media/media.lawrence.com/"
