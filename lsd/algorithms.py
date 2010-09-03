@@ -12,12 +12,7 @@
 #       in the universe (in the core cluster of tweets rated by these people).
 
 import unittest
-
-class Tweet(object):
-    def __init__(self, body, user, timestamp):
-        self.body = body
-        self.user = user
-        self.timestamp = timestamp
+from models import Tweet
 
 class Filter(object):
 
