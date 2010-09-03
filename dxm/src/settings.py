@@ -37,6 +37,7 @@ USE_I18N = True
 # Absolute root url of the site
 ROOT_URL = 'http://109.169.56.133/'
 
+ROOT_PROJECT_PATH = '/var/www/tweed/dxm/src/'
 
 # Absolute path to the directory that holds media. (this actually means uploaded media)
 # Example: "/home/media/media.lawrence.com/"
@@ -47,7 +48,8 @@ MEDIA_ROOT = ''
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/static/'
 
-STATIC_DOC_ROOT = '/var/www/tweed/dxm/src/static/'
+
+STATIC_DOC_ROOT = os.path.join(ROOT_PROJECT_PATH, 'static')
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -72,7 +74,7 @@ AUTH_PROFILE_MODULE = 'twitterauth.UserProfile'
 # address. This is a django restriction.
 LOGIN_URL = '/twitterauth/login/'
 
-LOGIN_REDIRECT_URL = '/twitter/'
+LOGIN_REDIRECT_URL = '/'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -86,6 +88,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
+    "django.core.context_processors.request",
 )
 
 
@@ -112,7 +115,9 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'tweet',
+    'base',
     'twitterauth',
     'backends',
+    'status',
+    'search',
 )

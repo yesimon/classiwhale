@@ -6,28 +6,29 @@ from django.views.generic.simple import direct_to_template
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from twitterauth.models import UserProfile, StatusDetails
-from tweet.models import Status
+from twitterauth.utils import get_authorized_twitter_api
+from status.models import Status
+from django.template.loader import get_template
 import twitter
 import json
 import time
 
 
-
 def recent_public_posts(request):
     api = twitter.Api()
     recentStatuses = api.GetPublicTimeline()
-    statusJson = recentStatuses[0].AsJsonString()
-    jsonPackage = json.dumps([j.AsJsonString() for j in recentStatuses])
+#    statusJson = recentStatuses[0].AsJsonString()
+#    jsonPackage = json.dumps([j.AsJsonString() for j in recentStatuses])
+    statusJson, jsonPackage = None, None
     return render_to_response('public_posts.html',
-        {'recentStatuses': recentStatuses, 
-        'statusJson': statusJson,
-        'jsonPackage': jsonPackage},
+        {'recentStatuses': recentStatuses, },
         context_instance=RequestContext(request))
 
 
 @login_required
-def rate(request):
+def ajax_rate(request):
     results = {'success':'False'}
     if request.method != u'POST':
         return HttpResponseBadRequest("Only allows POST requests")
@@ -62,7 +63,7 @@ def list_statuses(request):
     statusObjects = prof.statuses.iterator()
     statuses_like = []
     statuses_dislike = []
-    api = twitter.Api()
+    api = get_authorized_twitter_api(request.session['access_token'])
     for statusObject in statusObjects:
         try:
             s = api.GetStatus(statusObject.id)
@@ -81,25 +82,3 @@ def list_statuses(request):
         context_instance=RequestContext(request)) 
         
 
-
-@login_required
-def user_search_index(request):    
-    template = 'user_search_index.html'
-    data = {
-    }
-    return render_to_response(template, data, 
-                               context_instance=RequestContext(request))
-
-def ajax_user_search(request):
-    if request.is_ajax():
-        searchString = request.GET.get('q')
-        if searchString is not None:
-            api = twitter.Api()
-            statuses = api.GetUserTimeline(user=searchString)
-            template = 'user_search_results.html'
-            data = {
-                'user_statuses': statuses,
-            }
-            return render_to_response(template, data, 
-                                       context_instance=RequestContext(request))
-        

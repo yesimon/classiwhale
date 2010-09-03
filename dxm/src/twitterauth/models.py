@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-from tweet.models import Status
+from status.models import Status
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)

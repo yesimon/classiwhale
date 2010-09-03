@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+
+<head>
+
+<link rel="stylesheet" href="/static/feed.css" />
+<link rel="stylesheet" href="/static/base.css" />
+<script type="text/javascript" src="/static/jquery-1.4.2.js"></script>
+<title>
+{% block title %}
+{% endblock %}
+</title>
+
+{% block extra_js %}
+{% endblock %}
+
+{% block extra_css %}
+{% endblock %}
+
+</head>
+
+<body>
+
+{% include "navigation.html" %}
+
+
+<div id="middle">
+
+<div id="content">
+{% block content %}
+{% endblock %}
+</div>
+
+</div>
+
+<div id="footer">
+{% block footer %}
+{% endblock %}
+</div>
+
+</body>
+</html>
