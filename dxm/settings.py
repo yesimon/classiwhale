@@ -2,7 +2,6 @@
 import os.path
 import sys
 from glob import glob
-
 for p in glob('../lib/*'):
     sys.path.insert(0, p)
 
@@ -11,6 +10,10 @@ TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
+    ('Simon Ye', 'simon@classiwhale.com'),
+    ('Dan Huang', 'dan@classiwhale.com'),
+    ('Alex Churchill', 'alex@classiwhale.com'),
+    ('Emilio Lopez', 'emilio@classiwhale.com'),
 )
 
 MANAGERS = ADMINS
@@ -21,6 +24,10 @@ DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+
+INTERNAL_IPS = (
+    '128.12.124.43',
+)
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -40,9 +47,11 @@ SITE_ID = 1
 USE_I18N = True
 
 # Absolute root url of the site
-ROOT_URL = 'http://109.169.56.133/'
+ROOT_URL = 'http://www.classiwhale.com'
 
-ROOT_PROJECT_PATH = '.'
+ROOT_PROJECT_PATH = '/var/www/tweed/dxm/'
+
+SERVER_EMAIL = 'server@classiwhale.com'
 
 # Absolute path to the directory that holds media. (this actually means uploaded media)
 # Example: "/home/media/media.lawrence.com/"
@@ -81,6 +90,9 @@ LOGIN_URL = '/twitterauth/login/'
 
 LOGIN_REDIRECT_URL = '/'
 
+IGNORABLE_404_STARTS = ('/cgi-bin/', '/_vti_bin', '/_vti_inf', '/static/')
+
+
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
@@ -98,6 +110,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 
 MIDDLEWARE_CLASSES = (
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -114,15 +127,37 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
+def always_show_toolbar(request):
+    return True # Always show debug toolbar
+
+DEBUG_TOOLBAR_CONFIG = {
+#    'SHOW_TOOLBAR_CALLBACK': always_show_toolbar,
+    'INTERCEPT_REDIRECTS': False,
+}
+
+
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.comments',
+    'django.contrib.markup',
+    'south',
+    'debug_toolbar',
+    'django_extensions',
     'base',
+    'tagging',
     'twitterauth',
     'backends',
+    'feedback',
     'status',
     'search',
 )
+
+# Load local settings for each machine
+try:
+    from local_settings import *
+except ImportError:
+    pass

@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse
+from django.core.urlresolvers import reverse
 from django.contrib.auth import login, logout, authenticate
 from twitterauth.utils import get_request_token, get_authorization_url, get_access_token
 
@@ -7,10 +8,9 @@ from urlparse import parse_qsl
 import oauth2 as oauth
 import twitter
 
-ROOT_URL = getattr(settings, 'ROOT_URL')
+
 CONSUMER_KEY = getattr(settings, 'CONSUMER_KEY')
 CONSUMER_SECRET = getattr(settings, 'CONSUMER_SECRET')
-OAUTH_CALLBACK_URL = ROOT_URL + 'twitterauth/return/'
 
 LOGIN_REDIRECT_URL = getattr(settings, 'LOGIN_REDIRECT_URL')
 
@@ -20,10 +20,11 @@ AUTHORIZATION_URL = 'https://api.twitter.com/oauth/authorize'
 SIGNIN_URL        = 'https://api.twitter.com/oauth/authenticate'
 
 def twitter_login(request):
+    oauth_callback_url = 'http://%s%s' % (request.get_host(), reverse('twitterauth.views.twitter_return'))
     if CONSUMER_KEY is None or CONSUMER_SECRET is None:
         # Django config must have a consumer key and secret
         raise Exception
-    request_token = get_request_token()
+    request_token = get_request_token(oauth_callback_url)
 
     request.session['request_token'] = request_token.to_string()
     return HttpResponseRedirect(get_authorization_url(request_token))

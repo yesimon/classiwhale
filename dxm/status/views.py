@@ -2,11 +2,11 @@ from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpRespo
 from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic import list_detail
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
 from django.views.generic.simple import direct_to_template
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
 from twitterauth.models import UserProfile, StatusDetails
 from twitterauth.utils import get_authorized_twitter_api
 from status.models import Status
@@ -18,16 +18,51 @@ import time
 
 def recent_public_posts(request):
     api = twitter.Api()
-    recentStatuses = api.GetPublicTimeline()
+    statuses = api.GetPublicTimeline()
 #    statusJson = recentStatuses[0].AsJsonString()
 #    jsonPackage = json.dumps([j.AsJsonString() for j in recentStatuses])
     statusJson, jsonPackage = None, None
     return render_to_response('public_posts.html',
-        {'recentStatuses': recentStatuses, },
+        {'statuses': statuses, },
         context_instance=RequestContext(request))
 
+def ajax_recent_public_posts(request):
+    results = {'success': 'False'}
+    api = twitter.Api()
+#    since_id = request.GET.since_id
+    results['statuses'] = api.GetPublicTimeline()
+    t = get_template('status_list.html')
+    results['success'] = 'True'
+    html = t.render(RequestContext(request, results))
+    return HttpResponse(html)
 
-@login_required
+
+def friends_timeline(request):
+    if not request.user.is_authenticated() or 'access_token' not in request.session:
+        return HttpResponseRedirect(reverse('status.views.recent_public_posts'))
+    api = get_authorized_twitter_api(request.session['access_token'])
+    statuses = api.GetFriendsTimeline()
+    friends = api.GetFriends()
+    return render_to_response('friends_timeline.html',
+        {'statuses': statuses,
+        'friends': friends,},
+        context_instance=RequestContext(request))
+
+def ajax_friend_timeline(request):
+    results = {'success': 'False'}
+    if request.method != u'GET':
+        return HttpResponseBadRequest('Must be GET request')
+    if not request.GET.has_key(u'screenname'):
+        return HttpResponseBadRequest('friend screenname missing')
+    screenname = request.GET[u'screenname']
+    Api = twitter.Api()
+    api = get_authorized_twitter_api(request.session['access_token'])
+    results['statuses'] = api.GetUserTimeline(id=screenname)
+    t = get_template('status_list.html')
+    results['success'] = 'True'
+    html = t.render(RequestContext(request, results))
+    return HttpResponse(html)
+
 def ajax_rate(request):
     results = {'success':'False'}
     if request.method != u'POST':

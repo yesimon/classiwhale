@@ -19,7 +19,7 @@ urlpatterns = patterns('',
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    (r'^$', 'status.views.recent_public_posts'),
+    (r'^$', 'status.views.friends_timeline'),
     (r'^admin/', include(admin.site.urls)),
     (r'^about/$', 'django.views.generic.simple.direct_to_template', {'template': 'about.html' }),
     (r'^about/(\w+)/$', 'about_pages'),
@@ -28,13 +28,20 @@ urlpatterns = patterns('',
     (r'^twitterauth/logout/$', 'twitterauth.views.twitter_logout', {'next_page': '/'}),
     (r'^status/recent/$', 'status.views.recent_public_posts'),
     (r'^status/ajaxrate/$', 'status.views.ajax_rate'),
+    (r'^status/ajaxpublicposts/$', 'status.views.ajax_recent_public_posts'),
+    (r'^status/ajaxfriendtimeline/$', 'status.views.ajax_friend_timeline'),
     (r'^status/$', 'status.views.list_statuses'),
     (r'^search/$', 'search.views.user_search_index'),
     (r'^search/user/$', 'search.views.ajax_user_search'),
+    (r'^feedback/ajax/(.*?)$', 'feedback.views.handle_ajax'),
 )
 
 urlpatterns += patterns('contact.views',
     (r'^contact/$', 'contact'),
+)
+
+urlpatterns += patterns('',
+    (r'^blog/', include('basic.blog.urls')),
 )
 
 if settings.DEBUG:    

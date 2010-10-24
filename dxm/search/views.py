@@ -12,7 +12,7 @@ import json
 def user_search_index(request):    
     searchString = request.GET.get('q')
     if searchString is not None:
-        api = authorize_twitter_api(request.session['access_token'])
+        api = get_authorized_twitter_api(request.session['access_token'])
         statuses = api.GetUserTimeline(id=searchString)
         template = 'user_search_results.html'
         data = {
@@ -26,7 +26,7 @@ def ajax_user_search(request):
     if request.is_ajax():
         searchString = request.GET.get('q')
         if searchString is not None:
-            api = authorize_twitter_api(request.session['access_token'])
+            api = get_authorized_twitter_api(request.session['access_token'])
             statuses = api.GetUserTimeline(id=searchString)
             template = 'user_search_results.html'
             data = {

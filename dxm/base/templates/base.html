@@ -2,10 +2,12 @@
 <html lang="en">
 
 <head>
-
+<link rel="shortcut icon" href="/static/favicon.png"/>
 <link rel="stylesheet" href="/static/feed.css" />
 <link rel="stylesheet" href="/static/base.css" />
 <script type="text/javascript" src="/static/jquery-1.4.2.js"></script>
+{% include "feedback/header.html" %}
+
 <title>
 {% block title %}
 {% endblock %}
@@ -17,12 +19,13 @@
 {% block extra_css %}
 {% endblock %}
 
+
 </head>
 
 <body>
 
 {% include "navigation.html" %}
-
+{% include "feedback/button.html" %}
 
 <div id="middle">
 

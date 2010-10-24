@@ -1,4 +1,8 @@
+/basic
+/bkm
+
 mydb.db
+.gitignore
 .project
 .pydevproject
 *.pyc

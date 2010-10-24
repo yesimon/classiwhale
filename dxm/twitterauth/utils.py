@@ -6,10 +6,8 @@ import oauth2 as oauth
 
 signature_method = oauth.SignatureMethod_HMAC_SHA1()
 
-ROOT_URL = getattr(settings, 'ROOT_URL')
 CONSUMER_KEY = getattr(settings, 'CONSUMER_KEY')
 CONSUMER_SECRET = getattr(settings, 'CONSUMER_SECRET')
-OAUTH_CALLBACK_URL = ROOT_URL + 'twitterauth/return/'
 
 LOGIN_REDIRECT_URL = getattr(settings, 'LOGIN_REDIRECT_URL')
 
@@ -30,12 +28,12 @@ def get_authorized_twitter_api(access_token_string):
     return api
 
 
-def get_request_token():
+def get_request_token(oauth_callback_url):
     oauth_client = oauth.Client(CONSUMER)
     oauth_client.set_signature_method(signature_method)
     #Requesting request token from Twitter
     resp, content = oauth_client.request(REQUEST_TOKEN_URL, 'POST', force_auth_header=True, 
-                                         parameters={'oauth_callback': OAUTH_CALLBACK_URL})
+                                         parameters={'oauth_callback': oauth_callback_url})
     if resp['status'] != '200':
         return HttpResponse("Invalid respond from Twitter requesting temp token: %s' % resp['status']")
     else:
