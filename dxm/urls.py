@@ -40,10 +40,6 @@ urlpatterns += patterns('contact.views',
     (r'^contact/$', 'contact'),
 )
 
-urlpatterns += patterns('',
-    (r'^blog/', include('basic.blog.urls')),
-)
-
 if settings.DEBUG:    
     urlpatterns += patterns('',
         (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_DOC_ROOT}),

@@ -25,8 +25,10 @@ DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
+import socket
 INTERNAL_IPS = (
-    '128.12.124.43',
+    socket.gethostbyname(socket.gethostname()),
+    '127.0.0.1',
 )
 
 # Local time zone for this installation. Choices can be found here:
@@ -49,7 +51,7 @@ USE_I18N = True
 # Absolute root url of the site
 ROOT_URL = 'http://www.classiwhale.com'
 
-ROOT_PROJECT_PATH = '/var/www/tweed/dxm/'
+ROOT_PROJECT_PATH = os.path.dirname(__file__).replace('\\','/')
 
 SERVER_EMAIL = 'server@classiwhale.com'
 
@@ -148,7 +150,6 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'django_extensions',
     'base',
-    'tagging',
     'twitterauth',
     'backends',
     'feedback',

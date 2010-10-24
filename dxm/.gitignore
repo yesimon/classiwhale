@@ -2,7 +2,8 @@
 /bkm
 
 mydb.db
-.gitignore
+local_settings.py
+
 .project
 .pydevproject
 *.pyc
@@ -24,5 +25,4 @@ mydb.db
 ehthumbs.db
 Icon?
 Thumbs.db
-/mydb.db
 /mydb.db
