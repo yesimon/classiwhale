@@ -2,44 +2,41 @@
 <html lang="en">
 
 <head>
-<link rel="shortcut icon" href="/static/favicon.png"/>
-<link rel="stylesheet" href="/static/feed.css" />
-<link rel="stylesheet" href="/static/base.css" />
-<script type="text/javascript" src="/static/jquery-1.4.2.js"></script>
-{% include "feedback/header.html" %}
-
-<title>
-{% block title %}
-{% endblock %}
-</title>
-
-{% block extra_js %}
-{% endblock %}
-
-{% block extra_css %}
-{% endblock %}
-
-
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" href="/static/feed.css" />
+    <link rel="stylesheet" href="/static/base.css" />
+    <script type="text/javascript" src="/static/jquery-1.4.4.min.js"></script>
+    {% include "feedback/header.html" %}
+    
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+    
+    {% block extra_js %}
+    {% endblock %}
+    
+    {% block extra_css %}
+    {% endblock %}
 </head>
 
+
 <body>
-
-{% include "navigation.html" %}
-{% include "feedback/button.html" %}
-
-<div id="middle">
-
-<div id="content">
-{% block content %}
-{% endblock %}
-</div>
-
-</div>
-
-<div id="footer">
-{% block footer %}
-{% endblock %}
-</div>
-
+    {% include "navigation.html" %}
+    {% include "feedback/button.html" %}
+    
+    <div id="middle">
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+    
+    <div id="footer">
+        {% block footer %}
+        {% endblock %}
+    </div>
 </body>
+
+
 </html>

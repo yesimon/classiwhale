@@ -8,30 +8,30 @@ Tweed: Home
 
 <script type="text/javascript">
     function getFriendTimeline(user) {
-    $.get(
-    "{% url status.views.ajax_friend_timeline %}",
-    { screenname: $.trim(user.text()) },
-    function(data) {
-        $(".statuses").remove();
-        $(data).hide().appendTo($(".status-container")).fadeIn();
-    }
-    )
+        $.get(
+            "{% url status.views.ajax_friend_timeline %}",
+            { screenname: $.trim(user.text()) },
+            function(data) {
+                $(".statuses").remove();
+                $(data).hide().appendTo($(".status-container")).fadeIn();
+            }
+        );
     }
 
     function addFriendTimelineHandlers() {
         $(".friend-container .user").click(
-	function(e) {
-	    e.preventDefault();
-	    getFriendTimeline($(this));
-	}
-        )
+        	function(e) {
+        	    e.preventDefault();
+        	    getFriendTimeline($(this));
+        	}
+        );
     }
 
 
     function rate(kind, foundid) {
         $.post(
-        "{% url status.views.ajax_rate %}", 
-        { rating: kind, id: foundid }
+            "{% url status.views.ajax_rate %}", 
+            { rating: kind, id: foundid }
         );
     }
 
@@ -50,43 +50,41 @@ Tweed: Home
     }
 
     function addRateLinkHandlers() {
-	$(".status-container .like").live("click", rateLike);
-	$(".status-container .dislike").live("click", rateDislike);
+    	$(".status-container .like").live("click", rateLike);
+    	$(".status-container .dislike").live("click", rateDislike);
     }
 
     function moveToRatings() {
-        $(this).
-	prependTo($(".rating-container>.ratings")).slideDown();
+        $(this).prependTo($(".rating-container>.ratings")).slideDown();
     }
 
+
     function loadStatuses() {
-    if ($(".status-container .entry").size() < 5)
-        {
-	$.get(
-	"{% url status.views.ajax_recent_public_posts %}",
-	function(data) {
-	    $(data).appendTo($(".status-container")).slideDown();
-	    addRateLinkHandlers();
-	});
+        if ($(".status-container .entry").size() < 5) {
+        	$.get(
+            	"{% url status.views.ajax_recent_public_posts %}",
+            	function(data) {
+            	    $(data).appendTo($(".status-container")).slideDown();
+            	    addRateLinkHandlers();
+            	}
+            );
         } 
     }
+
 
     function autoRefreshStatuses() {
         setInterval("loadStatuses()", 5000);
     }
 
     function startJS() {
-//        $(".hoverable").hover(
-//            function() { $(this).addClass("hilite"); },
-//            function() { $(this).removeClass("hilite"); }
-//        ); -->
         addRateLinkHandlers();
-	addFriendTimelineHandlers();
+        addFriendTimelineHandlers();
     }
     $(document).ready(startJS);	
 </script>
 
 {% endblock %} 
+
 
 {% block content %} 
 {% if errors %}
@@ -97,36 +95,26 @@ Tweed: Home
 </ul>
 {% endif %}
 
+
 <div class="status-container">
-
-<h2>Home</h2>
-
-
-{% include 'status_list.html' %}
-
-
+    <h2>Home</h2>
+    {% include 'status_list.html' %}
 </div>
+
 
 <!--
-
 <div class="rating-container">
-<h2>Ratings</h2>
-
-<div class="ratings">
-
-</div>
-
+    <h2>Ratings</h2>
+    <div class="ratings">
+    </div>
 </div>
 -->
 
+
 <div class="friend-container">
-
-<h2>Friends</h2>
-
-{% include 'friend_list.html' %}
-
+    <h2>Friends</h2>   
+    {% include 'friend_list.html' %}
 </div>
-
 
 
 

@@ -1,21 +1,16 @@
 <div class="friends">
 
-{% for user in friends %}
-
-<div class="user" id="user-{{ user.GetId }}">
-
-<a href="">
-<img class="photo" width="48" height="48" 
-    src="{{ user.GetProfileImageUrl }}"
-    alt="{{ user.GetName }}" />
-<span class="screen_name">{{ user.GetScreenName }}</span>
-</a>
-</div>
-
-
-
-{% empty %}
-There are no friends to display.
-{% endfor %}
+    {% for user in friends %}
+    
+    <div class="user" id="user-{{ user.GetId }}">
+        <a href="">
+            <img class="photo" width="48" height="48" src="{{ user.GetProfileImageUrl }}" alt="{{ user.GetName }}" />
+            <span class="screen_name">{{ user.GetScreenName }}</span>
+        </a>
+    </div>
+    
+    {% empty %}
+    There are no friends to display.
+    {% endfor %}
 
 </div>

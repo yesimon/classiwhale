@@ -26,6 +26,7 @@ def recent_public_posts(request):
         {'statuses': statuses, },
         context_instance=RequestContext(request))
 
+
 def ajax_recent_public_posts(request):
     results = {'success': 'False'}
     api = twitter.Api()
@@ -48,6 +49,7 @@ def friends_timeline(request):
         'friends': friends,},
         context_instance=RequestContext(request))
 
+
 def ajax_friend_timeline(request):
     results = {'success': 'False'}
     if request.method != u'GET':
@@ -62,6 +64,7 @@ def ajax_friend_timeline(request):
     results['success'] = 'True'
     html = t.render(RequestContext(request, results))
     return HttpResponse(html)
+
 
 def ajax_rate(request):
     results = {'success':'False'}

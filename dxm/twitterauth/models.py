@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from status.models import Status
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, null=True)
     access_token = models.CharField(max_length=255, blank=True, null=True, editable=False)
     screen_name = models.CharField(max_length=30, blank=True, null=True)
     profile_image_url = models.URLField(blank=True, null=True)
@@ -15,6 +15,7 @@ class UserProfile(models.Model):
 
     def __unicode__(self):
         return "%s's profile" % self.user
+
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
