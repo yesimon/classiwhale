@@ -7,9 +7,9 @@ from django.views.generic.simple import direct_to_template
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from twitterauth.models import UserProfile, StatusDetails
+from twitterauth.models import *
 from twitterauth.utils import get_authorized_twitter_api
-from status.models import Status
+from status.models import *
 from django.template.loader import get_template
 import twitter
 import json

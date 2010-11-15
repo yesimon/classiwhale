@@ -2,10 +2,9 @@
 <html lang="en">
 
 <head>
-    <link rel="shortcut icon" href="/static/favicon.png"/>
-    <link rel="stylesheet" href="/static/feed.css" />
-    <link rel="stylesheet" href="/static/base.css" />
-    <script type="text/javascript" src="/static/jquery-1.4.4.min.js"></script>
+    <link rel="shortcut icon" href="/static/img/favicon.png"/>
+    <link rel="stylesheet" href="/static/css/main.css" />
+    <script type="text/javascript" src="/static/js/jquery-1.4.4.min.js"></script>
     {% include "feedback/header.html" %}
     
     <title>
@@ -25,6 +24,9 @@
     {% include "navigation.html" %}
     {% include "feedback/button.html" %}
     
+    <div id="wave_bg">
+	</div>
+
     <div id="middle">
         <div id="content">
             {% block content %}

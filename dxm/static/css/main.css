@@ -1,0 +1,434 @@
+* { margin: 0; padding: 0; }
+
+body {
+  font: 13px/20px "Lucida Grande", Arial, Sans-serif;
+  background-color:#A1BBF5;
+}
+
+div {
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  display: block;
+}
+
+form {
+  display: block;
+}
+
+a {
+  outline: none;
+}
+
+.link {
+	text-decoration:none;
+}
+
+.link:hover {
+	text-decoration:underline !important;
+}
+
+
+#nav {
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  min-width: 500px;
+  background: url("/static/img/nav_bg_blue.png") repeat 0 0;
+  float: left;
+  display: inline;
+  height: 40px;
+}
+
+#nav li {
+  display: inline;
+  float: right;
+}
+
+#nav a,
+#nav li.searchContainer {
+  display: inline;
+  height: 20px;
+  padding: 4px 6px 4px 6px;
+  float: right;
+  border-right: 1px solid #000000;
+}
+
+#nav li.searchContainer {
+
+}
+
+#nav li.searchContainer div {
+  background-color: #ABB3C8;
+  display: block;
+  padding: 0px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+#nav li.searchContainer div:focus {
+  background-color: #FFFFFF;
+}
+
+#nav a:link,
+#nav a:visited {
+  color: #FFFFFF;
+  float: right;
+  width: auto;
+  text-decoration: none;
+}
+
+
+
+#nav a:hover,
+#nav a:focus,
+#nav #logo a:hover,
+#nav #logo a:focus {
+  color: #FFFFFF;
+}
+
+#nav li.active a:link,
+#nav li.active a:visited {
+  color: #FFFFFF;
+}
+
+.searchContainer div form input[type="text"] { 
+  background-color:#ABB3C8;
+  margin: 0px 0px 0px 5px;
+  border: none;
+  height: 100%;
+}
+
+#nav li.searchContainer div form input[type="submit"]{
+  background: url(/static/img/magnifier.png) no-repeat;
+  width: 18px;
+  border: none;
+  margin-right: 4px;
+  cursor: pointer;
+  text-indent: -9999px; /* hide text on button */
+  display: inline;
+}
+
+#nav #logo a {
+  border: none;
+  color: #FFFFFF;
+  padding: 4px 6px 4px 6px;
+  font: bold 13px/20px "Lucida Grande", Arial, Sans-serif;
+  float: left;
+}
+
+#wave_bg {
+    height:150px;
+    top:0px;
+    left:0px;
+    width:100%;
+    background-color:#E3EBFC;
+    z-index: -1;
+}
+
+
+#middle {
+  width: 100%;
+  display: block;
+  overflow: hidden;
+  margin-top: -120px;
+}
+
+
+
+#sidenav {
+  float: left;
+  width: 140px;
+}
+
+#sidenav ul {
+  display: block;
+  list-style-type: none;
+  width: 150px;
+}
+
+#content {
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;  
+  color: #333333 !important;
+  font-weight: normal;
+  text-align: left;
+  overflow:hidden;
+}
+
+#footer {
+  width: 98%;
+}
+
+
+
+
+
+
+/**
+ ************************************
+ * 	Feed Styles
+ ************************************
+ */
+ 
+.entry {
+  border-bottom: 1px solid #CDCDCD;
+  padding: 8px 0px 10px;
+  overflow: hidden;
+}
+
+.user {
+  border: 2px solid #96D6A7;
+  display: block;
+  height: 60px;
+  margin: 3px 0px;
+}
+
+.user a {
+  display: block;
+  text-decoration: none;
+  width: 100%;
+  height: 100%;
+}
+
+
+
+.user a:link,
+.user a:visited {
+  line-height: 54px;
+  background:#FFFFFF;
+  color:#000000;
+}
+
+.user a:hover{
+  background: #82DE86;
+  color: #000000;
+}
+
+.status-container {
+	background-color: #FFFFFF;
+    width: 575px;
+    float: left;
+	border:0px;
+    padding:0px;
+}
+
+
+.status-container .status-prompt div {
+    color:#8F8F8F;
+    font-family: Arial;
+    font-size:16px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.status-container .status-prompt input {
+    color:#8F8F8F;
+    font-family:'Helvetica Neue', 'Lucida Grande', Arial;
+    font-size:20px;
+    width:400px;
+}
+
+.status-container .status-prompt {
+    background-color:#F8F8F8;
+    padding:15px 25px 23px;
+    border:1px solid #A0A0A0;
+    border-bottom:1px solid #CDCDCD;
+}
+
+
+
+.status-container .header {
+    background: #BBCDF7 url('/static/img/title_bg.png') repeat 0 0;
+    position:relative;
+    height:42px;
+    padding-left:10px;
+    padding-right:10px;
+}
+
+
+.status-container .header .title {
+    font-family:Arial, Helvetica;
+    font-size:21px;
+    color:#1A1A1A;
+    float:left;
+    margin-top:12px;
+}
+
+
+.status-container .header .links {
+    font-family: 'Lucida Grande', Helvetica;
+    font-size:13px;
+    color:#222;
+    float:right;
+    margin-top:15px;
+    margin-right:5px;
+}
+
+#content .status-container .header .links a:link,
+#content .status-container .header .links a:visited {
+    color:#143DA6;
+}
+
+
+.status-container .header .left-bg {
+    background: #BBCDF7 url('/static/img/title_corners.png') repeat 0 0;
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:10px;
+    height:42px;
+}
+
+.status-container .header .right-bg {
+    background: #BBCDF7 url('/static/img/title_corners.png') repeat -11px 0;
+    position:absolute;
+    top:0px;
+    right:0px;
+    width:10px;
+    height:42px;
+}
+
+
+
+.status-container .statuses {
+	border:1px solid #A0A0A0;
+	border-width: 0 1px 1px;
+}
+
+
+
+
+
+
+
+
+
+.rating-container {
+  float: left;
+  width: 460px;
+  padding: 0px 5px;
+}
+
+.friend-container {
+  float: left;
+  width: 300px;
+  padding: 0px 5px;
+}
+
+
+.rate-buttons {
+  float: left;
+  padding: 0px;
+  margin: 0 12px 0 14px
+}
+
+.rate-buttons div {
+	margin-top: 4px;
+	height:23px;
+	width:23px;
+	cursor:pointer;
+}
+
+.rate-buttons div.like {
+  	background: url('/static/img/thumb_icons.png') no-repeat 0 0;
+}
+
+.rate-buttons div.dislike {
+  	background: url('/static/img/thumb_icons.png') no-repeat 0 -23px;
+}
+
+.rate-buttons div.like.inactive {
+  	background: url('/static/img/thumb_icons.png') no-repeat -46px 0;
+}
+
+.rate-buttons div.dislike.inactive {
+  	background: url('/static/img/thumb_icons.png') no-repeat -46px -23px;
+}
+
+
+.rate-buttons div.like:hover,
+.rate-buttons div.like.active {
+	background-position: -23px 0;
+}
+
+.rate-buttons div.dislike:hover,
+.rate-buttons div.dislike.active {
+	background-position: -23px -23px;
+}
+
+
+
+.tweet-usr-profile {
+  height: 48px;
+  margin-top: 5px;
+  padding: 0px 4px;
+  width: 48px;
+  float: left;
+  overflow: hidden;
+  position: relative;
+}
+
+
+.tweet-usr-profile img {
+  height: 48px;
+  width: 48px;
+  border-color: transparent;
+  border-width: 0;
+}
+
+
+.user img {
+  padding: 6px 3px;
+  vertical-align: middle;
+  height: 48px;
+  width: 48px;
+  border-color: transparent;
+  border-width: 0;
+}
+
+.tweet-body{
+  float: left;
+  opacity: 1;
+}
+
+
+
+.tweet-body p {
+  line-height: 18px; 
+  color: #333333;
+  margin: 0;
+  padding: 0px 4px;
+  width: 340px;
+}
+
+
+
+#content a {
+  text-decoration: none;
+}
+
+.tweet-body a {
+  color: #2276BB;
+}
+
+.twtr-user {
+  display: inline;
+  font-weight: bold;
+}
+
+#content i {
+  display: block;
+  color: #999999;
+  font-size: 11px;
+  line-height: 20px;
+  margin-top: 0;
+  font-style: normal;
+}
+
+
+
+
+
+
