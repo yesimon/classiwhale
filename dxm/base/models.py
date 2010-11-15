@@ -16,14 +16,7 @@ class Hyperlink(models.Model):
 	def __unicode__(self):
 		return self.text
 	
-	
 
-class Rating(models.Model):
-	user = models.ForeignKey(UserProfile)
-	tweet = models.ForeignKey(Tweet)
-	rating = models.IntegerField()
-	
-	
 
 
 class Tweet(models.Model):
@@ -63,6 +56,13 @@ class Tweet(models.Model):
 
 	
 	
+
+class Rating(models.Model):
+	user = models.ForeignKey(UserProfile)
+	tweet = models.ForeignKey(Tweet)
+	rating = models.IntegerField()
+	
+
 	
 	
 
