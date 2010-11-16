@@ -87,11 +87,13 @@ Recent Public Posts
 {% endif %}
 
 <div class="status-container">
-	<div class="header">
-	    <div class="left-bg"></div>
-	    <div class="title">Recent Tweets</div>
-	    <div class="links"><a>Fitlered</a> &middot; <a class="link" href="#">Unfiltered</a></div>
-	    <div class="right-bg"></div>
+	<div class="header-wrapper">
+		<div class="header">
+		    <div class="left-bg"></div>
+		    <div class="title">Recent Tweets</div>
+		    <div class="links"><a>Fitlered</a> &middot; <a class="link" href="#">Unfiltered</a></div>
+		    <div class="right-bg"></div>
+		</div>
 	</div>
 	
 	<div class="status-prompt">
@@ -100,6 +102,11 @@ Recent Public Posts
 	</div>
 
 	{% include 'status_list.html' %}
+</div>
+
+        
+<div class="right-tab">
+	<img class="corner" src="/static/img/right_tab_corner.png"/>
 </div>
 
 <!--
