@@ -5,6 +5,7 @@
     <link rel="shortcut icon" href="/static/img/favicon.png"/>
     <link rel="stylesheet" href="/static/css/main.css" />
     <script type="text/javascript" src="/static/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="/static/js/main.js"></script>
     {% include "feedback/header.html" %}
     
     <title>
@@ -29,8 +30,34 @@
 
     <div id="middle">
         <div id="content">
-            {% block content %}
-            {% endblock %}
+        	
+			{% if errors %}
+			<ul>
+				{% for error in errors %}
+				<li>{{ error }}</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+
+        	<div class="status-container">
+				<div class="header-wrapper">
+					<div class="header">
+					    <div class="left-bg"></div>
+					    <div class="title">Recent Tweets</div>
+					    <div class="links"><a>Filtered</a> &middot; <a class="link" href="#">Unfiltered</a></div>
+					    <div class="right-bg"></div>
+					</div>
+				</div>
+				
+	            {% block content %}
+            	{% endblock %}
+            </div>
+            
+			{% include "feedback/button.html" %}
+			        
+			<div class="right-tab">
+				<img class="corner" src="/static/img/right_tab_corner.png"/>
+			</div>
         </div>
     </div>
     
