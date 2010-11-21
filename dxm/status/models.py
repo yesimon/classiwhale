@@ -1,7 +1,4 @@
 from django.db import models
-from twitterauth.models import UserProfile
-
-
 
 class Hashtag(models.Model):
     text = models.CharField(max_length=140, unique=True)
@@ -9,27 +6,22 @@ class Hashtag(models.Model):
     def __unicode__(self):
         return self.text
     
-    
-    
 class Hyperlink(models.Model):
     text = models.CharField(max_length=255, unique=True)
     
     def __unicode__(self):
         return self.text
     
-
-
-
 class Status(models.Model):
     id = models.IntegerField(primary_key=True)
     text = models.CharField(max_length=200, blank=True)
-    author = models.ForeignKey(UserProfile)
+    author = models.ForeignKey('twitterauth.UserProfile')
     content_length = models.IntegerField()
     punctuation = models.IntegerField()
     has_hyperlink = models.BooleanField()
     hyperlinks = models.ManyToManyField(Hyperlink)
     hashtags = models.ManyToManyField(Hashtag)
-    ats = models.ManyToManyField(UserProfile, related_name="status_ats")
+    ats = models.ManyToManyField('twitterauth.UserProfile', related_name="status_ats")
     
     def __unicode__(self):
         return self.id
@@ -65,12 +57,7 @@ class Status(models.Model):
                 user, created = UserProfile.objects.get_or_create(screen_name = name)
                 status.ats.add(user)
         
-        
 
-class Rating(models.Model):
-    status = models.ForeignKey(Status)
-    user_profile = models.ForeignKey(UserProfile)
-    rating = models.IntegerField()
-    rated_time = models.DateTimeField(auto_now_add=True)
+
     
-    
+

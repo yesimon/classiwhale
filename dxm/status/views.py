@@ -82,7 +82,7 @@ def ajax_rate(request):
     prof = u.get_profile()
     
     s, c = Status.objects.get_or_create(id=id)
-    r, c = Rating.objects.get_or_create(status=s, user_profile=prof)
+    r, c = RatingDetails.objects.get_or_create(status=s, user_profile=prof)
     
     if rating == u"up":
         r.rating = 1
