@@ -66,36 +66,35 @@ def ajax_friend_timeline(request):
     return HttpResponse(html)
 
 
+
+
+@login_required
+
 def ajax_rate(request):
     results = {'success':'False'}
     if request.method != u'POST':
         return HttpResponseBadRequest("Only allows POST requests")
     POST = request.POST
+    
     if (not POST.has_key(u'rating')) or (not POST.has_key(u'id')):
         return HttpResponseBadRequest("rating and/or id parameters missing")
     (u, id, rating) = (request.user, int(POST[u'id']), POST[u'rating'])
     prof = u.get_profile()
-    try:
-        s = Status.objects.get(id=id)
-    except:
-        s = Status.objects.create(id=id)
-    try:
-        details = StatusDetails.objects.get(user_profile=prof, status=s)
-    except:
-        details = StatusDetails.objects.create(status=s, user_profile=prof, rating=0)
+    
+    s, c = Status.objects.get_or_create(id=id)
+    r, c = Rating.objects.get_or_create(status=s, user_profile=prof)
     
     if rating == u"up":
-        details.rating=1
+        r.rating = 1
     elif rating == u"down":
-        details.rating=-1
-    details.save()
+        r.rating = -1
+    r.save()
     results['success'] = 'True'
     jsonResults = json.dumps(results)
     return HttpResponse(jsonResults, mimetype='application/json')
   
-
-
-@login_required
+  
+  
 def list_statuses(request):
     prof = request.user.get_profile()
     statusObjects = prof.statuses.iterator()
