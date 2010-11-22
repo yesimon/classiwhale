@@ -14,14 +14,14 @@ class Hyperlink(models.Model):
     
 class Status(models.Model):
     id = models.IntegerField(primary_key=True)
-    text = models.CharField(max_length=200, blank=True)
-    author = models.ForeignKey('twitterauth.UserProfile')
-    content_length = models.IntegerField()
-    punctuation = models.IntegerField()
-    has_hyperlink = models.BooleanField()
-    hyperlinks = models.ManyToManyField(Hyperlink)
-    hashtags = models.ManyToManyField(Hashtag)
-    ats = models.ManyToManyField('twitterauth.UserProfile', related_name="status_ats")
+    text = models.CharField(max_length=200, blank=True, null=True)
+    author = models.ForeignKey('twitterauth.UserProfile', blank=True, null=True)
+    content_length = models.IntegerField(blank=True, null=True)
+    punctuation = models.IntegerField(blank=True, null=True)
+    has_hyperlink = models.BooleanField(blank=True, null=True)
+    hyperlinks = models.ManyToManyField(Hyperlink, blank=True, null=True)
+    hashtags = models.ManyToManyField(Hashtag, blank=True, null=True)
+    ats = models.ManyToManyField('twitterauth.UserProfile', related_name="status_ats", blank=True, null=True)
     
     def __unicode__(self):
         return unicode(self.id)

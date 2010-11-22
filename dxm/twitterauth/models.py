@@ -15,7 +15,7 @@ class UserProfile(models.Model):
 
     def __unicode__(self):
         return "%s's profile" % self.user
-
+    
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -30,6 +30,7 @@ class RatingDetails(models.Model):
     rating = models.IntegerField(blank=True)
     rated_time = models.DateTimeField(auto_now_add=True)
 
-        
+    class Meta:
+        verbose_name_plural = "Ratings"
 
 
