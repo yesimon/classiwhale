@@ -4,13 +4,13 @@ class Hashtag(models.Model):
     text = models.CharField(max_length=140, unique=True)
     
     def __unicode__(self):
-        return self.text
+        return unicode(self.text)
     
 class Hyperlink(models.Model):
     text = models.CharField(max_length=255, unique=True)
     
     def __unicode__(self):
-        return self.text
+        return unicode(self.text)
     
 class Status(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -24,7 +24,7 @@ class Status(models.Model):
     ats = models.ManyToManyField('twitterauth.UserProfile', related_name="status_ats")
     
     def __unicode__(self):
-        return self.id
+        return unicode(self.id)
     
     class Meta:
         ordering = ["-id"]
