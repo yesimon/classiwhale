@@ -13,12 +13,12 @@ class Hyperlink(models.Model):
         return unicode(self.text)
     
 class Status(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.BigIntegerField(primary_key=True)
     text = models.CharField(max_length=200, blank=True, null=True)
     author = models.ForeignKey('twitterauth.UserProfile', blank=True, null=True)
     content_length = models.IntegerField(blank=True, null=True)
     punctuation = models.IntegerField(blank=True, null=True)
-    has_hyperlink = models.BooleanField(blank=True, null=True)
+    has_hyperlink = models.BooleanField(default=False)
     hyperlinks = models.ManyToManyField(Hyperlink, blank=True, null=True)
     hashtags = models.ManyToManyField(Hashtag, blank=True, null=True)
     ats = models.ManyToManyField('twitterauth.UserProfile', related_name="status_ats", blank=True, null=True)

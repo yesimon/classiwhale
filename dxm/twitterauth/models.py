@@ -27,7 +27,7 @@ post_save.connect(create_user_profile, sender=User)
 class RatingDetails(models.Model):
     user_profile = models.ForeignKey(UserProfile) 
     status = models.ForeignKey(Status) 
-    rating = models.IntegerField(blank=True)
+    rating = models.IntegerField(blank=True, null=True)
     rated_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
