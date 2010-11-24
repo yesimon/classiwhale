@@ -1,38 +1,33 @@
 from django.db import models
-from twitterauth.models import UserProfile
-
 
 
 class Hashtag(models.Model):
     text = models.CharField(max_length=140, unique=True)
     
     def __unicode__(self):
-        return self.text
-    
+        return unicode(self.text)
     
     
 class Hyperlink(models.Model):
     text = models.CharField(max_length=255, unique=True)
     
     def __unicode__(self):
-        return self.text
+        return unicode(self.text)
     
-
-
-
+    
 class Status(models.Model):
-    id = models.IntegerField(primary_key=True)
-    text = models.CharField(max_length=200, blank=True)
-    author = models.ForeignKey(UserProfile)
-    content_length = models.IntegerField()
-    punctuation = models.IntegerField()
-    has_hyperlink = models.BooleanField()
-    hyperlinks = models.ManyToManyField(Hyperlink)
-    hashtags = models.ManyToManyField(Hashtag)
-    ats = models.ManyToManyField(UserProfile, related_name="status_ats")
+    id = models.BigIntegerField(primary_key=True)
+    text = models.CharField(max_length=200, blank=True, null=True)
+    author = models.ForeignKey('twitterauth.UserProfile', blank=True, null=True)
+    content_length = models.IntegerField(blank=True, null=True)
+    punctuation = models.IntegerField(blank=True, null=True)
+    has_hyperlink = models.BooleanField(default=False)
+    hyperlinks = models.ManyToManyField(Hyperlink, blank=True, null=True)
+    hashtags = models.ManyToManyField(Hashtag, blank=True, null=True)
+    ats = models.ManyToManyField('twitterauth.UserProfile', related_name="status_ats", blank=True, null=True)
     
     def __unicode__(self):
-        return self.id
+        return unicode(self.id)
     
     class Meta:
         ordering = ["-id"]
@@ -65,12 +60,5 @@ class Status(models.Model):
                 user, created = UserProfile.objects.get_or_create(screen_name = name)
                 status.ats.add(user)
         
-        
 
-class Rating(models.Model):
-    status = models.ForeignKey(Status)
-    user_profile = models.ForeignKey(UserProfile)
-    rating = models.IntegerField()
-    rated_time = models.DateTimeField(auto_now_add=True)
-    
-    
+

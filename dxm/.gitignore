@@ -4,6 +4,7 @@
 mydb.db
 local_settings.py
 
+classiwhale
 .project
 .pydevproject
 *.pyc

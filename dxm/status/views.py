@@ -104,7 +104,7 @@ def list_statuses(request):
     for statusObject in statusObjects:
         try:
             s = api.GetStatus(statusObject.id)
-            details = StatusDetails.objects.get(status=statusObject, user_profile=prof)
+            details = Status.objects.get(status=statusObject, user_profile=prof)
             if details.rating > 0:
                 statuses_like.append(s)
             elif details.rating < 0:

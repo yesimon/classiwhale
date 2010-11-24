@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
+from status.models import Status
 
 
 class UserProfile(models.Model):
@@ -11,10 +12,11 @@ class UserProfile(models.Model):
     location = models.CharField(max_length=100, blank=True, null=True)
     url = models.URLField(blank=True, null=True)
     description = models.CharField(max_length=160, blank=True, null=True)
+    ratings = models.ManyToManyField(Status, blank=True, through='Rating')
 
     def __unicode__(self):
         return "%s's profile" % self.user
-
+    
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -24,9 +26,11 @@ post_save.connect(create_user_profile, sender=User)
 
 
 
-
-
-
-        
-
-
+class Rating(models.Model):
+    user_profile = models.ForeignKey('twitterauth.UserProfile') 
+    status = models.ForeignKey(Status) 
+    rating = models.IntegerField(blank=True, null=True)
+    rated_time = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name_plural = "Ratings"

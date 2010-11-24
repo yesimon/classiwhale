@@ -43,7 +43,7 @@ function addFriendTimelineHandlers() {
 
 function rate(kind, sid) {
     $.post(
-        "/status/ajax_rate/", 
+        "/status/ajaxrate/", 
         { rating: kind, id: sid }
     );
 }
