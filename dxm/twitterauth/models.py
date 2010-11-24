@@ -3,6 +3,7 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from status.models import Status
 
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, null=True)
     access_token = models.CharField(max_length=255, blank=True, null=True, editable=False)
@@ -24,13 +25,12 @@ def create_user_profile(sender, instance, created, **kwargs):
 post_save.connect(create_user_profile, sender=User)
 
 
+
 class Rating(models.Model):
-    user_profile = models.ForeignKey(UserProfile) 
+    user_profile = models.ForeignKey('twitterauth.UserProfile') 
     status = models.ForeignKey(Status) 
     rating = models.IntegerField(blank=True, null=True)
     rated_time = models.DateTimeField(auto_now_add=True)
-
+    
     class Meta:
         verbose_name_plural = "Ratings"
-
-

@@ -113,5 +113,3 @@ def ajax_rate(request):
   
   
   
-
-

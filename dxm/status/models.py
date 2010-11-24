@@ -1,16 +1,19 @@
 from django.db import models
 
+
 class Hashtag(models.Model):
     text = models.CharField(max_length=140, unique=True)
     
     def __unicode__(self):
         return unicode(self.text)
     
+    
 class Hyperlink(models.Model):
     text = models.CharField(max_length=255, unique=True)
     
     def __unicode__(self):
         return unicode(self.text)
+    
     
 class Status(models.Model):
     id = models.BigIntegerField(primary_key=True)
@@ -58,6 +61,4 @@ class Status(models.Model):
                 status.ats.add(user)
         
 
-
-    
 
