@@ -7,10 +7,11 @@ from django.views.generic.simple import direct_to_template
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.template.loader import get_template
+from django.core.paginator import Paginator
 from twitterauth.models import *
 from twitterauth.utils import get_authorized_twitter_api
 from status.models import *
-from django.template.loader import get_template
 import twitter
 import json
 import time
@@ -19,9 +20,6 @@ import time
 def recent_public_posts(request):
     api = twitter.Api()
     statuses = api.GetPublicTimeline()
-#    statusJson = recentStatuses[0].AsJsonString()
-#    jsonPackage = json.dumps([j.AsJsonString() for j in recentStatuses])
-    statusJson, jsonPackage = None, None
     return render_to_response('public_posts.html',
         {'statuses': statuses, },
         context_instance=RequestContext(request))
@@ -37,7 +35,37 @@ def ajax_recent_public_posts(request):
     html = t.render(RequestContext(request, results))
     return HttpResponse(html)
 
-
+def list_statuses(request):
+    prof = request.user.get_profile()
+#    profile = UserProfile.objects.select_related('ratings').get(prof)
+    paginator = Paginator(prof.ratings.all(), 10)
+    statuses = paginator.page(1).object_list
+    ratings = []
+    for status in statuses:
+        detail = Ratings.objects.get(status=status, user_profile=prof)
+        if detail.rating > 0: rating = 'like'
+        elif detail.rating < 0: rating = 'dislike'
+        else: pass
+        ratings.append((str(status.id), rating))
+    
+    # for statusObject in statusObjects:
+        # try:
+            # s = api.GetStatus(statusObject.id)
+            # details = StatusDetails.objects.get(status=statusObject, user_profile=prof)
+            # if details.rating > 0:
+                # statuses_like.append(s)
+            # elif details.rating < 0:
+                # statuses_dislike.append(s)
+            # else:
+                # pass
+        # except:
+            # pass
+    return render_to_response('statuses_history_list.html',
+        {'ratings': ratings},
+        context_instance=RequestContext(request)) 
+        
+    
+    
 def friends_timeline(request):
     if not request.user.is_authenticated() or 'access_token' not in request.session:
         return HttpResponseRedirect(reverse('status.views.recent_public_posts'))
@@ -69,7 +97,6 @@ def ajax_friend_timeline(request):
 
 
 @login_required
-
 def ajax_rate(request):
     results = {'success':'False'}
     if request.method != u'POST':
@@ -95,27 +122,5 @@ def ajax_rate(request):
   
   
   
-def list_statuses(request):
-    prof = request.user.get_profile()
-    statusObjects = prof.statuses.iterator()
-    statuses_like = []
-    statuses_dislike = []
-    api = get_authorized_twitter_api(request.session['access_token'])
-    for statusObject in statusObjects:
-        try:
-            s = api.GetStatus(statusObject.id)
-            details = StatusDetails.objects.get(status=statusObject, user_profile=prof)
-            if details.rating > 0:
-                statuses_like.append(s)
-            elif details.rating < 0:
-                statuses_dislike.append(s)
-            else:
-                pass
-        except:
-            pass
-    return render_to_response('statuses_list_page.html',
-        {'statuses_like': statuses_like,
-        'statuses_dislike': statuses_dislike},
-        context_instance=RequestContext(request)) 
-        
+
 
