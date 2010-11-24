@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-from status.models import Status
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, null=True)
@@ -11,7 +11,6 @@ class UserProfile(models.Model):
     location = models.CharField(max_length=100, blank=True, null=True)
     url = models.URLField(blank=True, null=True)
     description = models.CharField(max_length=160, blank=True, null=True)
-    statuses = models.ManyToManyField(Status, blank=True, through='StatusDetails')
 
     def __unicode__(self):
         return "%s's profile" % self.user
@@ -24,11 +23,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 post_save.connect(create_user_profile, sender=User)
 
 
-class StatusDetails(models.Model):
-    user_profile = models.ForeignKey(UserProfile) # should be unique=True
-    status = models.ForeignKey(Status) # should be unique=True
-    rating = models.IntegerField(blank=True)
-    rated_time = models.DateTimeField(auto_now_add=True)
 
 
 
