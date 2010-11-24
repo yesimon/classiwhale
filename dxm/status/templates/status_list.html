@@ -11,16 +11,17 @@
 	</div>
 	
 	<div class="tweet-usr-profile">
-		<a href="http://twitter.com/{{ status.GetUser.GetScreenName }}">
+		<a href="/profile/{{ status.GetUser.GetScreenName }}">
 			<img class="photo" width="48" height="48" src="{{ status.GetUser.GetProfileImageUrl }}" alt="{{ status.GetUser.GetName }} " /> 
 		</a>
 	</div>
 	
 	<div class="tweet-body">
 		<p>
-			<a class="twtr-user" target="_blank" href="http://twitter.com/{{ status.GetUser.GetScreenName }}">
+			<a class="twtr-user" href="/profile/{{ status.GetUser.GetScreenName }}">
 				{{ status.GetUser.GetScreenName }} 
-			</a> {{ status.GetText|urlize|url_target_blank }} <a class="tweet-hlink" target="_blank" href="http://twitpic.com/20seue" target="_blank"></a>
+			</a> 
+			{{ status.GetText|urlize|url_target_blank }}
 			<i>
 				<a class="tweet-timestamp" target="_blank" href="http://twitter.com/{{ status.GetUser.GetScreenName }}/status/{{ status.GetId }}" target="_blank">
 					{{ status.GetRelativeCreatedAt }}

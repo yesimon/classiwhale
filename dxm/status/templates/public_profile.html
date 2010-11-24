@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ username }} on ClassiWhale
+{% endblock %}
+
+
+{% block content %} 
+
+	<div class="status-prompt">
+	    <div>{{ user.name }}</div>
+	    <img class="photo" width="48" height="48" src="{{ user.GetProfileImageUrl }}" alt="{{ user.name }} " /> 
+		
+	</div>
+	
+	{% include 'status_list.html' %}
+
+{% endblock %}
+

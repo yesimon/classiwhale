@@ -40,7 +40,7 @@ def ajax_recent_public_posts(request):
 
 
 @login_required
-def list_statuses(request):
+def rating_history(request):
     '''Returns list of dicts giving tweet id and rating (like/dislike) for rated tweets'''
     # Paginator generates two database queries unfortunately - negating benefits?
     prof = request.user.get_profile()
@@ -53,11 +53,25 @@ def list_statuses(request):
         elif detail.rating < 0: rating = 'dislike'
         else: pass
         ratings.append({'id':detail.status_id, 'rating':rating})
-    return render_to_response('status_history_list.html',
+    return render_to_response('rating_history.html',
         {'ratings': ratings},
         context_instance=RequestContext(request)) 
         
 
+def public_profile(request, username):
+    
+    api = twitter.Api()
+    statuses = api.GetUserTimeline(username)
+    user = api.GetUser(username)
+    
+    return render_to_response('public_profile.html',
+        {
+         'user': user,
+         'statuses': statuses
+        },
+        context_instance=RequestContext(request)) 
+    
+    
 
 def ajax_friend_timeline(request):
     results = {'success': 'False'}
@@ -66,7 +80,6 @@ def ajax_friend_timeline(request):
     if not request.GET.has_key(u'screenname'):
         return HttpResponseBadRequest('friend screenname missing')
     screenname = request.GET[u'screenname']
-    Api = twitter.Api()
     api = get_authorized_twitter_api(request.session['access_token'])
     results['statuses'] = api.GetUserTimeline(id=screenname)
     t = get_template('status_list.html')
@@ -85,8 +98,10 @@ def friends_timeline(request):
     Rating.appendTo(statuses, request.user.get_profile())
     
     return render_to_response('friends_timeline.html',
-        {'statuses': statuses,
-        'friends': friends,},
+        {
+         'statuses': statuses,
+        'friends': friends
+        },
         context_instance=RequestContext(request))
 
 
