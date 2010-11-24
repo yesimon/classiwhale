@@ -26,6 +26,8 @@ def recent_public_posts(request):
 
 
 def ajax_recent_public_posts(request):
+    '''Get more recent public posts via ajax - currently does not support 
+    checking of the latest since_id for already down tweets'''
     results = {'success': 'False'}
     api = twitter.Api()
 #    since_id = request.GET.since_id
@@ -35,32 +37,21 @@ def ajax_recent_public_posts(request):
     html = t.render(RequestContext(request, results))
     return HttpResponse(html)
 
+@login_required
 def list_statuses(request):
+    '''Returns list of dicts giving tweet id and rating (like/dislike) for rated tweets'''
+    # Paginator generates two database queries unfortunately - negating benefits?
     prof = request.user.get_profile()
-#    profile = UserProfile.objects.select_related('ratings').get(prof)
-    paginator = Paginator(prof.ratings.all(), 10)
-    statuses = paginator.page(1).object_list
+    ratings_list = Rating.objects.filter(user_profile=prof).order_by('-rated_time')
     ratings = []
-    for status in statuses:
-        detail = Ratings.objects.get(status=status, user_profile=prof)
+    rating_paginator = Paginator(ratings_list, 10)
+    r_page = rating_paginator.page(1).object_list
+    for detail in r_page:
         if detail.rating > 0: rating = 'like'
         elif detail.rating < 0: rating = 'dislike'
         else: pass
-        ratings.append((str(status.id), rating))
-    
-    # for statusObject in statusObjects:
-        # try:
-            # s = api.GetStatus(statusObject.id)
-            # details = StatusDetails.objects.get(status=statusObject, user_profile=prof)
-            # if details.rating > 0:
-                # statuses_like.append(s)
-            # elif details.rating < 0:
-                # statuses_dislike.append(s)
-            # else:
-                # pass
-        # except:
-            # pass
-    return render_to_response('statuses_history_list.html',
+        ratings.append({'id':detail.status_id, 'rating':rating})
+    return render_to_response('status_history_list.html',
         {'ratings': ratings},
         context_instance=RequestContext(request)) 
         
@@ -109,7 +100,7 @@ def ajax_rate(request):
     prof = u.get_profile()
     
     s, c = Status.objects.get_or_create(id=id)
-    r, c = RatingDetails.objects.get_or_create(status=s, user_profile=prof)
+    r, c = Rating.objects.get_or_create(status=s, user_profile=prof)
     
     if rating == u"up":
         r.rating = 1

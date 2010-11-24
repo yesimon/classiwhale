@@ -1,11 +1,11 @@
 from django.contrib import admin
-from twitterauth.models import UserProfile, RatingDetails
+from twitterauth.models import UserProfile, Rating
 
 class UserProfileAdmin(admin.ModelAdmin):
     pass
 
-class RatingDetailsAdmin(admin.ModelAdmin):
+class RatingAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(UserProfile, UserProfileAdmin)
-admin.site.register(RatingDetails, RatingDetailsAdmin)
+admin.site.register(Rating, RatingAdmin)

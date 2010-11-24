@@ -11,7 +11,7 @@ class UserProfile(models.Model):
     location = models.CharField(max_length=100, blank=True, null=True)
     url = models.URLField(blank=True, null=True)
     description = models.CharField(max_length=160, blank=True, null=True)
-    ratings = models.ManyToManyField(Status, blank=True, through='RatingDetails')
+    ratings = models.ManyToManyField(Status, blank=True, through='Rating')
 
     def __unicode__(self):
         return "%s's profile" % self.user
@@ -24,7 +24,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 post_save.connect(create_user_profile, sender=User)
 
 
-class RatingDetails(models.Model):
+class Rating(models.Model):
     user_profile = models.ForeignKey(UserProfile) 
     status = models.ForeignKey(Status) 
     rating = models.IntegerField(blank=True, null=True)
