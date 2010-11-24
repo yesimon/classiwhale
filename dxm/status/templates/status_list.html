@@ -1,3 +1,4 @@
+{% load base_extras %}
 
 <div class="statuses">
 {% for status in statuses %}
@@ -5,8 +6,8 @@
 <div class="entry" id="{{ status.GetId }}">
 
 	<div class="rate-buttons">
-		<div class="like"></div> 
-		<div class="dislike"></div>
+		<div class="like{{ status.likeClass }}"></div> 
+		<div class="dislike{{ status.dislikeClass }}"></div>
 	</div>
 	
 	<div class="tweet-usr-profile">
@@ -17,11 +18,11 @@
 	
 	<div class="tweet-body">
 		<p>
-			<a class="twtr-user" href="http://twitter.com/{{ status.GetUser.GetScreenName }}">
+			<a class="twtr-user" target="_blank" href="http://twitter.com/{{ status.GetUser.GetScreenName }}">
 				{{ status.GetUser.GetScreenName }} 
-			</a> {{ status.GetText|urlize }} <a class="tweet-hlink" href="http://twitpic.com/20seue" target="_blank"></a>
+			</a> {{ status.GetText|urlize|url_target_blank }} <a class="tweet-hlink" target="_blank" href="http://twitpic.com/20seue" target="_blank"></a>
 			<i>
-				<a class="tweet-timestamp" href="http://twitter.com/{{ status.GetUser.GetScreenName }}/status/{{ status.GetId }}" target="_blank">
+				<a class="tweet-timestamp" target="_blank" href="http://twitter.com/{{ status.GetUser.GetScreenName }}/status/{{ status.GetId }}" target="_blank">
 					{{ status.GetRelativeCreatedAt }}
 				</a> 
 			</i>

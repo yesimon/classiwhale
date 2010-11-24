@@ -38,17 +38,6 @@ def ajax_recent_public_posts(request):
     return HttpResponse(html)
 
 
-def friends_timeline(request):
-    if not request.user.is_authenticated() or 'access_token' not in request.session:
-        return HttpResponseRedirect(reverse('status.views.recent_public_posts'))
-    api = get_authorized_twitter_api(request.session['access_token'])
-    statuses = api.GetFriendsTimeline()
-    friends = api.GetFriends()
-    return render_to_response('friends_timeline.html',
-        {'statuses': statuses,
-        'friends': friends,},
-        context_instance=RequestContext(request))
-
 
 def ajax_friend_timeline(request):
     results = {'success': 'False'}
@@ -66,6 +55,19 @@ def ajax_friend_timeline(request):
     return HttpResponse(html)
 
 
+def friends_timeline(request):
+    if not request.user.is_authenticated() or 'access_token' not in request.session:
+        return HttpResponseRedirect(reverse('status.views.recent_public_posts'))
+    api = get_authorized_twitter_api(request.session['access_token'])
+    statuses = api.GetFriendsTimeline()
+    friends = api.GetFriends()
+    
+    Rating.appendTo(statuses, request.user.get_profile())
+    
+    return render_to_response('friends_timeline.html',
+        {'statuses': statuses,
+        'friends': friends,},
+        context_instance=RequestContext(request))
 
 
 @login_required

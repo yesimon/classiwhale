@@ -34,3 +34,22 @@ class Rating(models.Model):
     
     class Meta:
         verbose_name_plural = "Ratings"
+        
+    @staticmethod
+    def appendTo(statuses, user):
+        l = len(statuses)
+        for i in range(l):
+            try:
+                r = Rating.objects.get(status = statuses[i].GetId(), user_profile=user)
+                statuses[i].rating = r.rating
+                if r.rating == 1:
+                    statuses[i].likeClass = ' active'
+                    statuses[i].dislikeClass = ' inactive'
+                if r.rating == -1:
+                    statuses[i].likeClass = ' inactive'
+                    statuses[i].dislikeClass = ' active'
+            except:
+                pass
+    
+    
+    
