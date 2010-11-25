@@ -5,7 +5,7 @@ from status.models import Status
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, null=True)
+    user = models.OneToOneField(User, primary_key=True)
     access_token = models.CharField(max_length=255, blank=True, null=True, editable=False)
     screen_name = models.CharField(max_length=30, blank=True, null=True)
     profile_image_url = models.URLField(blank=True, null=True)

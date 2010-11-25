@@ -15,6 +15,7 @@ The profile models should have following fields:
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from twitterauth.models import UserProfile
 
 import twitter
 
@@ -37,7 +38,7 @@ class TwitterBackend:
             return None
         userid = userinfo.GetId()
 
-        user, created = User.objects.get_or_create(username=userid)
+        user, created = User.objects.get_or_create(id=userid)
         if created:
             # no password set since we validating through twitter oauth
             user.set_unusable_password()
@@ -46,7 +47,6 @@ class TwitterBackend:
         user.save()
 
         # Get the user profile
-        userprofile = user.get_profile()
         userprofile.screen_name = userinfo.GetScreenName()
         userprofile.access_token = access_token.to_string()
         userprofile.url = userinfo.url
