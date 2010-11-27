@@ -1,5 +1,5 @@
 from django.db import models
-
+from datetime import datetime
 
 class Hashtag(models.Model):
     text = models.CharField(max_length=140, unique=True)
@@ -65,6 +65,32 @@ class Status(models.Model):
             for name in data['ats']:
                 user, created = UserProfile.objects.get_or_create(screen_name = name)
                 status.ats.add(user)
+                
+    def GetRelativeCreatedAt(self):
+        '''Get a human redable string representing the posting time
+
+        Returns:
+          A human readable string representing the posting time
+        '''
+        fudge = 1.25
+        td  = datetime.now() - self.created_at
+        delta = long(td.total_seconds())
         
+        if delta < (1 * fudge):
+          return 'about a second ago'
+        elif delta < (60 * (1/fudge)):
+          return 'about %d seconds ago' % (delta)
+        elif delta < (60 * fudge):
+          return 'about a minute ago'
+        elif delta < (60 * 60 * (1/fudge)):
+          return 'about %d minutes ago' % (delta / 60)
+        elif delta < (60 * 60 * fudge) or delta / (60 * 60) == 1:
+          return 'about an hour ago'
+        elif delta < (60 * 60 * 24 * (1/fudge)):
+          return 'about %d hours ago' % (delta / (60 * 60))
+        elif delta < (60 * 60 * 24 * fudge) or delta / (60 * 60 * 24) == 1:
+          return 'about a day ago'
+        else:
+          return 'about %d days ago' % (delta / (60 * 60 * 24))        
 
 

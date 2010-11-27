@@ -69,7 +69,6 @@ def twitter_return(request):
         # Redirect to login page
         del request.session['access_token']
         del request.session['request_token']
-        del request.session['twitter_api']
         return HttpResponse("Unable to authenticate you!")
 
     # authentication was successful, use is now logged in

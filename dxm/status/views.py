@@ -41,7 +41,7 @@ def ajax_recent_public_posts(request):
 
 @login_required
 def rating_history(request):
-    '''Returns list of dicts giving tweet id and rating (like/dislike) for rated tweets'''
+    """Returns list of dicts giving tweet id and rating (like/dislike) for rated tweets"""
     # Paginator generates two database queries unfortunately - negating benefits?
     prof = request.user.get_profile()
     ratings_list = Rating.objects.filter(user_profile=prof).order_by('-rated_time')
@@ -56,6 +56,19 @@ def rating_history(request):
     return render_to_response('rating_history.html',
         {'ratings': ratings},
         context_instance=RequestContext(request)) 
+        
+@login_required
+def training_set_posts(request):
+    """Returns list of unrated training tweets paginated"""
+    prof = request.user.get_profile()
+    statuses = prof.training_statuses.filter(
+        ratings__rating__isnull=True).order_by(
+        'created_at')[:20].select_related()
+    for status in statuses:
+        status.screen_name = status.author.screen_name
+    return render_to_response('training_set_posts.html',
+        {'statuses': statuses},
+        context_instance=RequestContext(request))
         
 
 def public_profile(request, username):

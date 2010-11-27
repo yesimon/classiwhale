@@ -80,7 +80,7 @@ function loadStatuses() {
 		$.get(
 		"/status/ajax_public_posts/",
 		function(data) {
-		    $(data).appendTo($(".status-container"));
+		    $(data).appendTo($(".statuses"));
 		    addRateLinkHandlers();
 		});
     } 

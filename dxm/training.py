@@ -29,8 +29,14 @@ tweeters = ['nytimes', 'TheEconomist', 'russellcrowe', 'sn00ki', 'BarackObama',
     'FT', 'taylorswift13', 'jtimberlake', 'justinbieber', 'katyperry', 'cnnbrk',
     'twitter', 'TheOnion', 'coldplay', 'PerezHilton', 'google', 'THE_REAL_SHAQ',
     'MariahCarey']
-raters = ['classiwhale0{0}'.format(i) for i in range(10)]
-raters.extend(['classiwhale{0}'.format(i) for i in range(10, 25)])
+    
+# Banned raters
+#raters = ['classiwhale0{0}'.format(i) for i in range(10)]
+#raters.extend(['classiwhale{0}'.format(i) for i in range(10, 25)])
+
+# New raters - not actual twitter accounts
+raters = [i for i in range(100, 125)]
+RATER_PASSWORD = 'testtest'
 
 d = datetime(2010, 9, 25, 0, 0, 0)
 since_date = d.isoformat()
@@ -39,11 +45,24 @@ alpha = 0.5 # Percentage of tweeters for each rater to follow
 
 
 class TrainingSet:
+
     def __init__(self):
         self.tweetdb = {}
         self.tweeters = {}
         self.raters = {}
 
+class TrainingUser:
+
+    def __init__(self, id):
+        self.id = id
+        self.screen_name = 'classiwhale{0}'.format(id)
+        self.name = 'Test {0}'.format(id)
+        self.profile_image_url = None
+        self.location = None
+        self.url = None
+        self.description = None
+        
+        
 def GetTweets(file, tweeters, raters):
     api = twitter.Api()
     train_set = TrainingSet()
@@ -56,7 +75,8 @@ def GetTweets(file, tweeters, raters):
         except: print "Cannot get user '{0}'".format(tweeter)
         train_set.tweeters[tweeter] = user
     for rater in raters:
-        try: user = api.GetUser(rater)
+        #try: user = api.GetUser(rater)
+        try: user = TrainingUser(rater)
         except:
             print "Cannot get user '{0}'".format(rater)
             sys.exit()
@@ -67,7 +87,8 @@ def FullCreateUser(user):
     """Full create user/userprofile from api user object"""
     u, created = User.objects.get_or_create(id=user.id, username=user.id)
     if created: 
-        u.set_unusable_password()
+        #u.set_unusable_password()
+        u.password=RATER_PASSWORD
         u.first_name=user.name
         u.save()
     p, created = UserProfile.objects.get_or_create(user=u)
@@ -85,9 +106,11 @@ def FullCreateUser(user):
         p.save()
     return u, p
     
+    
+    
 def FullCreateStatus(status):
-    """Full create status from api status object. Assumes 
-    author entry already exists in database"""
+    """Full create status from api status object. Does not guarantee
+    foreignkey references exist in database"""
     from email.utils import parsedate
     from time import mktime
     created_at = datetime.fromtimestamp(mktime(parsedate(status.created_at)))
@@ -101,7 +124,6 @@ def FullCreateStatus(status):
     s.author_id = status.user.id
     s.in_reply_to_user_id = status.in_reply_to_user_id
     s.in_reply_to_status_id = status.in_reply_to_status_id  
-    s.save()
     return s
 
 def AddStatuses(statuses):
@@ -114,9 +136,14 @@ def AddStatuses(statuses):
     s_found_ids = [s_found[s].id for s in s_found]
     s_toadd_ids = set(s_ids)-set(s_found_ids)
     s_toadd = [s for s in statuses if s.id in s_toadd_ids]
+    status_create_set = []
     for status in s_toadd:
         s = FullCreateStatus(status)
-        status_set.append(s)
+        status_create_set.append(s)
+    save_instances(status_create_set)
+#    for s in status_create_set:
+#        s.save()
+    status_set.extend(status_create_set)
     return status_set
 
 def AddTrainingStatuses(profile, api_statuses, model_statuses):
@@ -125,9 +152,12 @@ def AddTrainingStatuses(profile, api_statuses, model_statuses):
     ts_found = profile.training_statuses.all()
     ts_found_ids = [s.id for s in ts_found]
     ts_toadd_ids = set(s_ids)-set(ts_found_ids)
+    print ts_toadd_ids
     ts_toadd = [s for s in model_statuses if (s.id in ts_toadd_ids)]
-    for s in ts_toadd:
-        profile.training_statuses.add(s)
+    add_m2m_instances(profile.training_statuses, ts_toadd)
+
+#    for s in ts_toadd:
+#        profile.training_statuses.add(s)
     
     
 @transaction.commit_on_success
@@ -135,11 +165,12 @@ def save_instances(instances):
     """Note transactions only work for InnoDB on MySQL"""
     for inst in instances:
         inst.save()
+        
 @transaction.commit_on_success
 def add_m2m_instances(forward, instances):
     """Note transactions only work for InnoDB on MySQL"""
     for inst in instances:
-        forward.add(s)
+        forward.add(inst)
             
 
 def CreateTrainingSet(file):
