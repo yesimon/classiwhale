@@ -78,7 +78,7 @@ function rateDislike() {
 function loadStatuses() {
 	if ($(".status-container .entry").size() < 5) {
 		$.get(
-		"/status/ajax_recent_public_posts/",
+		"/status/ajax_public_posts/",
 		function(data) {
 		    $(data).appendTo($(".status-container"));
 		    addRateLinkHandlers();

@@ -17,6 +17,7 @@ classiwhale
 *.rar
 *.tar
 *.zip
+*.pkl
 
 *.log
 *.sql

@@ -43,10 +43,12 @@ class TwitterBackend:
             # no password set since we validating through twitter oauth
             user.set_unusable_password()
 
+        user.username = userid
         user.first_name = userinfo.name
         user.save()
 
         # Get the user profile
+        userprofile = user.get_profile()
         userprofile.screen_name = userinfo.GetScreenName()
         userprofile.access_token = access_token.to_string()
         userprofile.url = userinfo.url

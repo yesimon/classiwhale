@@ -9,13 +9,15 @@ class UserProfile(models.Model):
     access_token = models.CharField(max_length=255, blank=True, null=True, editable=False)
     screen_name = models.CharField(max_length=30, blank=True, null=True)
     profile_image_url = models.URLField(blank=True, null=True)
+#    verified = models.BooleanField(default=False)
     location = models.CharField(max_length=100, blank=True, null=True)
     url = models.URLField(blank=True, null=True)
     description = models.CharField(max_length=160, blank=True, null=True)
     ratings = models.ManyToManyField(Status, blank=True, through='Rating')
-
+    training_statuses = models.ManyToManyField(Status, blank=True, null=True, related_name='training')
+    
     def __unicode__(self):
-        return "%s's profile" % self.user
+        return "%s's profile" % self.screen_name
     
 
 def create_user_profile(sender, instance, created, **kwargs):
@@ -23,6 +25,9 @@ def create_user_profile(sender, instance, created, **kwargs):
         profile, created = UserProfile.objects.get_or_create(user=instance)
 
 post_save.connect(create_user_profile, sender=User)
+
+
+    
 
 
 
