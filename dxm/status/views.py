@@ -62,8 +62,8 @@ def training_set_posts(request):
     """Returns list of unrated training tweets paginated"""
     prof = request.user.get_profile()
     statuses = prof.training_statuses.filter(
-        ratings__rating__isnull=True).order_by(
-        'created_at')[:20].select_related()
+        rating__rating__isnull=True).order_by(
+        '-created_at')[:20].select_related()
     for status in statuses:
         status.screen_name = status.author.screen_name
     return render_to_response('training_set_posts.html',

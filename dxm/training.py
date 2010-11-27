@@ -55,7 +55,7 @@ class TrainingUser:
 
     def __init__(self, id):
         self.id = id
-        self.screen_name = 'classiwhale{0}'.format(id)
+        self.screen_name = id
         self.name = 'Test {0}'.format(id)
         self.profile_image_url = None
         self.location = None
@@ -85,10 +85,11 @@ def GetTweets(file, tweeters, raters):
 
 def FullCreateUser(user):
     """Full create user/userprofile from api user object"""
+    User.objects.create
     u, created = User.objects.get_or_create(id=user.id, username=user.id)
     if created: 
         #u.set_unusable_password()
-        u.password=RATER_PASSWORD
+        u.set_password(RATER_PASSWORD)
         u.first_name=user.name
         u.save()
     p, created = UserProfile.objects.get_or_create(user=u)
@@ -152,7 +153,6 @@ def AddTrainingStatuses(profile, api_statuses, model_statuses):
     ts_found = profile.training_statuses.all()
     ts_found_ids = [s.id for s in ts_found]
     ts_toadd_ids = set(s_ids)-set(ts_found_ids)
-    print ts_toadd_ids
     ts_toadd = [s for s in model_statuses if (s.id in ts_toadd_ids)]
     add_m2m_instances(profile.training_statuses, ts_toadd)
 
