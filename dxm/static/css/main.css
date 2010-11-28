@@ -230,6 +230,11 @@ a {
   overflow: hidden;
 }
 
+.entry-active {
+  border-left: 2px solid #697EF5;
+  border-right: 2px solid #697EF5;
+}
+
 .user {
   border: 2px solid #96D6A7;
   display: block;
