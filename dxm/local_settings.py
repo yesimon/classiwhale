@@ -1,0 +1,1 @@
+STATIC_SERVE = False
