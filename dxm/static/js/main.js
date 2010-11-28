@@ -10,6 +10,8 @@ $(document).ready(function() {
 	autoRefreshStatuses();
 });
 
+var lock_GetTrainingPosts = false;
+
 $(document).keydown(function(event) {
     if (event.keyCode == 74) { // 'j'
         hotkeyRateLike();
@@ -89,6 +91,7 @@ function addRateLinkHandlers() {
 
 function autoRefreshStatuses() {
     setInterval("loadStatuses()", 5000);
+    setInterval("loadTrainingStatuses()", 5000);
 }
 
 
@@ -158,6 +161,20 @@ function loadStatuses() {
 		function(data) {
 		    $(data).appendTo($(".statuses"));
 		    addRateLinkHandlers();
+		});
+    } 
+}
+
+function loadTrainingStatuses() {
+    if (lock_GetTrainingPosts == true) return;
+	if ($(".status-container .like:not(.active, .inactive)").size() < 10) {
+        lock_GetTrainingPosts = true;
+		$.get(
+		"/status/ajax_training_set_posts/",
+		function(data) {
+		    $(data).appendTo($(".statuses"));
+		    addRateLinkHandlers();
+            lock_GetTrainingPosts = false;
 		});
     } 
 }

@@ -32,7 +32,7 @@ class TwitterBackend:
                                   access_token_key=access_token.key,
                                   access_token_secret=access_token.secret)
         
-        print twitter_api
+         
         try:
             userinfo = twitter_api.VerifyCredentials()
         except:

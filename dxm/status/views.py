@@ -70,6 +70,20 @@ def training_set_posts(request):
         {'statuses': statuses},
         context_instance=RequestContext(request))
         
+def ajax_training_set_posts(request):
+    results = {'success': 'False'}
+    prof = request.user.get_profile()
+    statuses = prof.training_statuses.filter(
+        rating__rating__isnull=True).order_by(
+        '-created_at')[:40].select_related()
+    for status in statuses:
+        status.screen_name = status.author.screen_name
+    t = get_template('training_set_list.html')
+    results['success'] = 'True'
+    results['statuses'] = statuses
+    html = t.render(RequestContext(request, results))
+    return HttpResponse(html)
+
 
 def public_profile(request, username):
     
