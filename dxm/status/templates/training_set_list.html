@@ -1,4 +1,5 @@
 {% load base_extras %}
+{% load tweets %}
 
 
 {% for status in statuses %}
@@ -21,7 +22,7 @@
             <a class="twtr-user" href="/profile/{{ status.author.screen_name }}">
                 {{ status.author.screen_name }} 
             </a> 
-            {{ status.text|urlize|url_target_blank }}
+            {{ status.text|tweet|url_target_blank }}
             <i>
                 <a class="tweet-timestamp" target="_blank" href="http://twitter.com/{{ status.author.screen_name }}/status/{{ status.id }}" target="_blank">
                     {{ status.GetRelativeCreatedAt }}

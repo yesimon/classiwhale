@@ -22,7 +22,7 @@ Recent Tweets
 		<p>
 			<a class="twtr-user" href="http://twitter.com/{{ status.GetUser.GetScreenName }}">
 				{{ status.GetUser.GetScreenName }}
-			</a> {{ status.GetText }} 
+			</a> {{ status.GetText|tweet|url_target_blank }} 
 			
 			<i>
 				<a class="tweet-timestamp" href="http://twitter.com/{{ status.GetUser.GetScreenName }}/status/{{ status.GetId }}" target="_blank">
