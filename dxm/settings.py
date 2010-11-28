@@ -67,6 +67,8 @@ MEDIA_URL = '/static/'
 
 
 STATIC_DOC_ROOT = os.path.join(ROOT_PROJECT_PATH, 'static')
+STATIC_SERVE = True
+
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
