@@ -11,15 +11,26 @@ $(document).ready(function() {
 });
 
 $(document).keydown(function(event) {
-    if (event.keyCode == 74) {
+    if (event.keyCode == 74) { // 'j'
         hotkeyRateLike();
     }
-    if (event.keyCode == 75) {
+    if (event.keyCode == 75) { // 'k'
         hotkeyRateDislike();
+    }
+    if (event.keyCode == 85) { // 'u'
+        hotkeyPrevEntry();
     }
 
 });
 
+function hotkeyPrevEntry() {
+    activeEntry = $(".entry-active");
+    prevEntry = activeEntry.prev();
+    if (prevEntry.length == 0) return;
+    activeEntry.removeClass("entry-active");
+    prevEntry.addClass("entry-active");
+    $.scrollTo(prevEntry);
+}
 
 function hotkeyRateLike() {
     activeEntry = $(".entry-active");
