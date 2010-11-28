@@ -1,4 +1,7 @@
 mydb.db
+
+local_settings.py
+
 .project
 .pydevproject
 *.pyc
@@ -23,4 +26,4 @@ ehthumbs.db
 Icon?
 Thumbs.db
 /mydb.db
-/mydb.db
+
