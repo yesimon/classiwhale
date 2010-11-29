@@ -63,9 +63,12 @@ def training_set_posts(request):
     prof = request.user.get_profile()
     statuses = prof.training_statuses.filter(
         rating__rating__isnull=True).order_by(
-        '-created_at')[:20].select_related()
+        '-created_at')[:20]
+    author_ids = set([s.author_id for s in statuses])
+    authors = UserProfile.objects.in_bulk(author_ids)
     for status in statuses:
-        status.screen_name = status.author.screen_name
+        status.screen_name = authors[status.author_id].screen_name
+        status.profile_image_url = authors[status.author_id].profile_image_url
     return render_to_response('training_set_posts.html',
         {'statuses': statuses},
         context_instance=RequestContext(request))

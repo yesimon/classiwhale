@@ -231,8 +231,8 @@ a {
 }
 
 .entry-active {
-  border-left: 2px solid #697EF5;
-  border-right: 2px solid #697EF5;
+  border-left: 3px solid #697EF5;
+  border-right: 3px solid #697EF5;
 }
 
 .user {
