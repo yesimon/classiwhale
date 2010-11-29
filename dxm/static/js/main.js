@@ -7,7 +7,13 @@
 
 $(document).ready(function() {
     addRateLinkHandlers();
-	autoRefreshStatuses();
+//	autoRefreshStatuses();
+
+    $(window).infinitescroll({
+    url: "/status/ajax_training_set_posts/",
+    page: 2,
+    appendTo: ".statuses",
+    });
 });
 
 var lock_GetTrainingPosts = false;

@@ -72,10 +72,16 @@ def training_set_posts(request):
         
 def ajax_training_set_posts(request):
     results = {'success': 'False'}
+    if request.method != u'GET':
+        return HttpResponseBadRequest('Must be GET request')
+    if not request.GET.has_key(u'elements'):
+        return HttpResponseBadRequest('Number of existing elements missing')
+    num_shown_statuses = int(request.GET[u'elements'])
     prof = request.user.get_profile()
     statuses = prof.training_statuses.filter(
         rating__rating__isnull=True).order_by(
-        '-created_at')[:40].select_related()
+        '-created_at')[num_shown_statuses:num_shown_statuses+40] \
+        .select_related()
     for status in statuses:
         status.screen_name = status.author.screen_name
     t = get_template('training_set_list.html')
@@ -86,11 +92,9 @@ def ajax_training_set_posts(request):
 
 
 def public_profile(request, username):
-    
     api = twitter.Api()
     statuses = api.GetUserTimeline(username)
     user = api.GetUser(username)
-    
     return render_to_response('public_profile.html',
         {
          'user': user,
