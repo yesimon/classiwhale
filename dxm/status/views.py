@@ -85,8 +85,11 @@ def ajax_training_set_posts(request):
         rating__rating__isnull=True).order_by(
         '-created_at')[num_shown_statuses:num_shown_statuses+40] \
         .select_related()
+    author_ids = set([s.author_id for s in statuses])
+    authors = UserProfile.objects.in_bulk(author_ids)
     for status in statuses:
-        status.screen_name = status.author.screen_name
+        status.screen_name = authors[status.author_id].screen_name
+        status.profile_image_url = authors[status.author_id].profile_image_url
     t = get_template('training_set_list.html')
     results['success'] = 'True'
     results['statuses'] = statuses
