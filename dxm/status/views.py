@@ -57,12 +57,15 @@ def rating_history(request):
         {'ratings': ratings},
         context_instance=RequestContext(request)) 
         
+def training_login(request):
+    return HttpResponseRedirect('/accounts/login/?next=/training/')
+        
 @login_required
 def training_set_posts(request):
     """Returns list of unrated training tweets paginated"""
     prof = request.user.get_profile()
-    statuses = prof.training_statuses.filter(
-        rating__rating__isnull=True).order_by(
+    statuses = prof.training_statuses.exclude(
+        rating__user_profile__exact=prof.pk).order_by(
         '-created_at')[:20]
     author_ids = set([s.author_id for s in statuses])
     authors = UserProfile.objects.in_bulk(author_ids)
@@ -81,8 +84,8 @@ def ajax_training_set_posts(request):
         return HttpResponseBadRequest('Number of existing elements missing')
     num_shown_statuses = int(request.GET[u'elements'])
     prof = request.user.get_profile()
-    statuses = prof.training_statuses.filter(
-        rating__rating__isnull=True).order_by(
+    statuses = prof.training_statuses.exclude(
+        rating__user_profile__exact=prof.pk).order_by(
         '-created_at')[num_shown_statuses:num_shown_statuses+40] \
         .select_related()
     author_ids = set([s.author_id for s in statuses])

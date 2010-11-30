@@ -22,7 +22,7 @@
                             return;
                         }
                         $(settings.appendTo).trigger('infinitescroll.beforesend');
-                        elements = $(".status-container .like:not(.active, .inactive)").size()
+                        elements = $(".status-container .like:not(.active, .inactive)").size();
                         req = $.get(settings.url, 'elements='+elements, function(data) {
                             if (data !== '') {
                                 if (settings.page > 1) {

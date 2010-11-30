@@ -28,6 +28,7 @@ urlpatterns = patterns('',
     (r'^twitterauth/logout/$', 'twitterauth.views.twitter_logout', {'next_page': '/'}),
     (r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name':
         'login.html'}),
+    (r'^login/$', 'status.views.training_login'),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login',
         {'login_url': '/accounts/login/'}),
     (r'^status/recent/$', 'status.views.recent_public_posts'),

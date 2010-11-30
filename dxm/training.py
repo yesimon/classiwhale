@@ -38,6 +38,9 @@ tweeters = ['nytimes', 'TheEconomist', 'russellcrowe', 'sn00ki', 'BarackObama',
 raters = [i for i in range(100, 125)]
 RATER_PASSWORD = 'testtest'
 
+raters_screennames = ['classiwhale10{0}'.format(i) for i in range(10)]
+raters_screennames.extend(['classiwhale1{0}'.format(i) for i in range(10, 25)])
+
 d = datetime(2010, 9, 25, 0, 0, 0)
 since_date = d.isoformat()
 
@@ -202,12 +205,13 @@ def CreateTrainingSet(file):
 
 def DumpRatings(file):
     ratingdb = {}
-    users = UserProfile.objects.filter(screen_name__in=raters)
+    users = UserProfile.objects.filter(screen_name__in=raters_screennames)
     for user in users:
         ratingdb[user.screen_name] = {}
         ratings = Rating.objects.filter(user_profile=user)
         for rating in ratings:
             ratingdb[user.screen_name][rating.status_id] = rating
+    print ratingdb
     pickle.dump(ratingdb, file)
     
 
