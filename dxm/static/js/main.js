@@ -15,7 +15,7 @@ $(document).ready(function() {
     });
     
     $(window).bind('infinitescroll.finish', function() {
-        addRateLinkHandlers);
+        addRateLinkHandlers();
     });
 });
 
