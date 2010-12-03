@@ -5,7 +5,7 @@ from glob import glob
 for p in glob('../lib/*'):
     sys.path.insert(0, p)
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (

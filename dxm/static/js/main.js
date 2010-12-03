@@ -7,12 +7,15 @@
 
 $(document).ready(function() {
     addRateLinkHandlers();
-//	autoRefreshStatuses();
 
     $(window).infinitescroll({
     url: "/status/ajax_training_set_posts/",
     page: 2,
     appendTo: ".statuses",
+    });
+    
+    $(window).bind('infinitescroll.finish', function() {
+        addRateLinkHandlers);
     });
 });
 
@@ -95,10 +98,7 @@ function addRateLinkHandlers() {
 }
 
 
-function autoRefreshStatuses() {
-    setInterval("loadStatuses()", 5000);
-    setInterval("loadTrainingStatuses()", 5000);
-}
+
 
 
 
