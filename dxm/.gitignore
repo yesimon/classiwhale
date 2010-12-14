@@ -4,6 +4,7 @@ local_settings.py
 classiwhale
 .project
 .pydevproject
+*.ropeproject
 *.pyc
 *.pid
 *~
