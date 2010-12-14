@@ -48,7 +48,7 @@ urlpatterns += patterns('contact.views',
     (r'^contact/$', 'contact'),
 )
 
-if settings.DEBUG or settings.STATIC_SERVE:    
+if settings.STATIC_SERVE:    
     urlpatterns += patterns('',
         (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_DOC_ROOT}),
     )                           

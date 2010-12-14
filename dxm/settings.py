@@ -5,7 +5,7 @@ from glob import glob
 for p in glob('../lib/*'):
     sys.path.insert(0, p)
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ROOT_PROJECT_PATH = os.path.dirname(__file__).replace('\\','/')
