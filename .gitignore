@@ -4,6 +4,7 @@ local_settings.py
 
 .project
 .pydevproject
+.ropeproject
 *.pyc
 *.egg
 *~
