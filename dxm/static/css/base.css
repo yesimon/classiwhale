@@ -1,0 +1,97 @@
+* { margin: 0; padding: 0; }
+
+body {
+  font: 13px/20px "Lucida Grande", Arial, Sans-serif;
+  background-color:#A1BBF5;
+}
+
+div {
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  display: block;
+}
+
+form {
+  display: block;
+}
+
+a {
+  outline: none;
+}
+
+.link {
+	text-decoration:none;
+}
+
+.link:hover {
+	text-decoration:underline !important;
+}
+
+.clear {
+	clear: both;
+}
+
+
+#wave_bg {
+    height:170px;
+    top:0px;
+    left:0px;
+    width:100%;
+    background:#E3EBFC url("/static/img/wave.png") repeat-x scroll center bottom;
+    z-index: -1;
+}
+
+
+#middle {
+  width: 100%;
+  display: block;
+  overflow: hidden;
+  margin-top: -140px;
+}
+
+
+.right-tab {
+    width:304px;
+    height:400px;
+    background:#D0DDFA url('/static/img/right_shadow.png') repeat-y 0 0;
+    float:right;
+    margin-top:42px;
+    position:relative;
+    border:1px solid #A1BBF5;
+    border-width:1px 1px 1px 0;
+}
+
+
+.right-tab .corner {
+	position: absolute;
+	top:-1px; right:-1px;
+}
+
+
+#sidenav {
+  float: left;
+  width: 140px;
+}
+
+#sidenav ul {
+  display: block;
+  list-style-type: none;
+  width: 150px;
+}
+
+#content {
+  width: 880px;
+  margin-left: auto;
+  margin-right: auto;  
+  color: #333333 !important;
+  font-weight: normal;
+  text-align: left;
+  overflow:hidden;
+}
+
+#footer {
+  width: 98%;
+}
+
+
+

@@ -4,6 +4,20 @@
 Training Tweets
 {% endblock %}
 
+{% block extra_js %}
+$(document).ready(function() {
+    $(window).infinitescroll({
+    url: "/status/ajax_training_set_posts/",
+    page: 2,
+    appendTo: ".statuses"
+    });
+    
+    $(window).bind('infinitescroll.finish', function() {
+        addRateLinkHandlers();
+    });
+});
+{% endblock %}
+
 
 {% block content %} 
 

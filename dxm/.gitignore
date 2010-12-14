@@ -1,6 +1,8 @@
 mydb.db
 local_settings.py
 
+static/CACHE/
+
 classiwhale
 .project
 .pydevproject

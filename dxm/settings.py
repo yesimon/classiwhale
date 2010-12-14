@@ -64,9 +64,9 @@ ROOT_URL = 'http://www.classiwhale.com'
 
 SERVER_EMAIL = 'server@classiwhale.com'
 
-# Absolute path to the directory that holds media. (this actually means uploaded media)
+# Absolute path to the directory that holds media. (this actually means uploaded media?? unsure about this using as regular media for now)
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.join(ROOT_PROJECT_PATH, 'static')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -159,6 +159,7 @@ INSTALLED_APPS = (
     'django.contrib.comments',
     'django.contrib.markup',
     'annoying',
+    'compressor',
     'south',
     'debug_toolbar',
     'picklefield',

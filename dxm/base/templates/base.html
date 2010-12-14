@@ -3,24 +3,35 @@
 
 <head>
     <link rel="shortcut icon" href="/static/img/favicon.png"/>
-    <link rel="stylesheet" href="/static/css/main.css" />
-    
-    <script type="text/javascript" src="/static/js/jquery-1.4.4.min.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.infinitescroll.js"></script>
-    <script type="text/javascript" src="/static/js/main.js"></script>
-    {% include "feedback/header.html" %}
+    {% load compress %}
+    {% compress css %}
 
+    <link rel="stylesheet" href="/static/css/base.css" />
+    <link rel="stylesheet" href="/static/css/navigation.css" />
+    <link rel="stylesheet" href="/static/css/feed.css" />
+    {% block extra_css %}
+    {% endblock %}
+
+    {% endcompress %}
+
+    {% compress js %}
+    <script type="text/javascript" src="/static/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.scrollTo.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.infinitescroll.js"></script>
+    <script type="text/javascript" src="/static/js/base.js"></script>
+    <script type="text/javascript" src="/static/js/rating.js"></script>
+    
+    {% block extra_js %}
+    {% endblock %}
+
+    {% endcompress %}
+
+    {% include "feedback/header.html" %}
     
     <title>
         {% block title %}
         {% endblock %}
     </title>
-    
-    {% block extra_js %}
-    {% endblock %}
-    
-    {% block extra_css %}
-    {% endblock %}
 </head>
 
 
