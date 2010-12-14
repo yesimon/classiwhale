@@ -5,6 +5,7 @@ classiwhale
 .project
 .pydevproject
 *.pyc
+*.pid
 *~
 *.7z
 *.dmg

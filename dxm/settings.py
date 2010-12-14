@@ -8,6 +8,8 @@ for p in glob('../lib/*'):
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
+ROOT_PROJECT_PATH = os.path.dirname(__file__).replace('\\','/')
+
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
     ('Simon Ye', 'simon@classiwhale.com'),
@@ -19,12 +21,20 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'mysql'     # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'classiwhale'  #os.path.join(os.path.abspath(os.path.dirname(__file__)), 'mydb.db').replace('\\','/') # Or path to database file if using sqlite3.
-DATABASE_USER = 'classiwhale'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'look@thisduck'         # Not used with sqlite3.
-DATABASE_HOST = 'www.classiwhale.com'             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'classiwhale',
+        'HOST': '109.169.56.133',
+        'PORT': '',
+        'USER': 'classiwhale',
+        'PASSWORD': 'wombocombo',
+    },
+    'local': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(ROOT_PROJECT_PATH, "localdb.db"),
+    },
+}
 
 import socket
 INTERNAL_IPS = (
@@ -51,8 +61,6 @@ USE_I18N = True
 
 # Absolute root url of the site
 ROOT_URL = 'http://www.classiwhale.com'
-
-ROOT_PROJECT_PATH = os.path.dirname(__file__).replace('\\','/')
 
 SERVER_EMAIL = 'server@classiwhale.com'
 
@@ -150,8 +158,10 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.comments',
     'django.contrib.markup',
+    'annoying',
     'south',
     'debug_toolbar',
+    'picklefield',
     'django_extensions',
     'base',
     'twitterauth',
