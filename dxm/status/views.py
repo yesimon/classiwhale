@@ -75,7 +75,8 @@ def training_set_posts(request):
     return render_to_response('training_set_posts.html',
         {'statuses': statuses},
         context_instance=RequestContext(request))
-        
+
+@login_required        
 def ajax_training_set_posts(request):
     results = {'success': 'False'}
     if request.method != u'GET':
@@ -149,11 +150,12 @@ def ajax_rate(request):
     results = {'success':'False'}
     if request.method != u'POST':
         return HttpResponseBadRequest("Only allows POST requests")
-    POST = request.POST
-    
+    POST = request.POST    
     if (not POST.has_key(u'rating')) or (not POST.has_key(u'id')):
         return HttpResponseBadRequest("rating and/or id parameters missing")
     (u, id, rating) = (request.user, int(POST[u'id']), POST[u'rating'])
+    if !u.is_authenticated:
+        return HttpResponse(status=400)
     prof = u.get_profile()
     
     s, c = Status.objects.get_or_create(id=id)
