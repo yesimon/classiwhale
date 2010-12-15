@@ -4,6 +4,8 @@ import sys
 from glob import glob
 for p in glob('../lib/*'):
     sys.path.insert(0, p)
+import djcelery
+djcelery.setup_loader()
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -149,6 +151,13 @@ DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
 }
 
+BROKER_HOST = '109.169.56.133'
+BROKER_PORT = 5672
+BROKER_USER = 'classiwhale'
+BROKER_PASSWORD = 'wombocombo'
+BROKER_VHOST = 'magicfilter'
+
+
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -161,6 +170,7 @@ INSTALLED_APPS = (
     'annoying',
     'compressor',
     'south',
+    'djcelery',
     'debug_toolbar',
     'picklefield',
     'django_extensions',

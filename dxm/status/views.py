@@ -154,8 +154,8 @@ def ajax_rate(request):
     if (not POST.has_key(u'rating')) or (not POST.has_key(u'id')):
         return HttpResponseBadRequest("rating and/or id parameters missing")
     (u, id, rating) = (request.user, int(POST[u'id']), POST[u'rating'])
-    if not u.is_authenticated:
-        return HttpResponse(status=400)
+    if not u.is_authenticated():
+        return HttpResponseBadRequest("Must be logged in")
     prof = u.get_profile()
     
     s, c = Status.objects.get_or_create(id=id)
