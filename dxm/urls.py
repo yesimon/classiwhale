@@ -21,6 +21,7 @@ urlpatterns = patterns('',
 
     (r'^$', 'status.views.friends_timeline'),
     (r'^admin/', include(admin.site.urls)),
+    (r'^api/', include('api.urls')),
     (r'^about/$', 'django.views.generic.simple.direct_to_template', {'template': 'about.html' }),
     (r'^about/(\w+)/$', 'about_pages'),
     (r'^twitterauth/login/$', 'twitterauth.views.twitter_login'),

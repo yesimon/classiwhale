@@ -1,6 +1,5 @@
 from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
-from django.views.generic import list_detail
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.views.generic.simple import direct_to_template
@@ -12,9 +11,11 @@ from django.core.paginator import Paginator
 from twitterauth.models import *
 from twitterauth.utils import get_authorized_twitter_api
 from status.models import *
+from datetime import datetime
+from email.utils import parsedate
+from time import mktime
 import twitter
 import json
-import time
 
 
 def recent_public_posts(request):
@@ -153,14 +154,17 @@ def ajax_rate(request):
     POST = request.POST    
     if (not POST.has_key(u'rating')) or (not POST.has_key(u'id')):
         return HttpResponseBadRequest("rating and/or id parameters missing")
-    (u, id, rating) = (request.user, int(POST[u'id']), POST[u'rating'])
+    u, id, rating, text, created_at = (request.user, 
+                  int(POST[u'id']), POST[u'rating'], POST[u'text'],
+                                       POST[u'created_at'])
     if not u.is_authenticated():
         return HttpResponseBadRequest("Must be logged in")
     prof = u.get_profile()
     
-    s, c = Status.objects.get_or_create(id=id)
+    s, c = Status.objects.get_or_create(id=id, text=text,     \
+                created_at=datetime.fromtimestamp(mktime(     \
+                parsedate(created_at))))
     r, c = Rating.objects.get_or_create(status=s, user_profile=prof)
-    
     if rating == u"up":
         r.rating = 1
     elif rating == u"down":

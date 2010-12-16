@@ -1,0 +1,14 @@
+Brief overview of current architecture:
+
+Production Server (magicfilter):
+OS: Ubuntu 10.10
+Host: 109.169.56.133
+Description: This server currently runs pretty much everything. It runs the website server using nginx and fastCGI. It hosts the postgresql database for all data. It runs the RabbitMQ server for scheduling asynchronous tasks as well as the celery daemons that go about performing those tasks. As you can probably guess, separating out all of these server/daemons is one method of optimizing performance later down the line. 
+
+Code/Review Server:
+OS: Ubuntu 10.10
+Host: 204.236.131.199
+Description: This runs the git repository through ssh and two web interfaces on nginx. The repository contains two projects - classiwhale which is the main source and gitosis-admin, which controls which users can access the source. You may clone and modify gitosis-admin to add additional RSA keys if desired. The web interface repo.classiwhale.com contains a gitweb interface towards the repository. It is password protected with basic auth, and the username/password is a/wombocombo. Be careful considering that you can download the entire source from there. The second interface is code.classiwhale.com, which handles reviews. It runs a full instance of reviewboard which allows the handling of reviews. However, it is only an interface for running reviews. The integration of the patch into the repository must occur by hand and at the committer's discretion.
+
+Todo Server: (Ken's so I forgot the details)
+

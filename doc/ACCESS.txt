@@ -1,0 +1,15 @@
+This file contains access for all of the main components.
+
+repo.classiwhale.com:
+username = a
+password = wombocombo
+
+classiwhale.com (postgresql):
+username = classiwhale
+password = wombocombo
+
+classiwhale.com (rabbitmq):
+username = classiwhale
+password = wombocombo
+vhost = magicfilter
+

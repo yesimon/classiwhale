@@ -25,7 +25,7 @@ class Status(models.Model):
     hyperlinks = models.ManyToManyField(Hyperlink, blank=True, null=True)
     hashtags = models.ManyToManyField(Hashtag, blank=True, null=True)
     ats = models.ManyToManyField('twitterauth.UserProfile', related_name="status_ats", blank=True, null=True)
-    created_at = models.DateTimeField()
+    created_at = models.DateTimeField(blank=True, null=True)
     in_reply_to_user = models.ForeignKey('twitterauth.UserProfile', 
         related_name="user_replies", blank=True, null=True)
     in_reply_to_status = models.ForeignKey('self', 
