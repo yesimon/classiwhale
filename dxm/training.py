@@ -47,6 +47,7 @@ since_date = d.isoformat()
 alpha = 0.5 # Percentage of tweeters for each rater to follow
 
 
+
 class TrainingSet:
 
     def __init__(self):
@@ -72,7 +73,7 @@ def GetTweets(file, tweeters, raters):
     for tweeter in tweeters:
         try: timeline = api.GetUserTimeline(id=tweeter, count=50)
         except: 
-            print "User: '{0}' has protected tweets".format(tweeter)
+             print "User: '{0}' has protected tweets".format(tweeter)
         train_set.tweetdb[tweeter] = timeline
         try: user = api.GetUser(tweeter)
         except: print "Cannot get user '{0}'".format(tweeter)
