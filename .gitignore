@@ -17,7 +17,7 @@ local_settings.py
 *.rar
 *.tar
 *.zip
-
+.#*
 *.wsgi
 *.log
 *.sql
