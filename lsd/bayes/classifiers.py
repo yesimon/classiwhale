@@ -12,13 +12,12 @@ setup_environ(settings)
 
 ################# Script #####################
 import numpy as np
-from scipy.sparse import dok_matrix, csc_matrix
+from scipy.sparse import dok_matrix, csc_matrix, lil_matrix
 
 from extraction import SimpleExtractor
 from classifier.models import Classifier, TokenDictionary
 from twitterauth.models import UserProfile, Rating
 from status.models import Status
-import status.management.commands.extract as extract
 import random
 import collections
 import copy 
@@ -81,8 +80,8 @@ class MultinomialBayesClassifier(object):
         self.num_labels = self.d.num_labels  
         self.counts_y = np.zeros((self.d.num_labels, 1))
         self.m = np.uint32(0)
-        self.counts = dok_matrix((self.d.num_labels, self.d.num_tokens))
-        self.totals = dok_matrix((self.d.num_tokens, 1))
+        self.counts = lil_matrix((self.d.num_labels, self.d.num_tokens))
+        self.totals = lil_matrix((self.d.num_tokens, 1))
         self.modified = 1    
         self.statuses = set()
         
@@ -93,7 +92,8 @@ class MultinomialBayesClassifier(object):
         """Train a classifer with (status, rating) tuple, can be trained more"""
         d = self.d
         self.modified += 1
-        if sr_tup[0].id in self.statuses: return
+        status = sr_tup[0]
+        if status.id in self.statuses or not status.text: return
         self.statuses.add(sr_tup[0].id)
         feats = [(t, sr_tup[1]) for t in self.extractor.ExtractStatus(sr_tup[0])]
         for token, label in feats:
@@ -152,18 +152,18 @@ class MultinomialBayesClassifier(object):
         result = copy.copy(self)
         result.counts_y = np.add(self.counts_y, other.counts_y)
         result.m = np.add(self.m, other.m)
-        result.counts = dok_matrix(np.add(self.counts.todense(),
+        result.counts = lil_matrix(np.add(self.counts.todense(),
                                           other.counts.todense()))
-        result.totals = dok_matrix(np.add(self.totals.todense(), 
+        result.totals = lil_matrix(np.add(self.totals.todense(), 
                                           other.totals.todense()))
         return result
                 
     def __iadd__(self, other):                
         self.counts_y = np.add(self.counts_y, other.counts_y)
         self.m = np.add(self.m, other.m)
-        self.counts = dok_matrix(np.add(self.counts.todense(),
+        self.counts = lil_matrix(np.add(self.counts.todense(),
                                         other.counts.todense()))
-        self.totals = dok_matrix(np.add(self.totals.todense(),
+        self.totals = lil_matrix(np.add(self.totals.todense(),
                                         other.totals.todense()))
         return self
         
@@ -171,8 +171,8 @@ class MultinomialBayesClassifier(object):
         result = copy.copy(self)
         result.counts_y = np.multiply(self.counts_y, factor)
         result.m = np.multiply(self.m, factor)
-        result.counts = dok_matrix(np.multiply(self.counts.todense(), factor))
-        result.totals = dok_matrix(np.multiply(self.totals.todense(), factor))
+        result.counts = lil_matrix(np.multiply(self.counts.todense(), factor))
+        result.totals = lil_matrix(np.multiply(self.totals.todense(), factor))
         return result
         
         
@@ -182,7 +182,8 @@ class MultinomialBayesClassifier(object):
 
     def __getstate__(self):
         result = self.__dict__.copy()
-        del result['d']
+        try: del result['d']
+        except KeyError: pass
         return result
 
     @staticmethod        

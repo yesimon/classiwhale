@@ -50,6 +50,7 @@ class SimpleExtractor(ExtractorBase):
         Extract the tokens in a tweet based on ExtractWord. Unfortunately
         this is probably the bottleneck according to profiling
         """
+        if not status.text: return None
         tokens = map(cls.ExtractWord, status.text.split())
         tokens = [w for w in tokens if w]
         return tokens

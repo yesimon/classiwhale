@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}
+Recent Tweets
+{% endblock %}
+
+
+{% block content %} 
+
+	<div class="status-prompt">
+	    <div>What&#39;s happening?</div>
+	    <input type="text"/>
+	</div>
+	
+	{% include 'status_list.html' %}
+
+{% endblock %}
+
