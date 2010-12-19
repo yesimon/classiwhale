@@ -2,18 +2,17 @@
 import os.path
 import sys
 from glob import glob
-for p in glob('../lib/*'):
+ROOT_PROJECT_PATH = os.path.dirname(__file__).replace('\\','/')
+for p in glob(os.path.join(ROOT_PROJECT_PATH, '../lib/*')):
     sys.path.insert(0, p)
-sys.path.insert(0, '../lsd')
+sys.path.insert(0, os.path.join(ROOT_PROJECT_PATH, '../lsd'))
 import djcelery
 djcelery.setup_loader()
-
 
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ROOT_PROJECT_PATH = os.path.dirname(__file__).replace('\\','/')
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
