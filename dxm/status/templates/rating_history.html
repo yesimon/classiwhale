@@ -48,26 +48,26 @@ function loadStatusesAJAX() {
 
 function generateStatusHTML(data) {
     var html = "<div class=\"rate-buttons\">\n" +
-        "<div class=\"like\"></div>\n" +
-        "<div class=\"dislike\"></div>\n" +
-    "</div>\n\n" +
+        "<div class=\"like\"><\/div>\n" +
+        "<div class=\"dislike\"><\/div>\n" +
+    "<\/div>\n\n" +
     "<div class=\"tweet-usr-profile\">\n" +
         "<a href=\"http://twitter.com/" + data.user.screen_name + "\">\n" +
-            "<img class=\"photo\" width=\"48\" height=\"48\" src=\"" + data.user.profile_image_url +  "\" alt=\"" + data.user.screen_name + "\" />\n" +
-        "</a>\n" +
-    "</div>\n" + 
+            "<img class=\"photo\" width=\"48\" height=\"48\" src=\"" + data.user.profile_image_url +  "\" alt=\"" + data.user.screen_name + "\" \/>\n" +
+        "<\/a>\n" +
+    "<\/div>\n" + 
     "<div class=\"tweet-body\">\n" +
         "<p>\n" +
             "<a class=\"twtr-user\" href=\"http://twitter.com/" + data.user.screen_name + "\">\n" +
                 data.user.screen_name +
-            "</a> " + data.text + "<a class=\"tweet-hlink\" href=\"http://twitpic.com/20seue\" target=\"_blank\"></a>\n" +
+            "<\/a> " + data.text + "<a class=\"tweet-hlink\" href=\"http://twitpic.com/20seue\" target=\"_blank\"><\/a>\n" +
             "<i>\n" +
                 "<a class=\"tweet-timestamp\" href=\"http://twitter.com/" + data.user.screen_name + "/status/" + data.id_str + "\" target=\"_blank\">\n" +
                     relative_time(data.created_at) +
-                "</a>\n" +
-            "</i>\n" +
-        "</p>\n" +
-    "</div>\n";
+                "<\/a>\n" +
+            "<\/i>\n" +
+        "<\/p>\n" +
+    "<\/div>\n";
     return html;
 }
 
