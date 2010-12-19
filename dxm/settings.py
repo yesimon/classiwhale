@@ -8,6 +8,8 @@ sys.path.insert(0, '../lsd')
 import djcelery
 djcelery.setup_loader()
 
+
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -45,7 +47,7 @@ DATABASES = {
 #    '127.0.0.1',
 #)
 
-CACHE_BACKEND = 'dummy://'
+CACHE_BACKEND = 'locmem://'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
