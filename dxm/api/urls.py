@@ -1,8 +1,13 @@
 from django.conf.urls.defaults import *
 from piston.resource import Resource
 from api.handlers import RatingHandler
+from api.authentication import DjangoAuthentication
 
-rating_handler = Resource(RatingHandler)
+
+auth = DjangoAuthentication()
+ad = {'authentication': auth}
+
+rating_handler = Resource(RatingHandler, **ad)
 
 
 

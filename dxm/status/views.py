@@ -136,7 +136,7 @@ def friends_timeline(request):
     api = get_authorized_twitter_api(request.session['access_token'])
     statuses = api.GetFriendsTimeline()
     friends = api.GetFriends()
-    
+    # this next call is slow as hell, not efficient
     Rating.appendTo(statuses, request.user.get_profile())
     
     return render_to_response('friends_timeline.html',

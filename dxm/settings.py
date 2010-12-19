@@ -4,6 +4,7 @@ import sys
 from glob import glob
 for p in glob('../lib/*'):
     sys.path.insert(0, p)
+sys.path.insert(0, '../lsd')
 import djcelery
 djcelery.setup_loader()
 
@@ -43,6 +44,8 @@ INTERNAL_IPS = (
     socket.gethostbyname(socket.gethostname()),
     '127.0.0.1',
 )
+
+CACHE_BACKEND = 'dummy://'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -180,6 +183,7 @@ INSTALLED_APPS = (
     'feedback',
     'status',
     'search',
+    'classifier',
 )
 
 # Load local settings for each machine
