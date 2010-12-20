@@ -1,3 +1,4 @@
+from django.core.exceptions import DoesNotExist, MultipleObjectsReturned
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.template.loader import get_template
@@ -10,8 +11,8 @@ from annoying.decorators import render_to
 from django.core.cache import cache
 from bayes.classifiers import BayesCommonData, MultinomialBayesClassifier
 from bayes.extraction import SimpleExtractor
-import twitter
-import cPickle
+
+
 
 @login_required
 @render_to('train_bayes.html')
