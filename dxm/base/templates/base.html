@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/static/css/base.css" />
     <link rel="stylesheet" href="/static/css/navigation.css" />
     <link rel="stylesheet" href="/static/css/feed.css" />
+    <link rel="stylesheet" href="/static/feedback/feedback.css"/>
     {% block extra_css %}
     {% endblock %}
 
@@ -17,15 +18,31 @@
     {% compress js %}
     <script type="text/javascript" src="/static/js/jquery.scrollTo.js"></script>
     <script type="text/javascript" src="/static/js/jquery.infinitescroll.js"></script>
+    <script src="/static/feedback/jquery.form.js"></script>
+    <script src="/static/feedback/feedback.js"></script>
     <script type="text/javascript" src="/static/js/base.js"></script>
     <script type="text/javascript" src="/static/js/rating.js"></script>
-    
+
+    {% if GOOGLE_ANALYTICS_KEY %}
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-20334343-1']);
+      _gaq.push(['_setDomainName', '.classiwhale.com']);
+      _gaq.push(['_trackPageview']);
+      
+      (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    {% endif %}
+
     {% block extra_js %}
     {% endblock %}
 
     {% endcompress %}
 
-    {% include "feedback/header.html" %}
     
     <title>
         {% block title %}

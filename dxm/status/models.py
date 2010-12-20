@@ -18,7 +18,7 @@ class Hyperlink(models.Model):
 class Status(models.Model):
     id = models.BigIntegerField(primary_key=True)
     text = models.CharField(max_length=200, blank=True, null=True)
-    author = models.ForeignKey('twitterauth.UserProfile', blank=True, null=True)
+    user_profile = models.ForeignKey('twitterauth.UserProfile', blank=True, null=True)
     content_length = models.IntegerField(blank=True, null=True)
     punctuation = models.IntegerField(blank=True, null=True)
     has_hyperlink = models.BooleanField(default=False)
