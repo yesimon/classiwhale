@@ -1,4 +1,4 @@
-from django.core.exceptions import DoesNotExist, MultipleObjectsReturned
+from django.core.exceptions import MultipleObjectsReturned
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.template.loader import get_template
@@ -39,7 +39,7 @@ def get_multinomial_bayes_classifier(prof):
     try:
         c_obj = prof.classifier_set.get(name='MultinomialBayesClassifier')
         c_obj.classifier.update_common(common)
-    except DoesNotExist:
+    except Classifier.DoesNotExist:
         c = MultinomialBayesClassifier(common=common, extractor=SimpleExtractor)
         c_obj = Classifier(user_profile=prof, classifier=c, name='MultinomialBayesClassifier')
     except MultipleObjectsReturned:
