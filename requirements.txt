@@ -1,6 +1,35 @@
 BeautifulSoup==3.2.0
 Django==1.2.3
 South==0.7.3
+<<<<<<< HEAD
+amqplib>=0.6.1
+anyjson>=0.3
+carrot>=0.10.7
+celery>=2.1.4
+distribute>=0.6.14
+django-celery>=2.1.1
+django-picklefield>=0.1.9
+django-css>=2.3.1
+django-annoying>=0.7.5
+django-extensions>=0.6
+django-debug-toolbar>=0.8.4
+django-piston>=0.2.2
+django-compressor>=0.5.3
+flup>=1.0.2
+httplib2>=0.6.0
+#importlib>=1.0.2
+numpy>=1.5.1
+oauth2>=1.2.0
+psycopg2>=2.3.1
+pyparsing>=1.5.5
+python-dateutil>=1.5
+#python-twitter>=0.8-devel
+simplejson>=2.1.2
+virtualenv>=1.5.1
+virtualenvwrapper>=2.5.3
+wsgiref>=0.1.2
+yolk>=0.4.1
+=======
 amqplib==0.6.1
 anyjson==0.3
 carrot==0.10.7
@@ -32,3 +61,4 @@ virtualenvwrapper==2.5.3
 wsgiref==0.1.2
 yolk==0.4.1
 
+>>>>>>> 3206a2cb704f9b86353e685e8ca09e876de04802

@@ -41,11 +41,11 @@ DATABASES = {
     },
 }
 
-import socket
-INTERNAL_IPS = (
-    socket.gethostbyname(socket.gethostname()),
-    '127.0.0.1',
-)
+#import socket
+#INTERNAL_IPS = (
+#    socket.gethostbyname(socket.gethostname()),
+#    '127.0.0.1',
+#)
 
 CACHE_BACKEND = 'locmem://'
 
@@ -196,6 +196,7 @@ INSTALLED_APPS = (
     'status',
     'search',
     'classifier',
+    'algorithmio',
 )
 
 # Load local settings for each machine
