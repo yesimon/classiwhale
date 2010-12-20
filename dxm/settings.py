@@ -185,6 +185,7 @@ INSTALLED_APPS = (
     'status',
     'search',
     'classifier',
+    'algorithmio',
 )
 
 # Load local settings for each machine
