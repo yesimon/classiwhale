@@ -10,6 +10,7 @@ import djcelery
 djcelery.setup_loader()
 
 
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -155,6 +156,7 @@ DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
 }
 
+# Djcelery settings for rabbitmq broker
 BROKER_HOST = '109.169.56.133'
 BROKER_PORT = 5672
 BROKER_USER = 'classiwhale'
@@ -176,6 +178,11 @@ INSTALLED_APPS = (
     'south',
     'djcelery',
     'debug_toolbar',
+    'indexer',
+    'paging',
+    'sentry',
+    'sentry.client',
+    'sentry.client.celery',
     'picklefield',
     'django_extensions',
     'base',
