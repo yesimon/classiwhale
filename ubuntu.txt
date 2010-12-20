@@ -1,2 +1,0 @@
-sudo pip install mimeparse
-sudo apt-get install python-lxml
