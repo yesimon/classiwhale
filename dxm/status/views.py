@@ -68,11 +68,11 @@ def training_set_posts(request):
     statuses = prof.training_statuses.exclude(
         rating__user_profile__exact=prof.pk).order_by(
         '-created_at')[:20]
-    author_ids = set([s.author_id for s in statuses])
-    authors = UserProfile.objects.in_bulk(author_ids)
+    prof_ids = set([s.user_profile_id for s in statuses])
+    profs = UserProfile.objects.in_bulk(prof_ids)
     for status in statuses:
-        status.screen_name = authors[status.author_id].screen_name
-        status.profile_image_url = authors[status.author_id].profile_image_url
+        status.screen_name = profs[status.user_profile_id].screen_name
+        status.profile_image_url = profs[status.user_profile_id].profile_image_url
     return render_to_response('training_set_posts.html',
         {'statuses': statuses},
         context_instance=RequestContext(request))
@@ -90,11 +90,11 @@ def ajax_training_set_posts(request):
         rating__user_profile__exact=prof.pk).order_by(
         '-created_at')[num_shown_statuses:num_shown_statuses+40] \
         .select_related()
-    author_ids = set([s.author_id for s in statuses])
-    authors = UserProfile.objects.in_bulk(author_ids)
+    prof_ids = set([s.user_profile_id for s in statuses])
+    authors = UserProfile.objects.in_bulk(prof_ids)
     for status in statuses:
-        status.screen_name = authors[status.author_id].screen_name
-        status.profile_image_url = authors[status.author_id].profile_image_url
+        status.screen_name = authors[status.user_profile_id].screen_name
+        status.profile_image_url = authors[status.user_profile_id].profile_image_url
     t = get_template('training_set_list.html')
     results['success'] = 'True'
     results['statuses'] = statuses
