@@ -28,7 +28,8 @@ class TwitterBackend:
     def authenticate(self, access_token):
         '''authenticates the token by requesting user information from twitter
         '''
-        twitter_api = twitter.Api(username=CONSUMER_KEY, password=CONSUMER_SECRET,
+        twitter_api = twitter.Api(consumer_key=CONSUMER_KEY, 
+                                  consumer_secret=CONSUMER_SECRET,
                                   access_token_key=access_token.key,
                                   access_token_secret=access_token.secret)
         

@@ -188,6 +188,7 @@ INSTALLED_APPS = (
     'sentry.client.celery',
     'picklefield',
     'django_extensions',
+    'tastypie',
     'base',
     'twitterauth',
     'backends',

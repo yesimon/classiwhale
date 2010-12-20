@@ -1,4 +1,21 @@
 # -*- coding: utf-8 -*-
+
+
+# -*- coding: utf-8 -*-
+from django.core.management import setup_environ
+import sys
+# horrific path mangling here :(
+sys.path.extend(['../dxm/', '../lib/'])
+
+# For production use
+# sys.path.append('/var/www/classiwhale/dxm/')
+
+import settings
+setup_environ(settings)
+
+
+from status.models import Status
+from twitterauth.models import Rating
 import numpy as np
 import scipy.cluster.hierarchy as hierarchy
 from scipy.spatial.distance import pdist
@@ -53,7 +70,7 @@ class CommonData():
             
     def _LoadData(self, filename):
         with open(filename, 'r') as f:
-            data = pickle.load(f)
+            data = pickle.loads(f.read().replace('\r\n', '\n'))
         self.__dict__ = data.__dict__
                 
     def _StoreData(self, filename):
@@ -68,12 +85,12 @@ class CommonData():
         tokens_filename = 'tweet_tokens.pkl'
         self.stopwords = stopwords.words('english')       
         with open(ratings_filename, 'r') as f: 
-            self.rating_data = cPickle.load(f)
+            self.rating_data = cPickle.load(f.read().replace('\r\n', '\n'))
         with open(tweets_filename, 'r') as f:
-            self.train_data = cPickle.load(f)
+            self.train_data = cPickle.load(f.read().replace('\r\n', '\n'))
         try: 
             with open(tokens_filename, 'r') as f:
-                self.word_dictionary = cPickle.load(f)
+                self.word_dictionary = cPickle.load(f.read().replace('\r\n', '\n'))
         except IOError:
             self.word_dictionary = self.ExtractDictionary(self.train_set, self) 
             with open(tokens_filename, 'w') as f:
@@ -161,7 +178,18 @@ class CommonData():
         for w in bigrams:
             if w: frequency[w] += 1
         return frequency
-            
+
+def repopulate(d):
+    print d.rating_data
+
+    for i in range(len(d.raters)):
+        user_ratings = d.rating_data[d.raters[i]]
+        rating_ids = user_ratings.keys()
+        for rating_id in rating_ids:
+            rating = d.rating_data[d.raters[i]][rating_id]
+            rating.save()
+
+
 class MultinomialBayesClassifier():
     """Defines a multinomial bayes classifier. This classifier can be be trained
     multiple times via the train function. Use predict to make new predictions
@@ -504,6 +532,8 @@ def NaiveBayesNLTKClassifyTest(d, training, validation, ratings):
 def main():
     IPythonImport()
     d = CommonData()    
+    repopulate(d)
+    return
     n_folds = 2
     random.seed()
     
