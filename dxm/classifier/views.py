@@ -35,7 +35,6 @@ def get_multinomial_bayes_classifier(prof):
     if common == None: 
         common = BayesCommonData()
         cache.set('bayes_common', common, 60 * 30)
-    c_obj = prof.classifier_set.get(name='MultinomialBayesClassifier')
     try:
         c_obj = prof.classifier_set.get(name='MultinomialBayesClassifier')
         c_obj.classifier.update_common(common)
