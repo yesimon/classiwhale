@@ -41,22 +41,24 @@ class Rating(models.Model):
     class Meta:
         verbose_name_plural = "Ratings"
         
-    # this method easily used improperly - really slow if profiling
+
     @staticmethod
-    def appendTo(statuses, user):
-        l = len(statuses)
-        for i in range(l):
+    def appendTo(statuses, prof):
+        ratings = Rating.objects.filter(user_profile=prof,
+                                        status__in=[s.id for s in statuses])
+        rd = dict([(r.status_id, r) for r in ratings])
+        for s in statuses:
             try:
-                r = Rating.objects.get(status = statuses[i].GetId(), user_profile=user)
-                statuses[i].rating = r.rating
+                r = rd[s.id]
+                s.rating = r.rating
                 if r.rating == 1:
-                    statuses[i].likeClass = ' active'
-                    statuses[i].dislikeClass = ' inactive'
+                    s.likeClass = ' active'
+                    s.dislikeClass = ' inactive'
                 if r.rating == -1:
-                    statuses[i].likeClass = ' inactive'
-                    statuses[i].dislikeClass = ' active'
-            except:
-                pass
+                    s.likeClass = ' inactive'
+                    s.dislikeClass = ' active'
+            except KeyError:
+                continue
     
     
     

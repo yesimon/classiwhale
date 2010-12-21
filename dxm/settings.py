@@ -41,11 +41,11 @@ DATABASES = {
     },
 }
 
-#import socket
-#INTERNAL_IPS = (
-#    socket.gethostbyname(socket.gethostname()),
-#    '127.0.0.1',
-#)
+import socket
+INTERNAL_IPS = (
+    socket.gethostbyname(socket.gethostname()),
+    '127.0.0.1',
+)
 
 CACHE_BACKEND = 'locmem://'
 
@@ -133,7 +133,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 
 MIDDLEWARE_CLASSES = (
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+#    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -168,6 +168,19 @@ BROKER_VHOST = 'magicfilter'
 
 
 
+# Devserver settings
+DEVSERVER_MODULES = (
+    'devserver.modules.sql.SQLRealTimeModule',
+    'devserver.modules.sql.SQLSummaryModule',
+    'devserver.modules.profile.ProfileSummaryModule',
+
+    # Modules not enabled by default
+    #'devserver.modules.ajax.AjaxDumpModule',
+    #'devserver.modules.profile.MemoryUseModule',
+    #'devserver.modules.cache.CacheSummaryModule',
+)
+
+
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -180,7 +193,6 @@ INSTALLED_APPS = (
     'compressor',
     'south',
     'djcelery',
-    'debug_toolbar',
     'indexer',
     'paging',
     'sentry',
@@ -196,8 +208,13 @@ INSTALLED_APPS = (
     'status',
     'search',
     'classifier',
-    'algorithmio',
 )
+
+if DEBUG == True:
+    INSTALLED_APPS += (
+        'devserver',
+#    'debug_toolbar',
+    )
 
 # Load local settings for each machine
 try:
