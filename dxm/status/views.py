@@ -167,7 +167,11 @@ def ajax_rate(request):
     s, c = Status.objects.get_or_create(id=id, text=text,     \
                 created_at=datetime.fromtimestamp(mktime(     \
                 parsedate(created_at))))
-    r, c = Rating.objects.get_or_create(status=s, user_profile=prof)
+    try:
+        r, c = Rating.objects.get_or_create(status=s, user_profile=prof)
+    except:
+        r = Rating(status=s, user_profile=prof)
+        print r.id
     if rating == u"up":
         r.rating = 1
     elif rating == u"down":

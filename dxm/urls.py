@@ -1,9 +1,10 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.contrib.auth.views import login, logout
-from django.views.generic.simple import direct_to_template
-from django.views.generic import list_detail
 from django.conf import settings
+from tastypie.api import Api
+from twitterauth.api.resources import RatingResource
+
 
 URL_LIST = {
     'About'     : 'about/',
@@ -14,6 +15,10 @@ URL_LIST = {
 
 admin.autodiscover()
 
+v1_api = Api(api_name='v1')
+v1_api.register(RatingResource())
+
+
 urlpatterns = patterns('',
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
@@ -21,9 +26,9 @@ urlpatterns = patterns('',
 
     (r'^$', 'status.views.friends_timeline'),
     (r'^admin/', include(admin.site.urls)),
-    (r'^api/', include('api.urls')),
+    (r'^api/', include(v1_api.urls)),
     (r'^sentry/', include('sentry.urls')),
-     (r'^about/$', 'django.views.generic.simple.direct_to_template', {'template': 'about.html' }),
+    (r'^about/$', 'django.views.generic.simple.direct_to_template', {'template': 'about.html' }),
     (r'^about/(\w+)/$', 'about_pages'),
     (r'^twitterauth/login/$', 'twitterauth.views.twitter_login'),
     (r'^twitterauth/return/$', 'twitterauth.views.twitter_return'),
