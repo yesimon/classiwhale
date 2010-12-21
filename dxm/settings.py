@@ -1,5 +1,6 @@
 # Django settings for dxm project.
 import os.path
+import os
 import sys
 from glob import glob
 ROOT_PROJECT_PATH = os.path.dirname(__file__).replace('\\','/')
@@ -8,7 +9,6 @@ for p in glob(os.path.join(ROOT_PROJECT_PATH, '../lib/*')):
 sys.path.insert(0, os.path.join(ROOT_PROJECT_PATH, '../lsd'))
 import djcelery
 djcelery.setup_loader()
-
 
 
 DEBUG = True
@@ -195,7 +195,6 @@ INSTALLED_APPS = (
     'status',
     'search',
     'classifier',
-    'algorithmio',
 )
 
 # Load local settings for each machine

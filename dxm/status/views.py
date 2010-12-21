@@ -61,6 +61,8 @@ def rating_history(request):
 def training_login(request):
     return HttpResponseRedirect('/accounts/login/?next=/training/')
         
+        
+        
 @login_required
 def training_set_posts(request):
     """Returns list of unrated training tweets paginated"""
@@ -76,6 +78,7 @@ def training_set_posts(request):
     return render_to_response('training_set_posts.html',
         {'statuses': statuses},
         context_instance=RequestContext(request))
+
 
 @login_required        
 def ajax_training_set_posts(request):

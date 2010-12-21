@@ -5,6 +5,24 @@ Recent Tweets
 {% endblock %}
 
 
+
+{% block extra_js %}
+var pageIndex = 1;
+$(document).ready(function() {
+    $(window).infinitescroll({
+        url: "/status/ajax_training_set_posts/",
+        page: ++pageIndex,
+        appendTo: ".statuses"
+    });
+    
+    $(window).bind('infinitescroll.finish', function() {
+        addRateLinkHandlers();
+    });
+});
+{% endblock %}
+
+
+
 {% block content %} 
 
 	<div class="status-prompt">

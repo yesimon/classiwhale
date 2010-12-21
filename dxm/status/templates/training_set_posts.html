@@ -7,9 +7,9 @@ Training Tweets
 {% block extra_js %}
 $(document).ready(function() {
     $(window).infinitescroll({
-    url: "/status/ajax_training_set_posts/",
-    page: 2,
-    appendTo: ".statuses"
+        url: "/status/ajax_training_set_posts/",
+        page: 2,
+        appendTo: ".statuses"
     });
     
     $(window).bind('infinitescroll.finish', function() {
@@ -21,18 +21,17 @@ $(document).ready(function() {
 
 {% block content %} 
 
-	<div class="status-prompt">
-	    <div>What&#39;s happening?</div>
-	    <input type="text"/>
-	</div>
+	  <div class="status-prompt">
+	      <div>What&#39;s happening?</div>
+	      <input type="text"/>
+	  </div>
 	
     <div class="statuses">
-    {% include 'training_set_list.html' %}
-
+        {% include 'training_set_list.html' %}
     </div>
     
-
 {% endblock %}
+
 
 
 
