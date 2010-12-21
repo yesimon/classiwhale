@@ -8,10 +8,12 @@
                     triggerAt: 300,
                     page: 2,
                     appendTo: '.list tbody',
-                    container: $(document)
+                    container: $(document),
+                    getParams: ''
                 }, options);
             var req = null;
             var maxReached = false;
+            var page = 1;
 
             var infinityRunner = function() {
                 if (settings.url !== null) {
@@ -22,8 +24,11 @@
                             return;
                         }
                         $(settings.appendTo).trigger('infinitescroll.beforesend');
-                        elements = $(".status-container .like:not(.active, .inactive)").size();
-                        req = $.get(settings.url, 'elements='+elements, function(data) {
+                        
+                        //elements = $(".status-container .like:not(.active, .inactive)").size();
+                        page ++;
+                        
+                        req = $.get(settings.url, settings.getParams + '&page='+page, function(data) {
                             if (data !== '') {
                                 if (settings.page > 1) {
                                     $(settings.appendTo).append(data);

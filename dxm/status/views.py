@@ -18,15 +18,15 @@ import twitter
 import json
 
 
-def recent_public_posts(request):
+def public_timeline(request):
     api = twitter.Api()
     statuses = api.GetPublicTimeline()
-    return render_to_response('public_posts.html',
+    return render_to_response('public_timeline.html',
         {'statuses': statuses, },
         context_instance=RequestContext(request))
 
 
-def ajax_recent_public_posts(request):
+def ajax_public_timeline(request):
     '''Get more recent public posts via ajax - currently does not support 
     checking of the latest since_id for already down tweets'''
     results = {'success': 'False'}
@@ -106,46 +106,71 @@ def ajax_training_set_posts(request):
 
 
 def public_profile(request, username):
-    api = twitter.Api()
+    api = twitter.Api() # this should be authenticated if possible
     statuses = api.GetUserTimeline(username)
     user = api.GetUser(username)
+    max_id = statuses[0].GetId()
+    
     return render_to_response('public_profile.html',
         {
          'user': user,
-         'statuses': statuses
+         'statuses': statuses,
+         'max_id': max_id
         },
         context_instance=RequestContext(request)) 
     
-    
 
-def ajax_friend_timeline(request):
+def ajax_user_timeline(request):
     results = {'success': 'False'}
     if request.method != u'GET':
         return HttpResponseBadRequest('Must be GET request')
     if not request.GET.has_key(u'screenname'):
-        return HttpResponseBadRequest('friend screenname missing')
+        return HttpResponseBadRequest('screenname missing')
+    if not request.GET.has_key(u'max_id'):
+        return HttpResponseBadRequest('start id missing')
+    if not request.GET.has_key(u'page'):
+        return HttpResponseBadRequest('page number missing')
     screenname = request.GET[u'screenname']
-    api = get_authorized_twitter_api(request.session['access_token'])
-    results['statuses'] = api.GetUserTimeline(id=screenname)
+    max_id = request.GET[u'max_id']
+    page = request.GET[u'page']
+    
+    api = twitter.Api() # this should be authenticated if possible
+    results['statuses'] = api.GetUserTimeline(id=screenname, max_id=max_id, page=page)
     t = get_template('status_list.html')
     results['success'] = 'True'
     html = t.render(RequestContext(request, results))
     return HttpResponse(html)
 
 
-def friends_timeline(request):
+
+
+def ajax_timeline(request):
     if not request.user.is_authenticated() or 'access_token' not in request.session:
-        return HttpResponseRedirect(reverse('status.views.recent_public_posts'))
+        return HttpResponseRedirect(reverse('status.views.public_timeline'))
+    api = get_authorized_twitter_api(request.session['access_token'])
+    statuses = api.GetFriendsTimeline()
+    # this next call is slow as hell, not efficient
+    Rating.appendTo(statuses, request.user.get_profile())
+    return render_to_response('status_list.html',
+        {
+          'statuses': statuses
+        },
+        context_instance=RequestContext(request))
+    
+
+def timeline(request):
+    if not request.user.is_authenticated() or 'access_token' not in request.session:
+        return HttpResponseRedirect(reverse('status.views.public_timeline'))
     api = get_authorized_twitter_api(request.session['access_token'])
     statuses = api.GetFriendsTimeline()
     friends = api.GetFriends()
     # this next call is slow as hell, not efficient
     Rating.appendTo(statuses, request.user.get_profile())
     
-    return render_to_response('friends_timeline.html',
+    return render_to_response('timeline.html',
         {
-         'statuses': statuses,
-        'friends': friends
+          'statuses': statuses,
+          'friends': friends
         },
         context_instance=RequestContext(request))
 

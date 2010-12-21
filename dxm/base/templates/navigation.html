@@ -4,9 +4,9 @@
 	<div class="nav-bound">
 		<div id="logo">
 			{% if user.is_authenticated %}
-			    <a href="{% url status.views.friends_timeline %}">ClassiWhale</a>
+			    <a href="{% url status.views.timeline %}">ClassiWhale</a>
 			{% else %}
-			    <a href="{% url status.views.recent_public_posts %}">ClassiWhale</a>
+			    <a href="{% url status.views.public_timeline %}">ClassiWhale</a>
 			{% endif %}
 	    </div>
 		<ul>
@@ -24,14 +24,14 @@
 		    </li>
 		    
 		    </li>
-		    <li class="{% navactive request 'status.views.recent_public_posts' %}">
-		    	<a href="{% url status.views.recent_public_posts %}">Recent</a>
+		    <li class="{% navactive request 'status.views.public_timeline' %}">
+		    	<a href="{% url status.views.public_timeline %}">Recent</a>
 		    </li>
 		    <li class="{% navactive request 'status.views.rating_history' %}">
 		    	<a href="{% url status.views.rating_history %}">History</a>
 		    </li>
-		    <li class="{% navactive request 'status.views.friends_timeline' %}">
-		    	<a href="{% url status.views.friends_timeline %}">Home</a>
+		    <li class="{% navactive request 'status.views.timeline' %}">
+		    	<a href="{% url status.views.timeline %}">Home</a>
 		    </li>
 		    <li class="searchContainer">
 			    <div>
