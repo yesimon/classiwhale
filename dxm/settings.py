@@ -166,7 +166,7 @@ BROKER_USER = 'classiwhale'
 BROKER_PASSWORD = 'wombocombo'
 BROKER_VHOST = 'magicfilter'
 
-
+CELERY_DISABLE_RATE_LIMITS = True
 
 # Devserver settings
 DEVSERVER_MODULES = (
