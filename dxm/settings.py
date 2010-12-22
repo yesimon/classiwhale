@@ -207,7 +207,7 @@ INSTALLED_APPS = (
     'feedback',
     'status',
     'search',
-    'classifier',
+    'prediction',
     'multinomialbayes',
 )
 
