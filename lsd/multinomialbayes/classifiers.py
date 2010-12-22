@@ -217,7 +217,7 @@ class MultinomialBayesClassifier(Classifier):
             '-rated_time').select_related('status')
         train_set = []
         for rating in ratings_list:
-            train_set.append(rating.status, rating.rating)
+            train_set.append((rating.status, rating.rating))
         map(mb.train, train_set)
         mb_model.save()
         
@@ -227,11 +227,11 @@ class MultinomialBayesClassifier(Classifier):
         mb_model = self.get_multinomial_bayes_model(prof)
         mb = mb_model.data
         log_probas = map(mb.predict, statuses)
-        indexes = range(len(log_prob))
-        expects = [sorted([(mb.labels_lookup[i], log_proba[i, 0]) 
+        indexes = range(len(log_probas[0]))
+        expects = [sorted([(mb.d.labels_lookup[i], log_proba[i, 0]) 
             for i in indexes], key=itemgetter(1), reverse=True)
             for log_proba in log_probas]
-        return map(renormalization, expects)
+        return map(self.renormalization, expects)
 #        return mb.labels_lookup[np.argmax(log_proba)]        
 
     def renormalization(self, expect):
@@ -248,11 +248,12 @@ class MultinomialBayesClassifier(Classifier):
             cache.set('multinomialbayes_cd', common, 60 * 60 * 24)
         try:
             c_obj = MultinomialBayesModel.objects.get(version=self.version)
+
 #            c_obj = prof.classifier_set.get(version=self.version)
             c_obj.data.update_common(common)
-        except Classifier.DoesNotExist:
+        except MultinomialBayesModel.DoesNotExist:
             c = MultinomialBayesData(common=common, extractor=SimpleExtractor)
-            c_obj = MultinomialBayesModel(common=common, data=c, version=self.version)
+            c_obj = MultinomialBayesModel(user_profile=prof, data=c, version=self.version)
 #            c = MultinomialBayesClassifier(common=common, extractor=SimpleExtractor)
 #            c_obj = Classifier(user_profile=prof, classifier=c, name='MultinomialBayesClassifier')
         except MultipleObjectsReturned:

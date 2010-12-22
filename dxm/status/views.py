@@ -157,9 +157,10 @@ def ajax_timeline(request):
         context_instance=RequestContext(request))
     
 
+def timeline(request):
     user = request.user
     if not user.is_authenticated() or 'access_token' not in request.session:
-        return HttpResponseRedirect(reverse('status.views.recent_public_posts'))
+        return HttpResponseRedirect(reverse('status.views.public_timeline'))
     prof = user.get_profile()
     api = get_authorized_twitter_api(request.session['access_token'])
     statuses = api.GetFriendsTimeline()

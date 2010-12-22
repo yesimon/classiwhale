@@ -31,16 +31,19 @@ class TwitterBackend:
         twitter_api = twitter.Api(consumer_key=CONSUMER_KEY, 
                                   consumer_secret=CONSUMER_SECRET,
                                   access_token_key=access_token.key,
-                                  access_token_secret=access_token.secret)
+                                  access_token_secret=access_token.secret,
+                                  debugHTTP=True)
         
          
         try:
             userinfo = twitter_api.VerifyCredentials()
+            print >> sys.stderr, userinfo
         except:
             # If we cannot get the user information, user cannot be authenticated
-            return None
+            return "AAAAHHH"
         userid = userinfo.GetId()
-
+        return str(userid) + ' this'
+        
         user, created = User.objects.get_or_create(id=userid)
         if created:
             # no password set since we validating through twitter oauth
@@ -59,7 +62,7 @@ class TwitterBackend:
         userprofile.description = userinfo.description
         userprofile.profile_image_url = userinfo.profile_image_url
         userprofile.save()
-        return user
+        return userinfo
         
     
     def get_user(self, id):

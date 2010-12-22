@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout
+from backends.twitteroauth import TwitterBackend
 from twitterauth.utils import get_request_token, get_authorization_url, get_access_token
 
 from urlparse import parse_qsl
@@ -50,7 +51,7 @@ def twitter_return(request):
         # Redirect the user to the login page
         return HttpResponse("Something wrong! Tokens do not match...")
 
-    # Comment out verifier if broken - doesn't seemed to be used by other implemenations
+    # Comment out verifier if broken - doesn't seem to be used by other implemenations
     request_token.set_verifier(request.GET.get('oauth_verifier'))
 
     # Generating and signing request for an access token
@@ -59,7 +60,10 @@ def twitter_return(request):
 
     request.session['access_token'] = access_token.to_string()
     
-    auth_user = authenticate(access_token=access_token)
+
+    auth_user = TwitterBackend.authenticate(access_token=access_token)
+    
+    return HttpResponse(str(auth_user) + " more")
 
     # if user is authenticated then login user
     if auth_user:
