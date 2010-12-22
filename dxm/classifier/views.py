@@ -9,8 +9,11 @@ from status.models import *
 from classifier.models import *
 from annoying.decorators import render_to
 from django.core.cache import cache
-from bayes.classifiers import BayesCommonData, MultinomialBayesClassifier
-from bayes.extraction import SimpleExtractor
+
+"""
+
+from multinomialbayes.classifiers import BayesCommonData, MultinomialBayesClassifier
+from multinomialbayes.extraction import SimpleExtractor
 
 
 
@@ -69,3 +72,5 @@ def predicted_friends_timeline(request):
             s.dislikeClass = ' active'            
     return {'statuses': statuses, 'friends': friends}
     
+
+"""

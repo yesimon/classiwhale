@@ -143,7 +143,6 @@ def ajax_user_timeline(request):
 
 
 
-
 def ajax_timeline(request):
     if not request.user.is_authenticated() or 'access_token' not in request.session:
         return HttpResponseRedirect(reverse('status.views.public_timeline'))
@@ -158,21 +157,21 @@ def ajax_timeline(request):
         context_instance=RequestContext(request))
     
 
-def timeline(request):
-    if not request.user.is_authenticated() or 'access_token' not in request.session:
-        return HttpResponseRedirect(reverse('status.views.public_timeline'))
+    user = request.user
+    if not user.is_authenticated() or 'access_token' not in request.session:
+        return HttpResponseRedirect(reverse('status.views.recent_public_posts'))
+    prof = user.get_profile()
     api = get_authorized_twitter_api(request.session['access_token'])
     statuses = api.GetFriendsTimeline()
     friends = api.GetFriends()
-    # this next call is slow as hell, not efficient
-    Rating.appendTo(statuses, request.user.get_profile())
-    
-    return render_to_response('timeline.html',
+    Rating.appendTo(statuses, prof)
+    return render_to_response('friends_timeline.html',
         {
           'statuses': statuses,
           'friends': friends
         },
         context_instance=RequestContext(request))
+
 
 
 def ajax_rate(request):
