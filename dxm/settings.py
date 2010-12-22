@@ -41,11 +41,14 @@ DATABASES = {
     },
 }
 
-import socket
-INTERNAL_IPS = (
-    socket.gethostbyname(socket.gethostname()),
-    '127.0.0.1',
-)
+try:
+    import socket
+    INTERNAL_IPS = (
+        socket.gethostbyname(socket.gethostname()),
+        '127.0.0.1',
+    )
+except:
+    INTERNAL_IPS = ('127.0.0.1', )
 
 CACHE_BACKEND = 'locmem://'
 
