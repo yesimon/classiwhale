@@ -208,6 +208,7 @@ INSTALLED_APPS = (
     'status',
     'search',
     'classifier',
+    'multinomialbayes',
 )
 
 if DEBUG == True:

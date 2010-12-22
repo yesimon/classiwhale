@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.core.management import setup_environ
 import sys
 # horrific path mangling here :(
@@ -9,22 +8,28 @@ sys.path.extend(['../../dxm/', '../', '../../lib/'])
 
 import settings
 setup_environ(settings)
+    
 
-################# Script #####################
+
+# -*- coding: utf-8 -*-
 import numpy as np
 from scipy.sparse import dok_matrix, csc_matrix, lil_matrix
 
 from extraction import SimpleExtractor
-from classifier.models import Classifier, TokenDictionary
 from twitterauth.models import UserProfile, Rating
 from status.models import Status
+from algorithmio.interface import Classifier
+from django.core.cache import cache
+from multinomialbayes.models import *
+from django.core.exceptions import MultipleObjectsReturned
+from operator import itemgetter
 import random
 import collections
 import copy 
 
 
 
-class BayesCommonData():
+class MultinomialBayesCommonData():
     """ Elements in the dictionary 
     self.tokens
     self.labels
@@ -41,17 +46,19 @@ class BayesCommonData():
         tokens = TokenDictionary.objects.all()
         self.tokens = {}
         self.tokens_lookup = {}
+        self.num_tokens = 0
         for t in tokens:
             if not t.active: continue
             self.tokens[t.token] = t.id
             self.tokens_lookup[t.id] = t.token
-        self.num_tokens = len(self.tokens)
+            self.num_tokens += 1
         self.labels = {}
         self.labels_lookup = {}
-        for i, label in enumerate(sorted(BayesCommonData.labelings)):
+        self.num_labels = 0
+        for i, label in enumerate(sorted(MultinomialBayesCommonData.labelings)):
             self.labels[label] = i
             self.labels_lookup[i] = label
-        self.num_labels = len(self.labels)
+            self.num_labels += 1
 
 
 
@@ -63,14 +70,7 @@ class BayesCommonData():
         return s
 
 
-
-
-            
-class MultinomialBayesClassifier(object):
-    """Defines a multinomial bayes classifier. This classifier can be be trained
-    multiple times via the train function. Use predict to make new predictions
-    on inputs. 
-    """
+class MultinomialBayesData(object):
     def __init__(self, extractor=None, common=None):
         """Tokens as a word -> index dict. Labels as label -> index dict"""
         if extractor == None or common == None: raise UnboundLocalError
@@ -80,8 +80,8 @@ class MultinomialBayesClassifier(object):
         self.num_labels = self.d.num_labels  
         self.counts_y = np.zeros((self.d.num_labels, 1))
         self.m = np.uint32(0)
-        self.counts = lil_matrix((self.d.num_labels, self.d.num_tokens))
-        self.totals = lil_matrix((self.d.num_tokens, 1))
+        self.counts = np.zeros((self.d.num_labels, self.d.num_tokens))
+        self.totals = np.zeros((self.d.num_tokens, 1))
         self.modified = 1    
         self.statuses = set()
         
@@ -110,8 +110,8 @@ class MultinomialBayesClassifier(object):
         """Freeze the classifier in a state to increase performance"""
         self.log_phi_y = np.log(self.counts_y/self.m)
         self.log_phi_x_y = csc_matrix(np.log(np.divide(
-                         self.counts.todense() + 1, 
-                         np.transpose(self.totals.todense()) + self.num_tokens)))
+                         self.counts + 1, 
+                         np.transpose(self.totals) + self.num_tokens)))
         self.modified = 0            
             
     def predict(self, status):
@@ -124,55 +124,32 @@ class MultinomialBayesClassifier(object):
             try: t = d.tokens[token]
             except KeyError: continue
             log_proba += self.log_phi_x_y[:, t]
-        return d.labels_lookup[np.argmax(log_proba)]
-        
-    def most_informative_features(self, num_features=20):
-        d = self.d
-        phi_y = np.divide(self.counts.todense() + 1, 
-                   np.transpose(self.totals.todense()) + self.num_tokens)
-        best_labels = np.argmax(phi_y, axis=0)
-        worst_labels = np.argmin(phi_y, axis=0)
-        indicator = np.log(np.divide(np.amax(phi_y, axis=0),
-                                  np.amin(phi_y, axis=0)))
-        indicator = np.divide(np.amax(phi_y, axis=0), np.amin(phi_y, axis=0))
-        best_indices = indicator.argsort()[0, -num_features:]#[::-1]
-        s = "Most Informative Features\n"        
-        for n in range(num_features-1, 0, -1):
-            i = best_indices[0, n]
-            try:
-                s += "{0}\t\t {1} : {2} = {3}\n".format(d.tokens_lookup[i],
-                    d.labels_lookup[best_labels[0, i]],
-                    d.labels_lookup[worst_labels[0, i]],
-                    indicator[0, i])
-            except UnicodeEncodeError:
-                s += "Unprintable unicode token\n"
-        return s
+        return log_proba
+#        return d.labels_lookup[np.argmax(log_proba)]
+
+
                 
     def __add__(self, other):
         result = copy.copy(self)
         result.counts_y = np.add(self.counts_y, other.counts_y)
         result.m = np.add(self.m, other.m)
-        result.counts = lil_matrix(np.add(self.counts.todense(),
-                                          other.counts.todense()))
-        result.totals = lil_matrix(np.add(self.totals.todense(), 
-                                          other.totals.todense()))
+        result.counts = np.add(self.counts, other.counts)
+        result.totals = np.add(self.totals, other.totals)
         return result
                 
     def __iadd__(self, other):                
         self.counts_y = np.add(self.counts_y, other.counts_y)
         self.m = np.add(self.m, other.m)
-        self.counts = lil_matrix(np.add(self.counts.todense(),
-                                        other.counts.todense()))
-        self.totals = lil_matrix(np.add(self.totals.todense(),
-                                        other.totals.todense()))
+        self.counts = np.add(self.counts, other.counts)
+        self.totals = np.add(self.totals, other.totals)
         return self
         
     def __mul__(self, factor):
         result = copy.copy(self)
         result.counts_y = np.multiply(self.counts_y, factor)
         result.m = np.multiply(self.m, factor)
-        result.counts = lil_matrix(np.multiply(self.counts.todense(), factor))
-        result.totals = lil_matrix(np.multiply(self.totals.todense(), factor))
+        result.counts = np.multiply(self.counts, factor)
+        result.totals = np.multiply(self.totals, factor)
         return result
         
         
@@ -186,11 +163,12 @@ class MultinomialBayesClassifier(object):
         except KeyError: pass
         return result
 
+
     @staticmethod        
     def test():
-        d = BayesCommonData()
-        c1 = MultinomialBayesClassifier(common=d, extractor=SimpleExtractor)
-        c2 = MultinomialBayesClassifier(common=d, extractor=SimpleExtractor)
+        d = MultinomialBayesCommonData()
+        c1 = MultinomialBayesData(common=d, extractor=SimpleExtractor)
+        c2 = MultinomialBayesData(common=d, extractor=SimpleExtractor)
         superman = Status(id=1, text='superman')
         batman = Status(id=2, text='batman')
         spiderman = Status(id=3, text='spiderman')
@@ -210,12 +188,105 @@ class MultinomialBayesClassifier(object):
         print 'batman predict: {0}'.format(c2.predict(batman))
         print
         print 'classifier 3: c1 + c2*2'
-        print c3.most_informative_features()
+#        print c3.most_informative_features()
         print 'superman predict: {0}'.format(c3.predict(superman))
         print 'batman predict: {0}'.format(c3.predict(batman))
         
 
 
+
+
+
+            
+class MultinomialBayesClassifier(Classifier):
+    """Defines a multinomial bayes classifier. This classifier can be be trained
+    multiple times via the train function. Use predict to make new predictions
+    on inputs. 
+    """
+    
+    RENORM_CONSTANT = 2.0 # A value of 1, -1 indicates 100x more confidence
+    
+
+    def force_train(self, prof):
+        """Concrete method for Classifier"""
+        mb_model = self.get_multinomial_bayes_model(prof)
+        mb = mb_model.data
+        seen_statuses = mb.statuses
+        ratings_list = Rating.objects.filter(user_profile=prof).exclude(
+            status__id__in=seen_statuses).order_by(
+            '-rated_time').select_related('status')
+        train_set = []
+        for rating in ratings_list:
+            train_set.append(rating.status, rating.rating)
+        map(mb.train, train_set)
+        mb_model.save()
+        
+
+    def predict(self, statuses, prof):
+        """Concrete method for Classifier"""
+        mb_model = self.get_multinomial_bayes_model(prof)
+        mb = mb_model.data
+        log_probas = map(mb.predict, statuses)
+        indexes = range(len(log_prob))
+        expects = [sorted([(mb.labels_lookup[i], log_proba[i, 0]) 
+            for i in indexes], key=itemgetter(1), reverse=True)
+            for log_proba in log_probas]
+        return map(renormalization, expects)
+#        return mb.labels_lookup[np.argmax(log_proba)]        
+
+    def renormalization(self, expect):
+        """Expect as a sorted list of (label, probability)"""
+        log_confidence = expect[0][1] - expect[1][1]
+        conf = log_confidence / self.RENORM_CONSTANT
+        if conf > 1: conf = 1.0
+        return conf*expect[0][0]
+
+    def get_multinomial_bayes_model(self, prof):
+        common = cache.get('multinomialbayes_cd')
+        if common == None: 
+            common = MultinomialBayesCommonData()
+            cache.set('multinomialbayes_cd', common, 60 * 60 * 24)
+        try:
+            c_obj = MultinomialBayesModel.objects.get(version=self.version)
+#            c_obj = prof.classifier_set.get(version=self.version)
+            c_obj.data.update_common(common)
+        except Classifier.DoesNotExist:
+            c = MultinomialBayesData(common=common, extractor=SimpleExtractor)
+            c_obj = MultinomialBayesModel(common=common, data=c, version=self.version)
+#            c = MultinomialBayesClassifier(common=common, extractor=SimpleExtractor)
+#            c_obj = Classifier(user_profile=prof, classifier=c, name='MultinomialBayesClassifier')
+        except MultipleObjectsReturned:
+            # Should never happen to have two classifiers of same version
+            c_objs = MultinomialBayesModel.objects.filter(version=self.version)
+#            c_objs = prof.classifier_set.filter(name='MultinomialBayesClassifier')
+            [c.delete for c in c_objs[1:]]
+            c_obj = c_objs[0]
+        return c_obj
+
+        
+    def most_informative_features(self, prof, num_features=20):
+        mb_model = self.get_multinomial_bayes_model(prof)
+        mb = mb_model.data
+        d = mb.d
+        phi_y = np.divide(mb.counts + 1, 
+                   np.transpose(mb.totals) + mb.num_tokens)
+        best_labels = np.argmax(phi_y, axis=0)
+        worst_labels = np.argmin(phi_y, axis=0)
+        indicator = np.log(np.divide(np.amax(phi_y, axis=0),
+                                  np.amin(phi_y, axis=0)))
+        indicator = np.divide(np.amax(phi_y, axis=0), np.amin(phi_y, axis=0))
+        best_indices = indicator.argsort()[0, -num_features:]#[::-1]
+        s = "Most Informative Features\n"        
+        for n in range(num_features-1, 0, -1):
+            i = best_indices[0, n]
+            try:
+                s += "{0}\t\t {1} : {2} = {3}\n".format(d.tokens_lookup[i],
+                    d.labels_lookup[best_labels[0, i]],
+                    d.labels_lookup[worst_labels[0, i]],
+                    indicator[0, i])
+            except UnicodeEncodeError:
+                s += "Unprintable unicode token\n"
+        return s
 
 
 class MultinomialCollatedClassifier(MultinomialBayesClassifier):
@@ -283,4 +354,5 @@ class TrainingStatistics(dict):
     
 
 if __name__ == '__main__':
-    MultinomialBayesClassifier.test()
+    
+    MultinomialBayesData.test()

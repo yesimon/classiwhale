@@ -49,8 +49,8 @@ urlpatterns = patterns('',
     (r'^profile/(?P<username>\w+)/$', 'status.views.public_profile'),
     (r'^search/user/$', 'search.views.ajax_user_search'),
     (r'^feedback/ajax/(.*?)$', 'feedback.views.handle_ajax'),
-    (r'^bayes/train/$', 'classifier.views.train_multinomial_bayes'),
-    (r'^bayes/predict/$', 'classifier.views.predicted_friends_timeline'),
+#    (r'^bayes/train/$', 'classifier.views.train_multinomial_bayes'),
+#    (r'^bayes/predict/$', 'classifier.views.predicted_friends_timeline'),
 )
 
 urlpatterns += patterns('contact.views',

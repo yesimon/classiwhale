@@ -15,7 +15,8 @@ class UserProfile(models.Model):
     description = models.CharField(max_length=160, blank=True, null=True)
     ratings = models.ManyToManyField(Status, blank=True, through='Rating')
     training_statuses = models.ManyToManyField(Status, blank=True, null=True, related_name='training')
-    active_classifier = models.ForeignKey('classifier.Classifier', blank=True, null=True, related_name='active_classifier')
+    active_classifier = models.CharField(max_length=50, blank=True, null=True)
+    classifier_version = models.CharField(max_length=30, blank=True, null=True)
     
     def __unicode__(self):
         return "%s's profile" % self.screen_name
