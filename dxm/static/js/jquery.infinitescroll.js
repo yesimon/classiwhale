@@ -5,7 +5,7 @@
             var el = $(this);
             var settings = $.extend({
                     url: null,
-                    triggerAt: 300,
+                    triggerAt: 150,
                     page: 2,
                     appendTo: '.list tbody',
                     container: $(document),
@@ -36,10 +36,10 @@
                                     $(settings.appendTo).html(data);
                                 }
                                 settings.page++;
-                                $(settings.appendTo).trigger('infinitescroll.finish');
+                                $(el).trigger('infinitescroll.finish');
                             } else {
                                 maxReached = true;
-                                $(settings.appendTo).trigger('infinitescroll.maxreached');
+                                $(el).trigger('infinitescroll.maxreached');
                             }
                         }, 'html');
                     }

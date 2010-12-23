@@ -147,7 +147,12 @@ def ajax_timeline(request):
     if not request.user.is_authenticated() or 'access_token' not in request.session:
         return HttpResponseRedirect(reverse('status.views.public_timeline'))
     api = get_authorized_twitter_api(request.session['access_token'])
-    statuses = api.GetFriendsTimeline()
+    
+    if not request.GET.has_key(u'page'):
+        return HttpResponseBadRequest('page number missing')
+    page = request.GET[u'page']
+    
+    statuses = api.GetFriendsTimeline(page=page)
     # this next call is slow as hell, not efficient
     Rating.appendTo(statuses, request.user.get_profile())
     return render_to_response('status_list.html',
@@ -163,10 +168,12 @@ def timeline(request):
         return HttpResponseRedirect(reverse('status.views.public_timeline'))
     prof = user.get_profile()
     api = get_authorized_twitter_api(request.session['access_token'])
+    
     statuses = api.GetFriendsTimeline()
     friends = api.GetFriends()
+    
     Rating.appendTo(statuses, prof)
-    return render_to_response('friends_timeline.html',
+    return render_to_response('timeline.html',
         {
           'statuses': statuses,
           'friends': friends

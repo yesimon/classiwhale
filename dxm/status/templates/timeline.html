@@ -6,24 +6,21 @@ Recent Tweets
 
 
 
-{% block extra_js %}
-var pageIndex = 1;
-$(document).ready(function() {
-    $(window).infinitescroll({
-        url: "/status/ajax_training_set_posts/",
-        page: ++pageIndex,
-        appendTo: ".statuses"
-    });
-    
-    $(window).bind('infinitescroll.finish', function() {
-        addRateLinkHandlers();
-    });
-});
-{% endblock %}
-
-
 
 {% block content %} 
+
+    <script type="text/javascript">
+    $(function() {
+        $(window).infinitescroll({
+            url: "/status/ajax_timeline/",
+            appendTo: ".statuses"
+        });
+        
+        $(window).bind('infinitescroll.finish', function() {
+            addRateLinkHandlers();
+        });
+    });
+    </script>
 
 	<div class="status-prompt">
 	    <div>What&#39;s happening?</div>

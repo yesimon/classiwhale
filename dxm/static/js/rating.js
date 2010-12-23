@@ -29,12 +29,12 @@ function hotkeyPrevEntry() {
 function hotkeyRateLike() {
     activeEntry = $(".entry-active");
     if (activeEntry.length == 0) {
-        $(".entry:first").addClass("entry-active");
+        $(".status:first").addClass("entry-active");
         return;
     }
     nextEntry = activeEntry.next();
 
-    entry = activeEntry.closest(".entry");
+    entry = activeEntry.closest(".status");
     rate("up", entry.attr("id")); 	
     likeButton = entry.find(".like");
     likeButton.next().removeClass('active');
@@ -53,12 +53,12 @@ function hotkeyRateLike() {
 function hotkeyRateDislike() {
     activeEntry = $(".entry-active");
     if (activeEntry.length == 0) {
-        $(".entry:first").addClass("entry-active");
+        $(".status:first").addClass("entry-active");
         return;
     }
     nextEntry = activeEntry.next();
         
-    entry = activeEntry.closest(".entry");
+    entry = activeEntry.closest(".status");
     rate("down", entry.attr("id")); 
     dislikeButton = entry.find(".dislike");
     dislikeButton.prev().removeClass('active');
@@ -76,8 +76,8 @@ function hotkeyRateDislike() {
 
 
 function addRateLinkHandlers() {
-	$(".status-container .like").click(rateLike);
-	$(".status-container .dislike").click(rateDislike);
+	$(".status-container .like").unbind('click').click(rateLike);
+	$(".status-container .dislike").unbind('click').click(rateDislike);
 }
 
 
@@ -89,7 +89,7 @@ function rate(kind, sid, text, created_at) {
 }
 
 function rateLike() {
-    entry = $(this).closest(".entry");
+    entry = $(this).closest(".status");
     rate("up", entry.attr("id"), entry.attr("data-text"), entry.attr("data-created_at")); 	
     
     $(this).next().removeClass('active');
@@ -102,10 +102,8 @@ function rateLike() {
 
 
 function rateDislike() {
-    entry = $(this).closest(".entry");
+    entry = $(this).closest(".status");
     rate("down", entry.attr("id"), entry.attr("data-text"), entry.attr("data-created_at"));
-    //$(this).siblings().hide();
-    //$(this).closest(".entry").slideUp('', moveToRatings);
     
     $(this).prev().removeClass('active');
     $(this).prev().addClass('inactive');

@@ -19,12 +19,11 @@
         $(window).infinitescroll({
             url: "/status/ajax_user_timeline/",
             appendTo: ".statuses",
-            triggerAt: 50,
             getParams: 'screenname={{ user.GetScreenName|urlencode }}&max_id={{ max_id }}'
         });
         
         $(window).bind('infinitescroll.finish', function() {
-            //addRateLinkHandlers();
+            addRateLinkHandlers();
         });
     });
     </script>

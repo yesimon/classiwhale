@@ -1,8 +1,7 @@
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from django.contrib.auth import login, logout
-from backends.twitteroauth import TwitterBackend
+from django.contrib.auth import login, logout, authenticate
 from twitterauth.utils import get_request_token, get_authorization_url, get_access_token
 
 from urlparse import parse_qsl
@@ -60,10 +59,7 @@ def twitter_return(request):
 
     request.session['access_token'] = access_token.to_string()
     
-
-    auth_user = TwitterBackend.authenticate(access_token=access_token)
-    
-    return HttpResponse(str(auth_user) + " more")
+    auth_user = authenticate(access_token=access_token)
 
     # if user is authenticated then login user
     if auth_user:
