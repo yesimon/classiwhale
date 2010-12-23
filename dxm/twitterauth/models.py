@@ -39,7 +39,8 @@ class Rating(models.Model):
     
     class Meta:
         verbose_name_plural = "Ratings"
-        
+        get_latest_by = "rated_time"
+        ordering = ['-rated_time']
 
     @staticmethod
     def appendTo(statuses, prof):
