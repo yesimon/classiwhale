@@ -1,3 +1,4 @@
+
 from django.core.management import setup_environ
 import sys
 # horrific path mangling here :(
@@ -18,12 +19,11 @@ from scipy.sparse import dok_matrix, csc_matrix, lil_matrix
 from extraction import SimpleExtractor
 from twitterauth.models import UserProfile, Rating
 from status.models import Status
-from algorithmio.interface import Classifier
+from algorithmio.classifier import Classifier
 from django.core.cache import cache
 from multinomialbayes.models import *
 from django.core.exceptions import MultipleObjectsReturned
 from operator import itemgetter
-import random
 import collections
 import copy 
 
@@ -125,7 +125,7 @@ class MultinomialBayesData(object):
             except KeyError: continue
             log_proba += self.log_phi_x_y[:, t]
         return log_proba
-#        return d.labels_lookup[np.argmax(log_proba)]
+
 
 
                 
@@ -201,18 +201,21 @@ class MultinomialBayesData(object):
 class MultinomialBayesClassifier(Classifier):
     """Defines a multinomial bayes classifier. This classifier can be be trained
     multiple times via the train function. Use predict to make new predictions
-    on inputs. 
+    on inputs.
+    Contains instance variable:
+    self.prof 
     """
     
     RENORM_CONSTANT = 2.0 # A value of 1, -1 indicates 100x more confidence
     
 
-    def force_train(self, prof):
+
+    def force_train(self):
         """Concrete method for Classifier"""
-        mb_model = self.get_multinomial_bayes_model(prof)
+        mb_model = self.get_multinomial_bayes_model()
         mb = mb_model.data
         seen_statuses = mb.statuses
-        ratings_list = Rating.objects.filter(user_profile=prof).exclude(
+        ratings_list = Rating.objects.filter(user_profile=self.prof).exclude(
             status__id__in=seen_statuses).order_by(
             '-rated_time').select_related('status')
         train_set = []
@@ -222,9 +225,9 @@ class MultinomialBayesClassifier(Classifier):
         mb_model.save()
         
 
-    def predict(self, statuses, prof):
+    def predict(self, statuses):
         """Concrete method for Classifier"""
-        mb_model = self.get_multinomial_bayes_model(prof)
+        mb_model = self.get_multinomial_bayes_model()
         mb = mb_model.data
         log_probas = map(mb.predict, statuses)
         indexes = range(len(log_probas[0]))
@@ -241,32 +244,27 @@ class MultinomialBayesClassifier(Classifier):
         if conf > 1: conf = 1.0
         return conf*expect[0][0]
 
-    def get_multinomial_bayes_model(self, prof):
+    def get_multinomial_bayes_model(self):
         common = cache.get('multinomialbayes_cd')
         if common == None: 
             common = MultinomialBayesCommonData()
             cache.set('multinomialbayes_cd', common, 60 * 60 * 24)
         try:
-            c_obj = MultinomialBayesModel.objects.get(version=self.version)
-
-#            c_obj = prof.classifier_set.get(version=self.version)
+            c_obj = MultinomialBayesModel.objects.get(user_profile=self.prof, version=self.prof.classifier_version)
             c_obj.data.update_common(common)
         except MultinomialBayesModel.DoesNotExist:
             c = MultinomialBayesData(common=common, extractor=SimpleExtractor)
-            c_obj = MultinomialBayesModel(user_profile=prof, data=c, version=self.version)
-#            c = MultinomialBayesClassifier(common=common, extractor=SimpleExtractor)
-#            c_obj = Classifier(user_profile=prof, classifier=c, name='MultinomialBayesClassifier')
+            c_obj = MultinomialBayesModel(user_profile=self.prof, data=c, version=self.prof.classifier_version)
         except MultipleObjectsReturned:
             # Should never happen to have two classifiers of same version
-            c_objs = MultinomialBayesModel.objects.filter(version=self.version)
-#            c_objs = prof.classifier_set.filter(name='MultinomialBayesClassifier')
+            c_objs = MultinomialBayesModel.objects.filter(version=self.prof.classifier_version)
             [c.delete for c in c_objs[1:]]
             c_obj = c_objs[0]
         return c_obj
 
         
-    def most_informative_features(self, prof, num_features=20):
-        mb_model = self.get_multinomial_bayes_model(prof)
+    def most_informative_features(self, num_features=20):
+        mb_model = self.get_multinomial_bayes_model()
         mb = mb_model.data
         d = mb.d
         phi_y = np.divide(mb.counts + 1, 
