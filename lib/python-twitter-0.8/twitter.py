@@ -3260,9 +3260,6 @@ class Api(object):
         return None
       else:
         raise http_error
-    print "\n\n";
-    print json;
-    print "\n\n";
     
     data = simplejson.loads(json)
     self._CheckForTwitterError(data)
