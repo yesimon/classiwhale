@@ -1,0 +1,16 @@
+README.txt
+setup.py
+annoying/__init__.py
+annoying/decorators.py
+annoying/exceptions.py
+annoying/fields.py
+annoying/functions.py
+annoying/middlewares.py
+annoying/utils.py
+annoying/templatetags/__init__.py
+annoying/templatetags/annoying.py
+annoying/templatetags/smart_if.py
+django_annoying.egg-info/PKG-INFO
+django_annoying.egg-info/SOURCES.txt
+django_annoying.egg-info/dependency_links.txt
+django_annoying.egg-info/top_level.txt

@@ -8,10 +8,11 @@ register = Library()
 def tweet(value):
 	value = re.sub(r'((mailto\:|(news|(ht|f)tp(s?))\://){1}\S+)', '<a href="\g<0>" rel="external">\g<0></a>', value)
 	value = re.sub(r'http://(yfrog|twitpic).com/(?P<id>\w+/?)', '', value)
-	value = re.sub(r'#(?P<tag>\w+)', '<a href="http://search.twitter.com/search?tag=\g<tag>" rel="external">#\g<tag></a>', value)
-	value = re.sub(r'@(?P<username>\w+)', '@<a href="http://twitter.com/\g<username>/" rel="external">\g<username></a>', value)
-	
+	value = value.replace('<a ', '<a target="_blank" ')
+	value = re.sub(r'#(?P<tag>\w+)', '<a href="/search?q=%23\g<tag>">#\g<tag></a>', value)
+	value = re.sub(r'@(?P<username>\w+)', '@<a href="/profile/\g<username>/">\g<username></a>', value)
 	return mark_safe(value)
+
 
 def tweet_attachments(ex, value, max_items = -1):
 	start = 0

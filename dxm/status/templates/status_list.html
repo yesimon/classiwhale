@@ -22,7 +22,7 @@
 			<a class="twtr-user" href="/profile/{{ status.GetUser.GetScreenName }}">
 				{{ status.GetUser.GetScreenName }} 
 			</a> 
-			{{ status.GetText|tweet|url_target_blank }}
+			{{ status.GetText|tweet }}
 			<i>
 				<a class="tweet-timestamp" target="_blank" href="http://twitter.com/{{ status.GetUser.GetScreenName }}/status/{{ status.GetId }}" target="_blank">
 					{{ status.GetRelativeCreatedAt }}
