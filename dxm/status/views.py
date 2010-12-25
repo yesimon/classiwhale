@@ -167,6 +167,9 @@ def timeline(request):
     if not user.is_authenticated() or 'access_token' not in request.session:
         return HttpResponseRedirect(reverse('status.views.public_timeline'))
     prof = user.get_profile()
+#    if 'access_token' not in request.session:
+#        return HttpResponseRedirect(reverse('status.views.public_timeline'))
+#    prof = UserProfile.objects.get(pk=request.session['_auth_user_id'])
     api = get_authorized_twitter_api(request.session['access_token'])
     
     statuses = api.GetFriendsTimeline()
