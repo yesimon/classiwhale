@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ username }} on ClassiWhale
+{% endblock %}
+
+
+{% block content %} 
+
+    <div class="status-prompt">
+        <div>Results for {{ term }}</div>
+    </div>
+    
+    <script type="text/javascript">
+    $(function() {
+        $(window).infinitescroll({
+            url: "/search/ajax/",
+            appendTo: ".statuses",
+            getParams: 'q={{ term|urlencode }}'
+        });
+        
+        $(window).bind('infinitescroll.finish', function() {
+            addRateLinkHandlers();
+        });
+    });
+    </script>
+
+    <div class="statuses">
+       {% include 'status_list.html' %}
+    </div>
+    
+{% endblock %}
+
+

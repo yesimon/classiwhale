@@ -1,0 +1,329 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>virtualenvwrapper 2.5.3 &mdash; virtualenvwrapper v2.5.3 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '2.5.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="virtualenvwrapper v2.5.3 documentation" href="#" />
+    <link rel="next" title="Instalación" href="install.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="install.html" title="Instalación"
+             accesskey="N">next</a></li>
+        <li><a href="#">virtualenvwrapper v2.5.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="#">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">virtualenvwrapper 2.5.3</a><ul>
+<li><a class="reference external" href="#caracteristicas">Características</a></li>
+<li><a class="reference external" href="#introduccion">Introducción</a></li>
+<li><a class="reference external" href="#detalles">Detalles</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#referencias">Referencias</a></li>
+<li><a class="reference external" href="#licencia">Licencia</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Next topic</h4>
+            <p class="topless"><a href="install.html"
+                                  title="next chapter">Instalación</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/index.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="virtualenvwrapper-release">
+<h1>virtualenvwrapper 2.5.3<a class="headerlink" href="#virtualenvwrapper-release" title="Permalink to this headline">¶</a></h1>
+<p>virtualenvwrapper es un conjunto de extensiones de la herramienta de Ian
+Bicking <a class="reference external" href="http://pypi.python.org/pypi/virtualenv">virtualenv</a>. Las extensiones
+incluyen funciones para la creación y eliminación de entornos virtuales y por otro
+lado administración de tu rutina de desarrollo, haciendo fácil trabajar en más
+de un proyecto al mismo tiempo sin introducir conflictos entre sus dependencias.</p>
+<div class="section" id="caracteristicas">
+<h2>Características<a class="headerlink" href="#caracteristicas" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Organiza todos tus entornos virtuales en un sólo lugar.</li>
+<li>Funciones para administrar tus entornos virtuales (crear, eliminar, copiar).</li>
+<li>Usa un sólo comando para cambiar entre los entornos.</li>
+<li>Completa con Tab los comandos que toman un entorno virtual como argumento.</li>
+<li>Ganchos configurables para todas las operaciones (ver <a class="reference external" href="scripts.html#scripts"><em>Personalizaciones por usuario</em></a>).</li>
+<li>Sistema de plugins para la creación de extensiones compartibles (ver
+<a class="reference external" href="plugins.html#plugins"><em>Extender Virtualenvwrapper</em></a>).</li>
+</ol>
+</div>
+<div class="section" id="introduccion">
+<h2>Introducción<a class="headerlink" href="#introduccion" title="Permalink to this headline">¶</a></h2>
+<p>La mejor forma de explicar las características que virtualenvwrapper brinda es
+mostrarlo en acción.</p>
+<p>Primero, algunos pasos de inicialización. La mayoría de esto sólo necesita ser
+hecho una sola vez. Vas a querer agregar el comando <tt class="docutils literal"><span class="pre">source</span>
+<span class="pre">/usr/local/bin/virtualenvwrapper.sh</span></tt> al archivo de inicio de shell, cambiando
+el path hacia virtualenvwrapper.sh dependiendo en dónde haya sido instalado por
+pip.</p>
+<div class="highlight-python"><pre>$ pip install virtualenvwrapper
+...
+$ export WORKON_HOME=~/Envs
+$ mkdir -p $WORKON_HOME
+$ source /usr/local/bin/virtualenvwrapper.sh
+$ mkvirtualenv env1
+Installing
+distribute..........................................
+....................................................
+....................................................
+...............................done.
+virtualenvwrapper.user_scripts Creating /Users/dhellmann/Envs/env1/bin/predeactivate
+virtualenvwrapper.user_scripts Creating /Users/dhellmann/Envs/env1/bin/postdeactivate
+virtualenvwrapper.user_scripts Creating /Users/dhellmann/Envs/env1/bin/preactivate
+virtualenvwrapper.user_scripts Creating /Users/dhellmann/Envs/env1/bin/postactivate  New python executable in env1/bin/python
+(env1)$ ls $WORKON_HOME
+env1 hook.log</pre>
+</div>
+<p>Ahora podemos instalar algún software dentro del entorno.</p>
+<div class="highlight-python"><pre>(env1)$ pip install django
+Downloading/unpacking django
+  Downloading Django-1.1.1.tar.gz (5.6Mb): 5.6Mb downloaded
+  Running setup.py egg_info for package django
+Installing collected packages: django
+  Running setup.py install for django
+    changing mode of build/scripts-2.6/django-admin.py from 644 to 755
+    changing mode of /Users/dhellmann/Envs/env1/bin/django-admin.py to 755
+Successfully installed django</pre>
+</div>
+<p>Podemos ver el nuevo paquete instalado con <tt class="docutils literal"><span class="pre">lssitepackages</span></tt>:</p>
+<div class="highlight-python"><pre>(env1)$ lssitepackages
+Django-1.1.1-py2.6.egg-info     easy-install.pth
+distribute-0.6.10-py2.6.egg     pip-0.6.3-py2.6.egg
+django                          setuptools.pth</pre>
+</div>
+<p>Por supuesto que no estamos limitados a un sólo virtualenv:</p>
+<div class="highlight-python"><pre>(env1)$ ls $WORKON_HOME
+env1            hook.log
+(env1)$ mkvirtualenv env2
+Installing distribute...............................
+....................................................
+....................................................
+........... ...............................done.
+virtualenvwrapper.user_scripts Creating /Users/dhellmann/Envs/env2/bin/predeactivate
+virtualenvwrapper.user_scripts Creating /Users/dhellmann/Envs/env2/bin/postdeactivate
+virtualenvwrapper.user_scripts Creating /Users/dhellmann/Envs/env2/bin/preactivate
+virtualenvwrapper.user_scripts Creating /Users/dhellmann/Envs/env2/bin/postactivate  New python executable in env2/bin/python
+(env2)$ ls $WORKON_HOME
+env1            env2            hook.log</pre>
+</div>
+<p>Cambiar entre entornos con <tt class="docutils literal"><span class="pre">workon</span></tt>:</p>
+<div class="highlight-python"><pre>(env2)$ workon env1
+(env1)$ echo $VIRTUAL_ENV
+/Users/dhellmann/Envs/env1
+(env1)$</pre>
+</div>
+<p>El comando <tt class="docutils literal"><span class="pre">workon</span></tt> también incluye la opción de completar con Tab los nombres
+de los entornos, e invoca a los scripts personalizados cuando un entorno es
+activado o desactivado (ver <a class="reference external" href="scripts.html#scripts"><em>Personalizaciones por usuario</em></a>).</p>
+<div class="highlight-python"><pre>(env1)$ echo 'cd $VIRTUAL_ENV' &gt;&gt; $WORKON_HOME/postactivate
+(env1)$ workon env2
+(env2)$ pwd
+/Users/dhellmann/Envs/env2</pre>
+</div>
+<p><a class="reference external" href="scripts.html#scripts-postmkvirtualenv"><em>postmkvirtualenv</em></a> es ejecutado cuando un nuevo entorno es creado,
+dejándote instalar automáticamente herramientas comúnmente utilizadas.</p>
+<div class="highlight-python"><pre>(env2)$ echo 'pip install sphinx' &gt;&gt; $WORKON_HOME/postmkvirtualenv
+(env3)$ mkvirtualenv env3
+New python executable in env3/bin/python
+Installing distribute...............................
+....................................................
+....................................................
+........... ...............................done.
+virtualenvwrapper.user_scripts Creating /Users/dhellmann/Envs/env3/bin/predeactivate
+virtualenvwrapper.user_scripts Creating /Users/dhellmann/Envs/env3/bin/postdeactivate
+virtualenvwrapper.user_scripts Creating /Users/dhellmann/Envs/env3/bin/preactivate
+virtualenvwrapper.user_scripts Creating /Users/dhellmann/Envs/env3/bin/postactivate
+Downloading/unpacking sphinx
+  Downloading Sphinx-0.6.5.tar.gz (972Kb): 972Kb downloaded
+  Running setup.py egg_info for package sphinx
+    no previously-included directories found matching 'doc/_build'
+Downloading/unpacking Pygments&gt;=0.8 (from sphinx)
+  Downloading Pygments-1.3.1.tar.gz (1.1Mb): 1.1Mb downloaded
+  Running setup.py egg_info for package Pygments
+Downloading/unpacking Jinja2&gt;=2.1 (from sphinx)
+  Downloading Jinja2-2.4.tar.gz (688Kb): 688Kb downloaded
+  Running setup.py egg_info for package Jinja2
+    warning: no previously-included files matching '*' found under directory 'docs/_build/doctrees'
+Downloading/unpacking docutils&gt;=0.4 (from sphinx)
+  Downloading docutils-0.6.tar.gz (1.4Mb): 1.4Mb downloaded
+  Running setup.py egg_info for package docutils
+Installing collected packages: docutils, Jinja2, Pygments, sphinx
+  Running setup.py install for docutils
+  Running setup.py install for Jinja2
+  Running setup.py install for Pygments
+  Running setup.py install for sphinx
+    no previously-included directories found matching 'doc/_build'
+    Installing sphinx-build script to /Users/dhellmann/Envs/env3/bin
+    Installing sphinx-quickstart script to /Users/dhellmann/Envs/env3/bin
+    Installing sphinx-autogen script to /Users/dhellmann/Envs/env3/bin
+Successfully installed docutils Jinja2 Pygments sphinx  (env3)$
+(venv3)$ which sphinx-build
+/Users/dhellmann/Envs/env3/bin/sphinx-build</pre>
+</div>
+<p>A través de una combinación de funciones existentes definidas por el <em>core</em>
+del paquete (ver <a class="reference external" href="command_ref.html#command"><em>Referencia de comandos</em></a>), plugins de terceros (ver
+<a class="reference external" href="plugins.html#plugins"><em>Extender Virtualenvwrapper</em></a>), y scripts definidos por el usuario (ver <a class="reference external" href="scripts.html#scripts"><em>Personalizaciones por usuario</em></a>)
+virtualenvwrapper brinda una amplia variedad de oportunidades para automatizar
+tareas repetitivas.</p>
+</div>
+<div class="section" id="detalles">
+<h2>Detalles<a class="headerlink" href="#detalles" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="install.html">Instalación</a><ul>
+<li class="toctree-l2"><a class="reference external" href="install.html#instalacion-basica">Instalación básica</a></li>
+<li class="toctree-l2"><a class="reference external" href="install.html#workon-home">WORKON_HOME</a></li>
+<li class="toctree-l2"><a class="reference external" href="install.html#archivo-de-inicio-del-shell">Archivo de inicio del shell</a></li>
+<li class="toctree-l2"><a class="reference external" href="install.html#interprete-de-python-y-path">Intérprete de Python y $PATH</a></li>
+<li class="toctree-l2"><a class="reference external" href="install.html#inicio-rapido">Inicio rápido</a></li>
+<li class="toctree-l2"><a class="reference external" href="install.html#archivos-temporales">Archivos temporales</a></li>
+<li class="toctree-l2"><a class="reference external" href="install.html#actualizar-desde-1-x">Actualizar desde 1.x</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="command_ref.html">Referencia de comandos</a><ul>
+<li class="toctree-l2"><a class="reference external" href="command_ref.html#administrar-entornos">Administrar entornos</a></li>
+<li class="toctree-l2"><a class="reference external" href="command_ref.html#controlar-los-entornos-activos">Controlar los entornos activos</a></li>
+<li class="toctree-l2"><a class="reference external" href="command_ref.html#rapida-navegacion-dentro-de-virtualenv">Rápida navegación dentro de virtualenv</a></li>
+<li class="toctree-l2"><a class="reference external" href="command_ref.html#administracion-de-rutas">Administración de rutas</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="hooks.html">Personalizar Virtualenvwrapper</a><ul>
+<li class="toctree-l2"><a class="reference external" href="scripts.html">Personalizaciones por usuario</a></li>
+<li class="toctree-l2"><a class="reference external" href="plugins.html">Extender Virtualenvwrapper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="tips.html">Consejos y Trucos</a><ul>
+<li class="toctree-l2"><a class="reference external" href="tips.html#prompt-zsh">Prompt zsh</a></li>
+<li class="toctree-l2"><a class="reference external" href="tips.html#actualizar-las-entradas-de-path-cacheadas">Actualizar las entradas de <tt class="docutils literal"><span class="pre">$PATH</span></tt> cacheadas</a></li>
+<li class="toctree-l2"><a class="reference external" href="tips.html#atar-el-soporte-para-virtualenv-de-pip">Atar el soporte para virtualenv de pip</a></li>
+<li class="toctree-l2"><a class="reference external" href="tips.html#crear-los-directorio-para-trabajar-en-el-proyecto">Crear los directorio para trabajar en el proyecto</a></li>
+<li class="toctree-l2"><a class="reference external" href="tips.html#ejecutar-automaticamente-workon-cuando-se-ingresa-a-un-directorio">Ejecutar automáticamente workon cuando se ingresa a un directorio</a></li>
+<li class="toctree-l2"><a class="reference external" href="tips.html#instalar-herramientas-comunes-automaticmante-en-nuevos-entornos">Instalar herramientas comunes automáticmante en nuevos entornos</a></li>
+<li class="toctree-l2"><a class="reference external" href="tips.html#cambiar-el-comportamiento-por-default-de-cd">Cambiar el comportamiento por default de <tt class="docutils literal"><span class="pre">cd</span></tt></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="developers.html">Para desarrolladores</a><ul>
+<li class="toctree-l2"><a class="reference external" href="developers.html#construir-la-documentacion">Construir la documentación</a></li>
+<li class="toctree-l2"><a class="reference external" href="developers.html#ejecutar-tests">Ejecutar tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="extensions.html">Extensiones existentes</a><ul>
+<li class="toctree-l2"><a class="reference external" href="extensions.html#project">project</a></li>
+<li class="toctree-l2"><a class="reference external" href="extensions.html#emacs-desktop">emacs-desktop</a></li>
+<li class="toctree-l2"><a class="reference external" href="extensions.html#user-scripts">user_scripts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="history.html">Release History</a></li>
+</ul>
+</div>
+<div class="section" id="referencias">
+<span id="references"></span><h2>Referencias<a class="headerlink" href="#referencias" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://pypi.python.org/pypi/virtualenv">virtualenv</a>, de Ian
+Bicking, es un pre-requisito para usar estas extensiones.</p>
+<p>Para más detalles, referirse a la columna que escribí para la revista de
+python (Python Magazine) en Mayo de 2008: <a class="reference external" href="http://www.doughellmann.com/articles/CompletelyDifferent-2008-05-virtualenvwrapper/index.html">virtualenvwrapper | And Now For Something
+Completely Different</a>.</p>
+<p>Rich Leland ha grabado un pequeño <a class="reference external" href="http://mathematism.com/2009/jul/30/presentation-pip-and-virtualenv/">screencast</a>
+mostrando las características de virtualenvwrapper.</p>
+</div>
+<div class="section" id="licencia">
+<h2>Licencia<a class="headerlink" href="#licencia" title="Permalink to this headline">¶</a></h2>
+<p>Copyright Doug Hellmann, All Rights Reserved</p>
+<p>Permission to use, copy, modify, and distribute this software and its
+documentation for any purpose and without fee is hereby granted,
+provided that the above copyright notice appear in all copies and that
+both that copyright notice and this permission notice appear in
+supporting documentation, and that the name of Doug Hellmann not be
+used in advertising or publicity pertaining to distribution of the
+software without specific, written prior permission.</p>
+<p>DOUG HELLMANN DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
+INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO
+EVENT SHALL DOUG HELLMANN BE LIABLE FOR ANY SPECIAL, INDIRECT OR
+CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF
+USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Esta traducción fue realizada por <a class="reference external" href="http://humitos.wordpress.com/">Manuel Kaufmann</a>.</p>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<ul class="last simple">
+<li><a class="reference external" href="http://bitbucket.org/humitos/virtualenvwrapper-es-translation/">La traducción al español</a></li>
+<li>The original <a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/">English version</a> of the
+documentation.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="install.html" title="Instalación"
+             >next</a></li>
+        <li><a href="#">virtualenvwrapper v2.5.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Doug Hellmann.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

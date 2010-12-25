@@ -30,26 +30,32 @@ urlpatterns = patterns('',
     (r'^sentry/', include('sentry.urls')),
     (r'^about/$', 'django.views.generic.simple.direct_to_template', {'template': 'about.html' }),
     (r'^about/(\w+)/$', 'about_pages'),
+    
     (r'^twitterauth/login/$', 'twitterauth.views.twitter_login'),
     (r'^twitterauth/return/$', 'twitterauth.views.twitter_return'),
     (r'^twitterauth/logout/$', 'twitterauth.views.twitter_logout', {'next_page': '/'}),
+    
     (r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name':
         'login.html'}),
-    (r'^login/$', 'status.views.training_login'),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', 
         {'login_url': '/accounts/login/'}),
+        
     (r'^status/recent/$', 'status.views.public_timeline'),
     (r'^status/ajax_rate/$', 'status.views.ajax_rate'),
     (r'^status/ajax_public_timeline/$', 'status.views.ajax_public_timeline'),
     (r'^status/ajax_user_timeline/$', 'status.views.ajax_user_timeline'),
     (r'^status/ajax_timeline/$', 'status.views.ajax_timeline'),
-    (r'^history/$', 'status.views.rating_history'),
-    (r'^training/$', 'status.views.training_set_posts'),
     (r'^status/ajax_training_set_posts/$', 'status.views.ajax_training_set_posts'),
-    (r'^search/$', 'search.views.user_search_index'),
+    (r'^history/$', 'status.views.rating_history'),
     (r'^profile/(?P<username>\w+)/$', 'status.views.public_profile'),
-    (r'^search/user/$', 'search.views.ajax_user_search'),
+    (r'^login/$', 'status.views.training_login'),
+    (r'^training/$', 'status.views.training_set_posts'),
+    
+    (r'^search/$', 'search.views.index'),
+    (r'^search/ajax/$', 'search.views.ajax_index'),
+    
     (r'^feedback/ajax/(.*?)$', 'feedback.views.handle_ajax'),
+    
     (r'^bayes/train/$', 'prediction.views.train_multinomial_bayes'),
     (r'^bayes/predict/$', 'prediction.views.predicted_friends_timeline'),
 )

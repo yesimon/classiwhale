@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
@@ -9,29 +10,32 @@ import json
 
 
 @login_required
-def user_search_index(request):    
-    searchString = request.GET.get('q')
-    if searchString is not None:
+def index(request):    
+    term = request.GET.get('q')
+    if term is not None:
         api = get_authorized_twitter_api(request.session['access_token'])
-        statuses = api.GetUserTimeline(id=searchString)
-        template = 'user_search_results.html'
-        data = {
-            'user_statuses': statuses,
-        }
-        return render_to_response(template, data, 
-                                   context_instance=RequestContext(request))
+        statuses = api.GetSearch(term=term)
+        return  render_to_response('index.html', {
+                    'statuses': statuses,
+                    'term': term
+                }, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/')
 
 
-def ajax_user_search(request):
+@login_required
+def ajax_index(request):
     if request.is_ajax():
-        searchString = request.GET.get('q')
-        if searchString is not None:
+        term = request.GET.get('q')
+        page = request.GET.get('page')
+        if (term is not None and page is not None):
             api = get_authorized_twitter_api(request.session['access_token'])
-            statuses = api.GetUserTimeline(id=searchString)
-            template = 'user_search_results.html'
-            data = {
-                'user_statuses': statuses,
-            }
-            return render_to_response(template, data, 
-                                       context_instance=RequestContext(request))
-        
+            statuses = api.GetSearch(term=term, page=page)
+            return render_to_response('status_list.html', {
+                                         'statuses': statuses
+                                      }, context_instance=RequestContext(request))
+    return HttpResponse('')
+
+
+
+
