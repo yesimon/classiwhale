@@ -1,10 +1,13 @@
+import nexus
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.contrib.auth.views import login, logout
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.views.generic.simple import direct_to_template
 from tastypie.api import Api
 from twitterauth.api.resources import RatingResource
-
+import mimetypes
 
 URL_LIST = {
     'About'     : 'about/',
@@ -14,6 +17,7 @@ URL_LIST = {
 }
 
 admin.autodiscover()
+nexus.autodiscover()
 
 v1_api = Api(api_name='v1')
 v1_api.register(RatingResource())
@@ -26,9 +30,11 @@ urlpatterns = patterns('',
 
     (r'^$', 'status.views.timeline'),
     (r'^admin/', include(admin.site.urls)),
+    (r'^nexus/', include(nexus.site.urls)),
+#    (r'^doc/(?P<template>.*)$', login_required(direct_to_template), {'mimetype':mimetypes.guess_type(template)}),
     (r'^api/', include(v1_api.urls)),
     (r'^sentry/', include('sentry.urls')),
-    (r'^about/$', 'django.views.generic.simple.direct_to_template', {'template': 'about.html' }),
+    (r'^about/$', direct_to_template, {'template': 'about.html' }),
     (r'^about/(\w+)/$', 'about_pages'),
     
     (r'^twitterauth/login/$', 'twitterauth.views.twitter_login'),

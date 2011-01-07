@@ -148,7 +148,8 @@ ROOT_URLCONF = 'urls'
 
 
 TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
+    os.path.join(ROOT_PROJECT_PATH, 'templates').replace('\\','/'),
+    os.path.join(ROOT_PROJECT_PATH, '..', 'doc', '_build', 'html').replace('\\', '/'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -203,6 +204,8 @@ INSTALLED_APPS = (
     'sentry.client.celery',
     'picklefield',
     'django_extensions',
+    'nexus',
+    'gargoyle',
     'tastypie',
     'base',
     'twitterauth',
