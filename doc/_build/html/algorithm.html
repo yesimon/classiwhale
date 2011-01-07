@@ -1,0 +1,157 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Algorithm Interface and Driver &mdash; Classiwhale v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Classiwhale v0.1 documentation" href="index.html" />
+    <link rel="prev" title="Servers" href="servers.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="servers.html" title="Servers"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Classiwhale v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="algorithm-interface-and-driver">
+<span id="ref-algorithm"></span><h1>Algorithm Interface and Driver<a class="headerlink" href="#algorithm-interface-and-driver" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="interface">
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this headline">¶</a></h2>
+<p>The design of the algorithm interface was to allow the algorithm designer maximum flexibility in implementing an algorithm. You can choose to use Django models and therefore the rest of the Classiwhale database as storage, or you can use NoSQL or no storage at all. Therefore, to make the interface as general as possible, each algorithm must provide one subclass that implements the <tt class="docutils literal"><span class="pre">Classifier</span></tt> abc:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Classifier</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract interface that an algorithm absolutely must implement.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Be careful of race condition when asynch tasking on this. Essentially,</span>
+    <span class="c"># don&#39;t save prof model in a task without refetching</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prof</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prof</span> <span class="o">=</span> <span class="n">prof</span>
+
+    <span class="nd">@abc.abstractmethod</span>
+    <span class="k">def</span> <span class="nf">force_train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Force a train on a user immediately&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ne">NotImplementedError</span>
+
+    <span class="nd">@abc.abstractmethod</span>
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statuses</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Predict ratings using algorithm, returns list of float from [-1 1]&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ne">NotImplementedError</span>
+</pre></div>
+</div>
+<p>The default constructor passes in a <tt class="docutils literal"><span class="pre">UserProfile</span></tt> object. This is reasonable for most classifiers. But for classifiers that are global in nature, and thus return the same results for each user, you may choose to override the default constructor and throw away the profile. The driver will still pass in prof as an argument, but you may get rid of it if your algorithm does not make use of it.</p>
+</div>
+<div class="section" id="driver">
+<h2>Driver<a class="headerlink" href="#driver" title="Permalink to this headline">¶</a></h2>
+<p>The driver selects the current classifier and classifier version from the UserProfile model and exec&#8217;s the correct code path at that stage. For the code itself:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">get_predictions</span><span class="p">(</span><span class="n">prof</span><span class="p">,</span> <span class="n">statuses</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Statuses could be list of ids, list of api status objects, or list of</span>
+<span class="sd">    django status models, inspect to decide next steps&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">statuses</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="n">statuses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">long</span><span class="p">):</span>
+        <span class="n">statuses</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">id__in</span><span class="o">=</span><span class="n">statuses</span><span class="p">)</span>
+        <span class="c"># TODO: Do some integrity checks to make sure they are good?</span>
+    <span class="c"># TODO: Logic to obtain predictions from cache if at all possible</span>
+    <span class="n">algo</span> <span class="o">=</span> <span class="n">prof</span><span class="o">.</span><span class="n">active_classifier</span>
+    <span class="k">exec</span> <span class="s">&quot;predictions = {0}(prof).predict(statuses)</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">algo</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">predictions</span>
+
+<span class="k">def</span> <span class="nf">force_train</span><span class="p">(</span><span class="n">prof</span><span class="p">):</span>
+    <span class="n">algo</span><span class="p">,</span> <span class="n">version</span> <span class="o">=</span> <span class="n">prof</span><span class="o">.</span><span class="n">active_classifier</span><span class="p">,</span> <span class="n">prof</span><span class="o">.</span><span class="n">classifier_version</span>
+    <span class="k">exec</span> <span class="s">&quot;{0}(prof).force_train()</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">algo</span><span class="p">)</span>
+    <span class="k">return</span>
+</pre></div>
+</div>
+<p>One active classifier is stored per user, while the version field is a totally &#8220;up to the algorithm designer&#8221; field. Some more likely uses of version would be for updating algorithm source code, MVCC, and asynchronous training for users.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Algorithm Interface and Driver</a><ul>
+<li><a class="reference internal" href="#interface">Interface</a></li>
+<li><a class="reference internal" href="#driver">Driver</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="servers.html"
+                        title="previous chapter">Servers</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/algorithm.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="servers.html" title="Servers"
+             >previous</a> |</li>
+        <li><a href="index.html">Classiwhale v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Simon Ye.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
+    </div>
+  </body>
+</html>
