@@ -64,6 +64,7 @@ urlpatterns = patterns('',
     
     (r'^bayes/train/$', 'prediction.views.train_multinomial_bayes'),
     (r'^bayes/predict/$', 'prediction.views.predicted_friends_timeline'),
+    (r'^bayes/filter/$', 'prediction.views.filtered_friends_timeline'),
 )
 
 urlpatterns += patterns('contact.views',
