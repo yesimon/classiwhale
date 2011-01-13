@@ -4,7 +4,7 @@
 
 {% for status in statuses %}
 
-<div class="status" id="{{ status.GetId }}" data-created_at="{{ status.GetCreatedAt }}" data-text="{{ status.GetText }}">
+<div class="status" data-status="{{ status.AsJsonString }}">
 
 	<div class="rate-buttons">
 		<div class="like{{ status.likeClass }}"></div> 

@@ -183,34 +183,49 @@ def timeline(request):
         },
         context_instance=RequestContext(request))
 
+def full_create_status(status):
+    try: u = User.objects.get(id=status.user.id)
+    except User.DoesNotExist:
+        u = User(id=status.user.id, username=status.user.id)
+        u.save()
+    try: prof = UserProfile.objects.get(pk=status.user.id)
+    except UserProfile.DoesNotExist:
+        prof = UserProfile(pk=status.user.id)
+        prof.save()
+    status = Status(
+        id=status.id,
+        text=status.text,
+        user_profile=prof,
+        created_at=datetime.fromtimestamp(mktime(parsedate(status.created_at))),
+        content_length=len(status.text),
+        )
+    status.save()
+    return status
 
 
 def ajax_rate(request):
     results = {'success':'False'}
     if request.method != u'POST':
         return HttpResponseBadRequest("Only allows POST requests")
-    POST = request.POST    
-    if (not POST.has_key(u'rating')) or (not POST.has_key(u'id')):
-        return HttpResponseBadRequest("rating and/or id parameters missing")
-    u, id, rating, text, created_at = (request.user, 
-                  int(POST[u'id']), POST[u'rating'], POST[u'text'],
-                                       POST[u'created_at'])
+    POST = request.POST
+    if (not POST.has_key(u'rating')) or (not POST.has_key(u'status')):
+        return HttpResponseBadRequest("rating and/or status parameters missing")
+    u, rating, status = (request.user, POST[u'rating'], 
+                         twitter.Status.NewFromJsonDict(json.loads(POST[u'status'])))
     if not u.is_authenticated():
         return HttpResponseBadRequest("Must be logged in")
     prof = u.get_profile()
-    
-    s, c = Status.objects.get_or_create(id=id, text=text,     \
+    s = full_create_status(status)
+    """p
+    s, c = Status.objects.get_or_create(id=status.id, text=status.text,     \
                 created_at=datetime.fromtimestamp(mktime(     \
-                parsedate(created_at))))
-    try:
-        r, c = Rating.objects.get_or_create(status=s, user_profile=prof)
-    except:
-        r = Rating(status=s, user_profile=prof)
-        print r.id
+                parsedate(status.created_at))))
+    """
     if rating == u"up":
-        r.rating = 1
+        rating_int = 1
     elif rating == u"down":
-        r.rating = -1
+        rating_int = -1
+    r = Rating(status=s, user_profile=prof, rating=rating_int)
     r.save()
     results['success'] = 'True'
     jsonResults = json.dumps(results)

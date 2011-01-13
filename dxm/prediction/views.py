@@ -24,6 +24,14 @@ def train_multinomial_bayes(request):
     force_train(prof)
     return {'success': 'works?'}
 
+@login_required
+@render_to('train_bayes.html')
+def train_classifier(request):
+    prof = request.user.get_profile()
+    force_train(prof)
+    return {'success': 'works?'}
+
+
 
 @login_required
 @render_to('predicted_friends_timeline.html')

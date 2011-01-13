@@ -20,7 +20,7 @@ class UserProfile(models.Model):
     
     def __unicode__(self):
         return "%s's profile" % self.screen_name
-    
+
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
