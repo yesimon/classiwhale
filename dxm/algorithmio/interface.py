@@ -1,5 +1,6 @@
 from status.models import *
 from multinomialbayes.classifiers import MultinomialBayesClassifier
+from cylonbayes.classifiers import CylonBayesClassifier
 
 def get_predictions(prof, statuses, session=None):
     """Statuses could be list of ids, list of api status objects, or list of

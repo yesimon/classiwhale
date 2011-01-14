@@ -1,5 +1,9 @@
 from django.db import models
 from datetime import datetime
+from django.contrib.auth.models import User
+from time import mktime
+from email.utils import parsedate
+from datetime import datetime
 
 class Hashtag(models.Model):
     text = models.CharField(max_length=140, unique=True)
@@ -39,13 +43,14 @@ class Status(models.Model):
         ordering = ["-id"]
         verbose_name_plural = "statuses"
         
-        
+
     @staticmethod
     def fullCreate(data):
+        """Create status from dictionary"""
         status = Status.objects.create(
                                         id = data['id'],
                                         text = data['text'],
-                                        author = data['author'],
+                                        user = data['user'],
                                         has_hyperlink = data['has_hyperlink'],
                                         content_length = data['content_length'],
                                         punctuation = data['punctuation']
@@ -92,5 +97,7 @@ class Status(models.Model):
           return 'about a day ago'
         else:
           return 'about %d days ago' % (delta / (60 * 60 * 24))        
+
+
 
 

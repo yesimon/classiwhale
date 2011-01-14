@@ -1,0 +1,31 @@
+.. highlight:: rst
+.. _ref-install:
+
+Installation
+============
+
+Installation and deployment so far is still a problem, and fixing it later will have to include some combination of chef/fabric/woven.
+
+Anyways, start off by cloning the repository once you have access.
+
+``git clone git@repo.classiwhale.com:classiwhale.git``
+
+At the top level contains a requirements.txt, which will be fed into pip, but first you must have python and pip! Therefore.
+
+Install python2.6/2.7
+
+Install setuptools
+
+Now you can get pip.
+
+``easy_install pip``
+
+Use pip to get as much as possible using requirements.
+
+``pip install -r requirements.txt``
+
+If this fails at any point, it is likely because there are other requirements which have not been installed yet. In this case, look where the error occurs and manually install the necessary compenent (with some googling/SO), and try pip installing again. For example, you need to install postgresql first before psycopg2 will install properly. If other errors occur, just try messing around / commenting with requirements.txt to get it working.
+
+At this point you should be good to go.
+
+One thing to note: anything you do while running the local development server access the classiwhale database, so be careful!

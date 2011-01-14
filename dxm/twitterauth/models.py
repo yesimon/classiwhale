@@ -20,7 +20,7 @@ class UserProfile(models.Model):
     
     def __unicode__(self):
         return "%s's profile" % self.screen_name
-    
+
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -44,7 +44,7 @@ class Rating(models.Model):
 
     @staticmethod
     def appendTo(statuses, prof):
-        ratings = Rating.objects.filter(user_profile=prof,
+        ratings = Rating.objects.filter(user_profile=prof.user_id,
                                         status__in=[s.id for s in statuses])
         rd = dict([(r.status_id, r) for r in ratings])
         for s in statuses:

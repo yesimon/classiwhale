@@ -21,6 +21,9 @@ import twitter
 
 CONSUMER_KEY = getattr(settings, 'CONSUMER_KEY')
 CONSUMER_SECRET = getattr(settings, 'CONSUMER_SECRET')
+DEFAULT_CLASSIFIER = 'CylonBayesClassifier'
+DEFAULT_CLASSIFIER_VERSION = '0.1'
+
 
 class TwitterBackend:
     """TwitterBackend for authentication
@@ -41,14 +44,13 @@ class TwitterBackend:
             return None
         userid = userinfo.GetId()
 
-        user, created = User.objects.get_or_create(id=userid)
+        user, created = User.objects.get_or_create(id=userid,
+                                                   username=userid,
+                                                   first_name=userinfo.name)
         if created:
             # no password set since we validating through twitter oauth
             user.set_unusable_password()
-
-        user.username = userid
-        user.first_name = userinfo.name
-        user.save()
+            user.save()
 
         # Get the user profile
         userprofile = user.get_profile()
@@ -58,6 +60,9 @@ class TwitterBackend:
         userprofile.location = userinfo.location
         userprofile.description = userinfo.description
         userprofile.profile_image_url = userinfo.profile_image_url
+        if not userprofile.active_classifier:
+            userprofile.active_classifier = DEFAULT_CLASSIFIER
+            userprofile.classifier_version = DEFAULT_CLASSIFIER_VERSION
         userprofile.save()
         return user
         

@@ -136,7 +136,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 
 MIDDLEWARE_CLASSES = (
-#    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -148,7 +148,8 @@ ROOT_URLCONF = 'urls'
 
 
 TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
+    os.path.join(ROOT_PROJECT_PATH, 'templates').replace('\\','/'),
+    os.path.join(ROOT_PROJECT_PATH, '..', 'doc', '_build', 'html').replace('\\', '/'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -203,6 +204,8 @@ INSTALLED_APPS = (
     'sentry.client.celery',
     'picklefield',
     'django_extensions',
+    'nexus',
+    'gargoyle',
     'tastypie',
     'base',
     'twitterauth',
@@ -212,13 +215,14 @@ INSTALLED_APPS = (
     'search',
     'prediction',
     'multinomialbayes',
-    'confidence_bayes'
+    'confidence_bayes',
+    'cylonbayes',
 )
 
 if DEBUG == True:
     INSTALLED_APPS += (
-        'devserver',
-#    'debug_toolbar',
+#        'devserver',
+    'debug_toolbar',
     )
 
 # Load local settings for each machine

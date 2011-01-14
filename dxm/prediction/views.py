@@ -24,6 +24,14 @@ def train_multinomial_bayes(request):
     force_train(prof)
     return {'success': 'works?'}
 
+@login_required
+@render_to('train_bayes.html')
+def train_classifier(request):
+    prof = request.user.get_profile()
+    force_train(prof)
+    return {'success': 'works?'}
+
+
 
 @login_required
 @render_to('predicted_friends_timeline.html')
@@ -33,8 +41,6 @@ def predicted_friends_timeline(request):
     statuses = api.GetFriendsTimeline()
     friends = api.GetFriends()
     predictions = get_predictions(prof, statuses)
-    print predictions
-    print "\n\n\n\n\n\n"
     for s, r in zip(statuses, predictions):
         if r > 0:
             s.likeClass = ' active'
@@ -44,5 +50,15 @@ def predicted_friends_timeline(request):
             s.dislikeClass = ' active'            
     return {'statuses': statuses, 'friends': friends}
     
-
-
+@login_required
+@render_to('timeline.html')
+def filtered_friends_timeline(request):
+    prof = request.user.get_profile()
+    api = get_authorized_twitter_api(request.session['access_token'])
+    statuses = api.GetFriendsTimeline()
+    friends = api.GetFriends()
+    predictions = get_predictions(prof, statuses)
+    filtered_statuses = []
+    for s, r in zip(statuses, predictions):
+        if r >= 0: filtered_statuses.append(s)
+    return {'statuses': filtered_statuses, 'friends': friends}

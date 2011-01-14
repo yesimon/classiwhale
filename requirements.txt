@@ -19,6 +19,7 @@ django-picklefield==0.1.9
 django-sentry==1.4.1
 django-templatetag-sugar==0.1
 flup==1.0.2
+gargoyle==0.1.0
 guppy==0.1.9
 httplib2==0.6.0
 importlib==1.0.2

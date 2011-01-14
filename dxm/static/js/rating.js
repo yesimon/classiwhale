@@ -81,17 +81,17 @@ function addRateLinkHandlers() {
 }
 
 
-function rate(kind, sid, text, created_at) {
+function rate(kind, status){
     $.post(
         "/status/ajax_rate/", 
-        { rating: kind, id: sid, text: text, created_at: created_at }
+        { rating: kind, status: status }
     );
 }
 
 function rateLike() {
     entry = $(this).closest(".status");
-    rate("up", entry.attr("id"), entry.attr("data-text"), entry.attr("data-created_at")); 	
-    
+    rate("up", entry.attr("data-status"));
+
     $(this).next().removeClass('active');
     $(this).next().addClass('inactive');
     
@@ -103,7 +103,7 @@ function rateLike() {
 
 function rateDislike() {
     entry = $(this).closest(".status");
-    rate("down", entry.attr("id"), entry.attr("data-text"), entry.attr("data-created_at"));
+    rate("down", entry.attr("data-status"));
     
     $(this).prev().removeClass('active');
     $(this).prev().addClass('inactive');
