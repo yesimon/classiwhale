@@ -211,7 +211,8 @@ INSTALLED_APPS = (
     'status',
     'search',
     'prediction',
-    'multinomialbayes'
+    'multinomialbayes',
+    'confidence_bayes'
 )
 
 if DEBUG == True:
