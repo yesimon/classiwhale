@@ -3,7 +3,7 @@
     {% for user in friends %}
     
     <div class="user" id="user-{{ user.GetId }}">
-        <a href="">
+        <a href="/profile/{{user.GetScreenName}}">
             <img class="photo" width="48" height="48" src="{{ user.GetProfileImageUrl }}" alt="{{ user.GetName }}" />
             <span class="screen_name">{{ user.GetScreenName }}</span>
         </a>

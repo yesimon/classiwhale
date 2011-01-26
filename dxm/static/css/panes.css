@@ -1,0 +1,21 @@
+.left-tab, .right-tab {
+    width:152px;
+    height:400px;
+    background:#D0DDFA url('/static/img/right_shadow.png') repeat-y 0 0;
+    display:inline-block;
+    margin-top:42px;
+    position:relative;
+    border:1px solid #A1BBF5;
+    border-width:1px 1px 1px 0;
+}
+
+.left-tab {
+    float: left;
+}
+
+
+.right-tab {
+    float: right;
+    margin-left: -5px
+}
+
