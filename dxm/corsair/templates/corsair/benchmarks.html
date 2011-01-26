@@ -1,0 +1,73 @@
+{% extends 'corsair/base.html' %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function(){
+ 
+    l2 = [11, 9, 5, 12, 14];
+    l3 = [4, 8, 5, 3, 6];
+    l4 = [12, 6, 13, 11, 2];
+    l5 = [4, -3, 3, 6, 2, -2];    
+ 
+    
+    plot1b = $.jqplot('chart1b',[l2, l3, l4],{
+       stackSeries: true,
+       showMarker: false,
+       seriesDefaults: {
+           fill: true
+       },
+       axes: {
+           xaxis: {
+               renderer: $.jqplot.CategoryAxisRenderer,
+               ticks: ["Mon", "Tue", "Wed", "Thr", "Fri"]
+           }
+       }
+    });
+    
+    plot1c = $.jqplot('chartdiv',[l5],{
+       stackSeries: true,
+       showMarker: false,
+       seriesDefaults: {
+           fill: true,
+           fillToZero: true,
+           rendererOptions: {
+               highlightMouseDown: true
+           }
+       }
+    });
+ 
+    $('#chartdiv').bind('jqplotDataClick', 
+        function (ev, seriesIndex, pointIndex, data) {
+            $('#info1c').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
+        }
+    );
+    
+    $('#chartdiv').bind('jqplotDataHighlight', 
+        function (ev, seriesIndex, pointIndex, data) {
+            $('#info1b').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
+        }
+    );
+    
+    $('#chart1b').bind('jqplotDataUnhighlight', 
+        function (ev) {
+            $('#info1b').html('Nothing');
+        }
+    );
+});
+ 
+</script>
+{% endblock %}
+
+
+{% block content %}
+<div><span>Moused Over: </span><span id="info1b">Nothing</span></div> 
+ 
+<div id="chart1b" class="plot" style="width:400px;height:260px;"></div> 
+ 
+<p>For the chart below, mouseover has been disabled and click handling is enabled by setting "highlightMouseDown: true".  For "fillToZero" area charts that have both negative and positive values as shown below, clicking in either the positive of negative regions will generate the same result.</p> 
+ 
+<div><span>You Clicked: </span><span id="info1c">Nothing yet</span></div> 
+ 
+<div id="chart1c" class="plot" style="width:400px;height:260px;"></div> 
+<div id="chartdiv" style="height:400px;width:300px; "></div>
+{% endblock %}

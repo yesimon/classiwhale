@@ -110,6 +110,10 @@
   height:26px;
 }
 
+#nav li.searchContainer form input:focus{
+  outline: none;
+}
+
 
 #nav li.searchContainer.focused form input[type="submit"]{
   background: url("/static/img/search.png") no-repeat -7px -26px transparent;

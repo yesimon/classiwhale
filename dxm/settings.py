@@ -208,6 +208,7 @@ INSTALLED_APPS = (
     'gargoyle',
     'tastypie',
     'base',
+    'corsair',
     'twitterauth',
     'backends',
     'feedback',

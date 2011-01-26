@@ -2,6 +2,8 @@ from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login, logout, authenticate
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 from twitterauth.utils import get_request_token, get_authorization_url, get_access_token
 
 from urlparse import parse_qsl
@@ -19,8 +21,9 @@ ACCESS_TOKEN_URL  = 'https://api.twitter.com/oauth/access_token'
 AUTHORIZATION_URL = 'https://api.twitter.com/oauth/authorize'
 SIGNIN_URL        = 'https://api.twitter.com/oauth/authenticate'
 
-def twitter_login(request):
-    oauth_callback_url = 'http://%s%s' % (request.get_host(), reverse('twitterauth.views.twitter_return'))
+def twitter_login(request, window_type='window'):
+    print window_type
+    oauth_callback_url = 'http://%s%s' % (request.get_host(), reverse('twitterauth.views.twitter_return', args=[window_type]))
     if CONSUMER_KEY is None or CONSUMER_SECRET is None:
         # Django config must have a consumer key and secret
         raise Exception
@@ -31,7 +34,7 @@ def twitter_login(request):
 
 
 
-def twitter_return(request):
+def twitter_return(request, window_type):
     request_token_string = request.session.get('request_token', None)
 
     # If there is no request_token for session,
@@ -72,7 +75,11 @@ def twitter_return(request):
         return HttpResponse("Unable to authenticate you!")
 
     # authentication was successful, use is now logged in
-    return HttpResponseRedirect(LOGIN_REDIRECT_URL)
+    if window_type == 'popup':
+        return render_to_response("twitter_return.html", {},
+                              context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect(LOGIN_REDIRECT_URL)
 
 
 ##### My views
@@ -81,3 +88,4 @@ def twitter_return(request):
 def twitter_logout(request, next_page):
     logout(request)
     return HttpResponseRedirect(next_page)
+

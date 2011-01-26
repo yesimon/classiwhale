@@ -21,13 +21,13 @@ from status.models import Status
 from twitter import User
 from algorithmio.classifier import Classifier
 from django.core.cache import cache
-from multinomialbayes.models import *
 from cylonbayes.models import *
 from cylonbayes.extraction import BaltarExtractor
 from django.core.exceptions import MultipleObjectsReturned
 from operator import itemgetter
 import collections
 import copy 
+import random
 from math import exp
 
 
@@ -61,21 +61,21 @@ class CylonBayesData(object):
             if status.id in self.statuses or not status.text or not status.user: return
         except AttributeError: return
         self.statuses.add(sr_tup[0].id)
-        feats = [(t, sr_tup[1]) for t in self.extractor.ExtractStatus(sr_tup[0])]
-        for token, label in feats:
-            try: i = self.labels[label]
-            except KeyError: raise
+        try: i = self.labels[sr_tup[1]]
+        except KeyError: raise
+        feats = [(t, i) for t in self.extractor.ExtractStatus(sr_tup[0])]
+        self.counts_y[i, 0] += 1
+        for token, i in feats:
             if token not in self.totals:
                 self.counts[token] = np.zeros((self.num_labels, 1))
                 self.totals[token] = 0
             self.counts[token][i, 0] += 1
             self.totals[token] += 1
-            self.counts_y[i, 0] += 1
             self.m += 1                
             
     def _freeze(self):
         """Freeze the classifier in a state to increase performance"""
-        self.log_phi_y = np.log(self.counts_y/self.m)
+        self.log_phi_y = np.log(self.counts_y/len(self.statuses))
         self.log_phi_x_y = {}
         for token, counts in self.counts.iteritems():
             self.log_phi_x_y[token] = np.log(np.divide(counts + 1,
@@ -85,8 +85,7 @@ class CylonBayesData(object):
     def predict(self, status):
         """Predict status using the classifier, returns list"""
         if self.modified > 0: self._freeze()
-#        log_proba = self.log_phi_y.copy()
-        log_proba = np.zeros((2, 1))
+        log_proba = self.log_phi_y.copy()
         tokens = self.extractor.ExtractStatus(status)
         for token in tokens:
             try: 
@@ -153,6 +152,98 @@ class CylonBayesData(object):
     __radd = __add__
     __rmul__ = __mul__         
 
+        
+
+
+
+
+
+            
+class CylonBayesClassifier(Classifier):
+    """Defines a multinomial bayes classifier. This classifier can be be trained
+    multiple times via the train function. Use predict to make new predictions
+    on inputs.
+    Contains instance variable:
+    self.prof 
+    """
+    def convert_rating(rating):
+        if isinstance(rating.status, Status):
+            u = User(id=rating.status.user_profile_id)
+            setattr(rating.status, 'user', u)
+        return rating
+
+    def force_train(self):
+        """Concrete method for Classifier"""
+        mb_model = self.get_cylon_bayes_model()
+        mb = mb_model.data
+        seen_statuses = mb.statuses
+        ratings_list = Rating.objects.filter(user_profile=self.prof).exclude(
+            status__id__in=seen_statuses).order_by(
+            '-rated_time').select_related('status')
+        train_set = []
+        for rating in ratings_list:
+            convert_rating(rating)
+            train_set.append((rating.status, rating.rating))
+        map(mb.train, train_set)
+        mb_model.save()
+
+    def test_train(self, ratings=None, clicks=None):
+        mb = CylonBayesData(extractor=BaltarExtractor)
+        train_set = []
+        for rating in ratings:
+            convert_rating(rating)
+            train_set.append((rating.status, rating.rating))
+        map(mb.train, train_set)
+        self.mb = mb
+        return self
+
+    def test_predict(self, statuses):
+        return predict(self, statuses, test=True)
+
+    def predict(self, statuses, test=False):
+        """Concrete method for Classifier"""
+        if test: mb = self.mb 
+        else:
+            mb_model = self.get_cylon_bayes_model()
+            mb = mb_model.data
+        log_probas = map(mb.predict, statuses)
+        indexes = range(len(log_probas[0]))
+        expects = [sorted([(mb.labels_lookup[i], log_proba[i, 0]) 
+            for i in indexes], key=itemgetter(1), reverse=True)
+            for log_proba in log_probas]
+        a = map(self.renormalization, expects)
+        return a
+
+    def renormalization(self, expect):
+        """Expect as a sorted list of (label, probability)"""
+        conf = exp(expect[0][1]) / (exp(expect[0][1]) + exp(expect[1][1]))
+#        print "e1: {0}, e2: {1}".format(expect[0][1], expect[1][1])
+        if np.isnan(conf):
+            return 1
+        return conf*expect[0][0]
+
+    def get_cylon_bayes_model(self):
+        try:
+            c_obj = CylonBayesModel.objects.get(user_profile=self.prof, version=self.prof.classifier_version)
+        except CylonBayesModel.DoesNotExist:
+            c = CylonBayesData(extractor=BaltarExtractor)
+            c_obj = CylonBayesModel(user_profile=self.prof, data=c, version=self.prof.classifier_version)
+        except MultipleObjectsReturned:
+            # Should never happen to have two classifiers of same version
+            c_objs = CylonBayesModel.objects.filter(version=self.prof.classifier_version)
+            [c.delete for c in c_objs[1:]]
+            c_obj = c_objs[0]
+        return c_obj
+
+    def round_away(num, split=0.0):
+        if num >= split: return 1
+        else: return -1
+
+    def create_training_set():
+        pass
+
+
+
 
     @staticmethod        
     def test():
@@ -185,72 +276,6 @@ class CylonBayesData(object):
         print c3.most_informative_features()
         print 'superman predict: {0}'.format(c3.predict(superman))
         print 'batman predict: {0}'.format(c3.predict(batman))
-        
-
-
-
-
-
-            
-class CylonBayesClassifier(Classifier):
-    """Defines a multinomial bayes classifier. This classifier can be be trained
-    multiple times via the train function. Use predict to make new predictions
-    on inputs.
-    Contains instance variable:
-    self.prof 
-    """
-    
-    def force_train(self):
-        """Concrete method for Classifier"""
-        mb_model = self.get_cylon_bayes_model()
-        mb = mb_model.data
-        seen_statuses = mb.statuses
-        ratings_list = Rating.objects.filter(user_profile=self.prof).exclude(
-            status__id__in=seen_statuses).order_by(
-            '-rated_time').select_related('status')
-        train_set = []
-        for rating in ratings_list:
-            if isinstance(rating.status, Status):
-                u = User(id=rating.status.user_profile_id)
-                setattr(rating.status, 'user', u)
-            train_set.append((rating.status, rating.rating))
-        map(mb.train, train_set)
-        mb_model.save()
-        
-
-    def predict(self, statuses):
-        """Concrete method for Classifier"""
-        mb_model = self.get_cylon_bayes_model()
-        mb = mb_model.data
-        log_probas = map(mb.predict, statuses)
-        indexes = range(len(log_probas[0]))
-        expects = [sorted([(mb.labels_lookup[i], log_proba[i, 0]) 
-            for i in indexes], key=itemgetter(1), reverse=True)
-            for log_proba in log_probas]
-        a = map(self.renormalization, expects)
-        return a
-
-    def renormalization(self, expect):
-        """Expect as a sorted list of (label, probability)"""
-        conf = exp(expect[0][1]) / (exp(expect[0][1]) + exp(expect[1][1]))
-#        print "e1: {0}, e2: {1}".format(expect[0][1], expect[1][1])
-        if np.isnan(conf):
-            return 1
-        return conf*expect[0][0]
-
-    def get_cylon_bayes_model(self):
-        try:
-            c_obj = CylonBayesModel.objects.get(user_profile=self.prof, version=self.prof.classifier_version)
-        except CylonBayesModel.DoesNotExist:
-            c = CylonBayesData(extractor=BaltarExtractor)
-            c_obj = CylonBayesModel(user_profile=self.prof, data=c, version=self.prof.classifier_version)
-        except MultipleObjectsReturned:
-            # Should never happen to have two classifiers of same version
-            c_objs = CylonBayesModel.objects.filter(version=self.prof.classifier_version)
-            [c.delete for c in c_objs[1:]]
-            c_obj = c_objs[0]
-        return c_obj
-
         
 
 
@@ -313,4 +338,4 @@ class TrainingStatistics(dict):
             
 
 if __name__ == '__main__':
-    CylonBayesData.test()
+    CylonBayesClassifier.test()
