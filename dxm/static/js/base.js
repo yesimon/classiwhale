@@ -1,3 +1,22 @@
+$(document).ready(function() {
+    $('#login').click(function(){
+        $.oauthpopup({
+            path: '/twitterauth/login/popup/',
+	    callback: function(){
+	        window.location.reload();
+		}
+	    });
+        });
+    $('a.track').click(linktrack());
+});
+
+
+function linktrack() {
+    $.post('/status/linktrack/', {text:this.text});
+    return true;    
+}
+
+
 function getFriendTimeline(user) {
     $.get(
         "/status/ajax_friend_timeline/",

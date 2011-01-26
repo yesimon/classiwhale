@@ -1,6 +1,11 @@
 from status.models import *
 from multinomialbayes.classifiers import MultinomialBayesClassifier
 from cylonbayes.classifiers import CylonBayesClassifier
+from algorithmio.classifier import ClassifierLibrary
+
+classifier_library = ClassifierLibrary()
+classifier_library.register(CylonBayesClassifier)
+classifier_library.register(MultinomialBayesClassifier)
 
 def get_predictions(prof, statuses, session=None):
     """Statuses could be list of ids, list of api status objects, or list of
@@ -11,7 +16,8 @@ def get_predictions(prof, statuses, session=None):
         # TODO: Do some integrity checks to make sure they are good?
     # TODO: Logic to obtain predictions from cache if at all possible
     algo = prof.active_classifier
-    exec "predictions = {0}(prof).predict(statuses)\n".format(algo)
+    classifier = classifier_library.classifiers[algo]
+    predictions = classifier(prof).predict(statuses)
     return predictions
 
 def get_predictions_filter(prof, statuses, session=None):
@@ -20,5 +26,6 @@ def get_predictions_filter(prof, statuses, session=None):
 
 def force_train(prof):
     algo, version = prof.active_classifier, prof.classifier_version
-    exec "{0}(prof).force_train()\n".format(algo)
+    classifier = classifier_library.classifiers[algo]
+    classifier(prof).force_train()
     return
