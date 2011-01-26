@@ -17,6 +17,7 @@ class UserProfile(models.Model):
     training_statuses = models.ManyToManyField(Status, blank=True, null=True, related_name='training')
     active_classifier = models.CharField(max_length=50, blank=True, null=True)
     classifier_version = models.CharField(max_length=30, blank=True, null=True)
+    whale = models.ForeignKey('whale.Whale', blank=True, null=True)
     
     def __unicode__(self):
         return "%s's profile" % self.screen_name
