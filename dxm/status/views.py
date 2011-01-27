@@ -232,4 +232,15 @@ def ajax_rate(request):
     return HttpResponse(jsonResults, mimetype='application/json')
   
   
-  
+def post_status(request):
+    results = {'success':'False'}
+    user = request.user
+    print('here')
+    if not user.is_authenticated() or 'access_token' not in request.session:
+        return HttpResponseRedirect(reverse('status.views.public_timeline'))
+    API = get_authorized_twitter_api(request.session['access_token'])
+    status = request.POST[u'status']
+    API.PostUpdate(status)
+    results['success'] = 'True'
+    jsonResults = json.dumps(results)
+    return HttpResponse(jsonResults, mimetype='application/json')
