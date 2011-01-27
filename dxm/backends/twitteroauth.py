@@ -16,6 +16,7 @@ The profile models should have following fields:
 from django.conf import settings
 from django.contrib.auth.models import User
 from twitterauth.models import UserProfile
+from whale.models import Whale, WhaleSpecies
 
 import twitter
 
@@ -60,6 +61,10 @@ class TwitterBackend:
         userprofile.location = userinfo.location
         userprofile.description = userinfo.description
         userprofile.profile_image_url = userinfo.profile_image_url
+        if not userprofile.whale:
+            whale = Whale(species=WhaleSpecies.getDefaultSpecies())
+            whale.save()
+            userprofile.whale = whale
         if not userprofile.active_classifier:
             userprofile.active_classifier = DEFAULT_CLASSIFIER
             userprofile.classifier_version = DEFAULT_CLASSIFIER_VERSION
