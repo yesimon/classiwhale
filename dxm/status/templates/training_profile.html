@@ -1,6 +1,15 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+         $(".whale-progress-bar").progressbar({
+              value: {{ whale.exp }}
+         });
+    });
+</script>
+
 <div class="training-pane">
   <div class="whale-name"> {{ whale.name }} </div>
      <div class="whale">
-          <img class="whale-photo" src="{{ whale.species.img.url }}" alt="{{ whale.species.name }}" /> 
+          <img class="whale-photo" height="130px" width="130px" src="{{ whale.species.img.url }}" alt="{{ whale.species.name }}" /> 
     </div>
+    <div class="whale-progress-bar"></div>
 </div>

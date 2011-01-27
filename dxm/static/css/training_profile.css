@@ -6,8 +6,16 @@
 }
 
 .whale {
+   margin-top: 8px;
    margin-left: auto;
    margin-right: auto;
-   width: 116px;
-   height: 116px;
+   margin-bottom: 8px;
+   width: 130px;
+   height: 130px;
+}
+
+.whale-progress-bar {
+    width: 144px;
+    margin-left: auto;
+    margin-right: auto;
 }
