@@ -34,7 +34,9 @@ Recent Tweets
                  twitpost($input_text);
                  return false;
               });
-              
+        $is_post_form_focused = false;
+        $('#postinput').unbind('focus').focus(function() { $is_post_form_focused = true; });
+        $('#postinput').unbind('blur').blur(function() { $is_post_form_focused = false; });      
     }
     $(document).ready(startPostHandler);	
     </script>
