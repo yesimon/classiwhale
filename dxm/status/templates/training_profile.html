@@ -1,6 +1,6 @@
-<div class="training-pane">   
+<div class="training-pane">
+  <div class="whale-name"> {{ whale.name }} </div>
      <div class="whale">
-          <img class="whale-photo" width="96" height="96"
-     src="/static/img/train_whale5.png" alt="Your Whale" />
+          <img class="whale-photo" src="{{ whale.species.img.url }}" alt="{{ whale.species.name }}" /> 
     </div>
 </div>

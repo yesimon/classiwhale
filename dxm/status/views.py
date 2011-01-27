@@ -175,6 +175,7 @@ def timeline(request):
     Rating.appendTo(statuses, prof)
     return render_to_response('timeline.html',
         {
+          'whale': prof.whale,
           'statuses': statuses,
           'friends': friends
         },
