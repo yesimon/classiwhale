@@ -1,0 +1,12 @@
+{% extends 'corsair/base.html' %}
+
+{% block extra_js %}
+{% endblock %}
+
+{% block content %}
+    <ul class="training_sets" id="training_set_list">
+    {% for training_set in training_sets %}
+        <li>{{ training_set.name }}</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

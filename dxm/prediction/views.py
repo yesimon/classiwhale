@@ -42,10 +42,10 @@ def predicted_friends_timeline(request):
     friends = api.GetFriends()
     predictions = get_predictions(prof, statuses)
     for s, r in zip(statuses, predictions):
-        if r > 0:
+        if r >= 0:
             s.likeClass = ' active'
             s.dislikeClass = ' inactive'
-        if r <= 0:
+        if r < 0:
             s.likeClass = ' inactive'
             s.dislikeClass = ' active'            
     return {'statuses': statuses, 'friends': friends}

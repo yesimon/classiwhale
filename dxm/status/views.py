@@ -22,7 +22,7 @@ def public_timeline(request):
     api = twitter.Api()
     statuses = api.GetPublicTimeline()
     return render_to_response('public_timeline.html',
-        {'statuses': statuses, },
+        {'statuses': statuses},
         context_instance=RequestContext(request))
 
 
@@ -37,8 +37,6 @@ def ajax_public_timeline(request):
     results['success'] = 'True'
     html = t.render(RequestContext(request, results))
     return HttpResponse(html)
-
-
 
 @login_required
 def rating_history(request):
@@ -161,7 +159,6 @@ def ajax_timeline(request):
         },
         context_instance=RequestContext(request))
     
-
 def timeline(request):
     user = request.user
     if not user.is_authenticated() or 'access_token' not in request.session:

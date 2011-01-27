@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="/static/css/navigation.css" />
     <link rel="stylesheet" href="/static/css/feed.css" />
     <link rel="stylesheet" href="/static/feedback/feedback.css"/>
+    <link rel="stylesheet" href="/static/css/panes.css" />
+    <link rel="stylesheet" href="/static/css/friends.css" />
+
     {% block extra_css %}
     {% endblock %}
 
@@ -18,6 +21,7 @@
     {% compress js %}
     <script type="text/javascript" src="/static/js/jquery.scrollTo.js"></script>
     <script type="text/javascript" src="/static/js/jquery.infinitescroll.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.oauthpopup.js"></script>
     <script src="/static/feedback/jquery.form.js"></script>
     <script src="/static/feedback/feedback.js"></script>
     <script type="text/javascript" src="/static/js/base.js"></script>
@@ -70,25 +74,10 @@
 			</ul>
 			{% endif %}
 
-        	<div class="status-container">
-				<div class="header-wrapper">
-					<div class="header">
-					    <div class="left-bg"></div>
-					    <div class="title">Recent Tweets</div>
-					    <div class="links"><a class="link" href="/">Unfiltered</a> &middot; <a class="link" href="/bayes/filter/">Filtered</a></div>
-					    <div class="right-bg"></div>
-					</div>
-				</div>
-				
-	            {% block content %}
-            	{% endblock %}
-            </div>
+			{% block content %}
+			{% endblock %}
             
 			{% include "feedback/button.html" %}
-			        
-			<div class="right-tab">
-				<img class="corner" src="/static/img/right_tab_corner.png"/>
-			</div>
         </div>
         <br/><br/>
     </div>

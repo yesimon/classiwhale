@@ -41,13 +41,17 @@ function hotkeyRateLike() {
     likeButton.next().addClass('inactive');
     likeButton.addClass('active');
     likeButton.removeClass('inactive');
- 
-    if (nextEntry.length != 0) {
-        activeEntry.removeClass("entry-active");
-        nextEntry.addClass("entry-active");
-        $.scrollTo(nextEntry);
-    }
 
+    computeScroll(nextEntry, activeEntry);
+}
+
+function computeScroll(next, active) {
+    console.log(next);
+    if (next.length != 0) {
+        active.removeClass("entry-active");
+        next.addClass("entry-active");
+        $.scrollTo(next);
+    }
 }
 
 function hotkeyRateDislike() {
@@ -66,12 +70,7 @@ function hotkeyRateDislike() {
     dislikeButton.addClass('active');
     dislikeButton.removeClass('inactive');
 
-    if (nextEntry.length != 0) {
-        activeEntry.removeClass("entry-active");
-        nextEntry.addClass("entry-active");
-        $.scrollTo(nextEntry);
-    }
-
+    computeScroll(nextEntry, activeEntry);
 }
 
 
