@@ -225,7 +225,16 @@ def ajax_rate(request):
         rating_int = -1
     r = Rating(status=s, user_profile=prof, rating=rating_int)
     r.save()
+    prof.whale.exp = prof.whale.exp + 1
+    if prof.whale.exp == prof.whale.species.evolution.minExp:
+        prof.whale.species = prof.whale.species.evolution
+    prof.whale.save()
     results['success'] = 'True'
+    results['exp'] = prof.whale.exp
+    results['min-exp'] = prof.whale.species.minExp
+    results['max-exp'] = prof.whale.species.evolution.minExp
+    results['species'] = prof.whale.species.img.url
+    results['speciesName'] = prof.whale.species.name
     jsonResults = json.dumps(results)
     return HttpResponse(jsonResults, mimetype='application/json')
   

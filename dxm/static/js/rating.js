@@ -88,7 +88,13 @@ function addRateLinkHandlers() {
 function rate(kind, status){
     $.post(
         "/status/ajax_rate/", 
-        { rating: kind, status: status }
+        { rating: kind, status: status }, 
+	function(data) {
+	    setWhaleProgress(data.exp, data['min-exp'], data['max-exp']);
+	    var photo = $(".whale-photo")[0];
+	    if (photo.src != data.species)
+		photo.src = data.species;
+	}
     );
 }
 

@@ -1,9 +1,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
-         $(".whale-progress-bar").progressbar({
-              value: {{ whale.exp }}
-         });
+        setWhaleProgress({{whale.exp}}, {{whale.species.minExp}}, {{whale.species.evolution.minExp}});
     });
+
 </script>
 
 <div class="training-pane">

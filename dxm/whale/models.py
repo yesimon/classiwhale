@@ -5,7 +5,11 @@ DEFAULT_SPECIES_ID = 1
 class WhaleSpecies(models.Model):
     name = models.CharField(default="Baby Whale", unique=True, max_length=50, blank=True, null=True)
     img = models.ImageField(upload_to="img/whale/WhaleSpecies", blank=True, null=True)
-    levelUpExp = models.IntegerField(blank=True, null=True)
+    minExp = models.IntegerField(blank=True, null=True)
+    evolution = models.ForeignKey('self', blank=True, null=True)
+
+    def __unicode__(self):
+        return self.name
 
     @staticmethod
     def getDefaultSpecies():
