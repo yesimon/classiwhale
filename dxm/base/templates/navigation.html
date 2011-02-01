@@ -2,14 +2,13 @@
 
 <div id="nav">	
 	<div class="nav-bound">
-		<div id="logo">
-			{% if user.is_authenticated %}
-			    <a href="{% url status.views.timeline %}">ClassiWhale</a>
-			{% else %}
-			    <a href="{% url status.views.public_timeline %}">ClassiWhale</a>
-			{% endif %}
-	    </div>
+		{% if user.is_authenticated %}
+		    <a href="{% url status.views.timeline %}" class="logo"></a>
+		{% else %}
+		    <a href="{% url status.views.public_timeline %}" class="logo"></a>
+		{% endif %}
 		<ul>
+		    <!--
 			{% if user.is_authenticated %}
 			    <li>
 			    	<a href="{% url twitterauth.views.twitter_logout %}">Logout</a>
@@ -26,10 +25,11 @@
 		    </li>
 		    <li class="{% navactive request 'status.views.public_timeline' %}">
 		    	<a href="{% url status.views.public_timeline %}">Recent</a>
-		    </li>
+		    </li> -->
 		    <li class="{% navactive request 'status.views.rating_history' %}">
-		    	<a href="{% url status.views.rating_history %}">History</a>
+		    	<a href="{% url status.views.rating_history %}">Profile</a>
 		    </li>
+		    <li class="separator"></li>
 		    <li class="{% navactive request 'status.views.timeline' %}">
 		    	<a href="{% url status.views.timeline %}">Home</a>
 		    </li>
@@ -52,7 +52,6 @@
 			    		
 			    	</script>
 				    <form action="{% url search.views.index %}" method="get">
-				    	<div class="left-round"></div>
 					    <input type="text" id="q" name="q" onfocus="searchFocus(this)" onblur="searchBlur(this)" value="Search"/>
 					    <input type="submit" id="searchSubmit" alt="Search" />
 					    <div class="clear"></div>
