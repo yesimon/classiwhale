@@ -49,25 +49,6 @@ a {
   margin-top: -140px;
 }
 
-
-.right-tab {
-    width:304px;
-    height:400px;
-    background:#D0DDFA url('/static/img/right_shadow.png') repeat-y 0 0;
-    float:right;
-    margin-top:42px;
-    position:relative;
-    border:1px solid #A1BBF5;
-    border-width:1px 1px 1px 0;
-}
-
-
-.right-tab .corner {
-	position: absolute;
-	top:-1px; right:-1px;
-}
-
-
 #sidenav {
   float: left;
   width: 140px;

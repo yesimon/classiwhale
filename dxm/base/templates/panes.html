@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="left-tab">
+  {% include "friend_list.html" %}
+</div>
+<div class="middle-tab" style="display:inline-block">
+ <div class="status-container">
+				<div class="header-wrapper">
+					<div class="header">
+					    <div class="left-bg"></div>
+					    <div class="title">Recent Tweets</div>
+					    <div class="links"><a class="link" href="/">Unfiltered</a> &middot; <a class="link" href="/bayes/filter/">Filtered</a></div>
+					    <div class="right-bg"></div>
+					</div>
+				</div>
+				
+	            {% block middle %}
+            	{% endblock %}
+            </div>
+</div>
+<div class="right-tab">
+  {% include "training_profile.html" %}
+</div>
+{% endblock %}
+

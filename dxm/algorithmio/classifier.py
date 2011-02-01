@@ -23,3 +23,14 @@ class Classifier(object):
     def predict(self, statuses):
         """Predict ratings using algorithm, returns list of float from [-1 1]"""
         return NotImplementedError
+
+class ClassifierLibrary(object):
+    def __init__(self):
+        self.classifiers = {}
+
+    def register(self, classifier, name=None):
+        if name:
+            self.classifiers[name] = classifier
+        else:
+            self.classifiers[classifier.__name__] = classifier
+

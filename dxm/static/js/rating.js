@@ -5,17 +5,22 @@ $(document).ready(function() {
 
 
 $(document).keydown(function(event) {
-    if (event.keyCode == 74) { // 'j'
-        hotkeyRateLike();
+    if(shouldUseHotkeys()) {
+        if (event.keyCode == 74) { // 'j'
+            hotkeyRateLike();
+        }
+        if (event.keyCode == 75) { // 'k'
+            hotkeyRateDislike();
+        }
+        if (event.keyCode == 85) { // 'u'
+            hotkeyPrevEntry();
+        }
     }
-    if (event.keyCode == 75) { // 'k'
-        hotkeyRateDislike();
-    }
-    if (event.keyCode == 85) { // 'u'
-        hotkeyPrevEntry();
-    }
-
 });
+
+function shouldUseHotkeys() {
+    return !$is_post_form_focused;
+}
 
 function hotkeyPrevEntry() {
     activeEntry = $(".entry-active");
@@ -41,13 +46,17 @@ function hotkeyRateLike() {
     likeButton.next().addClass('inactive');
     likeButton.addClass('active');
     likeButton.removeClass('inactive');
- 
-    if (nextEntry.length != 0) {
-        activeEntry.removeClass("entry-active");
-        nextEntry.addClass("entry-active");
-        $.scrollTo(nextEntry);
-    }
 
+    computeScroll(nextEntry, activeEntry);
+}
+
+function computeScroll(next, active) {
+    console.log(next);
+    if (next.length != 0) {
+        active.removeClass("entry-active");
+        next.addClass("entry-active");
+        $.scrollTo(next);
+    }
 }
 
 function hotkeyRateDislike() {
@@ -66,12 +75,7 @@ function hotkeyRateDislike() {
     dislikeButton.addClass('active');
     dislikeButton.removeClass('inactive');
 
-    if (nextEntry.length != 0) {
-        activeEntry.removeClass("entry-active");
-        nextEntry.addClass("entry-active");
-        $.scrollTo(nextEntry);
-    }
-
+    computeScroll(nextEntry, activeEntry);
 }
 
 
@@ -84,7 +88,13 @@ function addRateLinkHandlers() {
 function rate(kind, status){
     $.post(
         "/status/ajax_rate/", 
-        { rating: kind, status: status }
+        { rating: kind, status: status }, 
+	function(data) {
+	    setWhaleProgress(data.exp, data['min-exp'], data['max-exp']);
+	    var photo = $(".whale-photo")[0];
+	    if (photo.src != data.species)
+		photo.src = data.species;
+	}
     );
 }
 
