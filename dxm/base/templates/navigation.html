@@ -16,9 +16,10 @@
 			{% else %}
 			    <li>
 			      <a id="login">Login</a>
-<!--			    	<a href="{% url twitterauth.views.twitter_login %}">Login</a> -->
+  		    	<a href="{% url twitterauth.views.twitter_login %}">Login</a> 
 			    </li>
 			{% endif %}
+			-->
 		    <li class="{% navactive request 'django.views.generic.simple.direct_to_template' %}">
 		    	<a href="/about">About</a>
 		    </li>
@@ -26,7 +27,7 @@
 		    </li>
 		    <li class="{% navactive request 'status.views.public_timeline' %}">
 		    	<a href="{% url status.views.public_timeline %}">Recent</a>
-		    </li> -->
+		    </li>
 		    <li class="{% navactive request 'status.views.rating_history' %}">
 		    	<a href="{% url status.views.rating_history %}">Profile</a>
 		    </li>
