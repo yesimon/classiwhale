@@ -16,10 +16,16 @@
 }
 
 .user {
-  border: 2px solid #96D6A7;
+  border: 1px solid #1B577A;
   display: block;
   height: 60px;
-  margin: 3px 0px;
+  margin: 0px 0px 4px;
+  background-color: #C9D9E0;
+  color: #000000;
+}
+
+.user:hover{
+  background-color: #E4EBEF; /*#DBE5EA;*/
 }
 
 .user a {
@@ -34,14 +40,9 @@
 .user a:link,
 .user a:visited {
   line-height: 54px;
-  background:#FFFFFF;
   color:#000000;
 }
 
-.user a:hover{
-  background: #82DE86;
-  color: #000000;
-}
 
 .status-container {
     width: 575px;

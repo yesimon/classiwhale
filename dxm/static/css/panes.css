@@ -1,12 +1,8 @@
 .left-tab, .right-tab {
     width:152px;
-    height:400px;
-    background:#D0DDFA url('/static/img/right_shadow.png') repeat-y 0 0;
     display:inline-block;
-    margin-top:42px;
+    margin-top:38px;
     position:relative;
-    border:1px solid #A1BBF5;
-    border-width:1px 1px 1px 0;
 }
 
 .left-tab {
@@ -15,7 +11,11 @@
 
 
 .right-tab {
+    height:400px;
+    border:1px solid #A1BBF5;
+    border-width:1px 1px 1px 0;
     float: right;
-    margin-left: -5px
+    margin-left: -5px;
+    background:#D0DDFA url('/static/img/right_shadow.png') repeat-y 0 0;
 }
 
