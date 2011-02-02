@@ -28,7 +28,6 @@ numpy==1.5.1
 psycopg2==2.3.1
 pyparsing==1.5.5
 python-dateutil==1.5
-scipy==0.7.2
 simplejson==2.1.2
 sqlparse==0.1.2
 virtualenv==1.5.1
