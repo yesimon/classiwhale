@@ -5,7 +5,7 @@ class TrainingSetAdmin(admin.ModelAdmin):
     pass
 
 class PredictionStatisticsAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('classifier', 'training_set', 'model', 'created')
 
 admin.site.register(TrainingSet, TrainingSetAdmin)
 admin.site.register(PredictionStatistics, PredictionStatisticsAdmin)

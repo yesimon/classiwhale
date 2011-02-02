@@ -2,7 +2,7 @@
 
 body {
   font: 13px/20px "Lucida Grande", Arial, Sans-serif;
-  background-color:#A1BBF5;
+  background: url("/static/img/main_back.jpg") no-repeat center 60px #1E2746;
 }
 
 div {
@@ -32,21 +32,11 @@ a {
 }
 
 
-#wave_bg {
-    height:170px;
-    top:0px;
-    left:0px;
-    width:100%;
-    background:#E3EBFC url("/static/img/wave.png") repeat-x scroll center bottom;
-    z-index: -1;
-}
-
-
 #middle {
   width: 100%;
   display: block;
   overflow: hidden;
-  margin-top: -140px;
+  margin-top: 42px;
 }
 
 #sidenav {

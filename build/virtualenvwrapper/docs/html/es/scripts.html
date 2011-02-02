@@ -1,0 +1,378 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Personalizaciones por usuario &mdash; virtualenvwrapper v2.5.3 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '2.5.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="virtualenvwrapper v2.5.3 documentation" href="index.html" />
+    <link rel="up" title="Personalizar Virtualenvwrapper" href="hooks.html" />
+    <link rel="next" title="Extender Virtualenvwrapper" href="plugins.html" />
+    <link rel="prev" title="Personalizar Virtualenvwrapper" href="hooks.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="plugins.html" title="Extender Virtualenvwrapper"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="hooks.html" title="Personalizar Virtualenvwrapper"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">virtualenvwrapper v2.5.3 documentation</a> &raquo;</li>
+          <li><a href="hooks.html" accesskey="U">Personalizar Virtualenvwrapper</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Personalizaciones por usuario</a><ul>
+<li><a class="reference external" href="#initialize">initialize</a></li>
+<li><a class="reference external" href="#premkvirtualenv">premkvirtualenv</a></li>
+<li><a class="reference external" href="#postmkvirtualenv">postmkvirtualenv</a></li>
+<li><a class="reference external" href="#precpvirtualenv">precpvirtualenv</a></li>
+<li><a class="reference external" href="#postcpvirtualenv">postcpvirtualenv</a></li>
+<li><a class="reference external" href="#preactivate">preactivate</a></li>
+<li><a class="reference external" href="#postactivate">postactivate</a></li>
+<li><a class="reference external" href="#predeactivate">predeactivate</a></li>
+<li><a class="reference external" href="#postdeactivate">postdeactivate</a></li>
+<li><a class="reference external" href="#prermvirtualenv">prermvirtualenv</a></li>
+<li><a class="reference external" href="#postrmvirtualenv">postrmvirtualenv</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="hooks.html"
+                                  title="previous chapter">Personalizar Virtualenvwrapper</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="plugins.html"
+                                  title="next chapter">Extender Virtualenvwrapper</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/scripts.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="personalizaciones-por-usuario">
+<span id="scripts"></span><h1>Personalizaciones por usuario<a class="headerlink" href="#personalizaciones-por-usuario" title="Permalink to this headline">¶</a></h1>
+<p>Los scripts de personalización de usuarios finales son <em>incluidos</em> uno por uno
+(permitiéndoles modificar su entorno de shell) o <em>ejecutados</em> como un programa externo
+en el momento apropiado.</p>
+<div class="section" id="initialize">
+<span id="scripts-initialize"></span><h2>initialize<a class="headerlink" href="#initialize" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Global/Local:</th><td class="field-body">global</td>
+</tr>
+<tr class="field"><th class="field-name">Argumento(s):</th><td class="field-body">ninguno</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Incluido/Ejecutado:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">incluido</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><tt class="docutils literal"><span class="pre">$WORKON_HOME/initialize</span></tt> es incluido cuando <tt class="docutils literal"><span class="pre">virtualenvwrapper.sh</span></tt>
+es cargado dentro de tu entorno. Usa este para ajustar configuraciones globales
+cuando virtualenvwrapper es habilitado.</p>
+</div>
+<div class="section" id="premkvirtualenv">
+<span id="scripts-premkvirtualenv"></span><h2>premkvirtualenv<a class="headerlink" href="#premkvirtualenv" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Global/Local:</th><td class="field-body">global</td>
+</tr>
+<tr class="field"><th class="field-name">Argumento(s):</th><td class="field-body">nombre de un nuevo virtualenv</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Incluido/Ejecutado:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">ejecutado</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><tt class="docutils literal"><span class="pre">$WORKON_HOME/premkvirtualenv</span></tt> es ejecutado como un programa externo luego que
+de un entorno virtual es creado pero antes de que el entorno actual sea cambiado
+para apuntar al nuevo entorno. El directorio de trabajo actual para este script
+es <tt class="docutils literal"><span class="pre">$WORKON_HOME</span></tt> y el nombre del nuevo entorno es pasado como argumento al
+script.</p>
+</div>
+<div class="section" id="postmkvirtualenv">
+<span id="scripts-postmkvirtualenv"></span><h2>postmkvirtualenv<a class="headerlink" href="#postmkvirtualenv" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Global/Local:</th><td class="field-body">global</td>
+</tr>
+<tr class="field"><th class="field-name">Argumento(s):</th><td class="field-body">ninguno</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Incluido/Ejecutado:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">incluido</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><tt class="docutils literal"><span class="pre">$WORKON_HOME/postmkvirtualenv</span></tt> es incluido después de que un nuevo entorno es
+creado y activado.</p>
+</div>
+<div class="section" id="precpvirtualenv">
+<span id="scripts-precpvirtualenv"></span><h2>precpvirtualenv<a class="headerlink" href="#precpvirtualenv" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Global/Local:</th><td class="field-body">global</td>
+</tr>
+<tr class="field"><th class="field-name">Argumento(s):</th><td class="field-body">nombre del entorno original, nombre del nuevo entorno</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Incluido/Ejecutado:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">ejecutado</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><tt class="docutils literal"><span class="pre">$WORKON_HOME/precpvirtualenv</span></tt> es ejecutado como un programa externo luego de
+que un entorno es duplicado y hecho reubicable, pero antes de que
+<tt class="docutils literal"><span class="pre">premkvirtualenv</span></tt> sea ejecutado o se haya cambiado al nuevo entorno creado. El
+directorio de trabajo actual para este script es <tt class="docutils literal"><span class="pre">$WORKON_HOME</span></tt> y los nombres
+del entorno original y el nuevo son pasados como argumento al script.</p>
+</div>
+<div class="section" id="postcpvirtualenv">
+<span id="scripts-postcpvirtualenv"></span><h2>postcpvirtualenv<a class="headerlink" href="#postcpvirtualenv" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Global/Local:</th><td class="field-body">global</td>
+</tr>
+<tr class="field"><th class="field-name">Argumento(s):</th><td class="field-body">ninguno</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Incluido/Ejecutado:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">incluido</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><tt class="docutils literal"><span class="pre">$WORKON_HOME/postcpvirtualenv</span></tt> es incluido luego de que un nuevo entorno es
+creado y activado.</p>
+</div>
+<div class="section" id="preactivate">
+<span id="scripts-preactivate"></span><h2>preactivate<a class="headerlink" href="#preactivate" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Global/Local:</th><td class="field-body">global, local</td>
+</tr>
+<tr class="field"><th class="field-name">Argumento(s):</th><td class="field-body">nombre de entorno</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Incluido/Ejecutado:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">ejecutado</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>El script global <tt class="docutils literal"><span class="pre">$WORKON_HOME/preactivate</span></tt> es ejecutado antes de que el nuevo
+entorno sea habilitado. El nombre de entorno es pasado como primer argumento.</p>
+<p>El gancho <tt class="docutils literal"><span class="pre">$VIRTUAL_ENV/bin/preactivate</span></tt> es ejecutado antes de que el nuevo
+entorno sea habilitado. El nombre del entorno es pasado como primer argumento.</p>
+</div>
+<div class="section" id="postactivate">
+<span id="scripts-postactivate"></span><h2>postactivate<a class="headerlink" href="#postactivate" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Global/Local:</th><td class="field-body">global, local</td>
+</tr>
+<tr class="field"><th class="field-name">Argumento(s):</th><td class="field-body">ninguno</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Incluido/Ejecutado:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">incluido</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>El script global <tt class="docutils literal"><span class="pre">$WORKON_HOME/postactivate</span></tt> es incluido luego de que el nuevo
+entorno sea habilitado. <tt class="docutils literal"><span class="pre">$VIRTUAL_ENV</span></tt> hace referencia al nuevo entorno al
+momento en el que se ejecuta el script.</p>
+<p>Este script de ejemplo añade un espacio entre el nombre del entorno virtual y la
+tu variable PS1 haciendo uso de <tt class="docutils literal"><span class="pre">_OLD_VIRTUAL_PS1</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">PS1</span><span class="o">=</span><span class="s">&quot;(`basename </span><span class="se">\&quot;</span><span class="s">$VIRTUAL_ENV</span><span class="se">\&quot;</span><span class="s">`) $_OLD_VIRTUAL_PS1&quot;</span>
+</pre></div>
+</div>
+<p>El script local <tt class="docutils literal"><span class="pre">$VIRTUAL_ENV/bin/postactivate</span></tt> es incluido luego de que el
+nuevo entorno es habilitado. <tt class="docutils literal"><span class="pre">$VIRTUAL_ENV</span></tt>  hace referencia al nuevo entorno
+al momento en el que el script es ejecutado.</p>
+<p>Este script de ejemplo para el entorno PyMOTW cambia el directorio de trabajo
+actual y la referencia de la variable PATH hacia el árbol que
+contiene el código de PyMOTW.</p>
+<div class="highlight-python"><pre>pymotw_root=/Users/dhellmann/Documents/PyMOTW
+cd $pymotw_root
+PATH=$pymotw_root/bin:$PATH</pre>
+</div>
+</div>
+<div class="section" id="predeactivate">
+<span id="scripts-predeactivate"></span><h2>predeactivate<a class="headerlink" href="#predeactivate" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Global/Local:</th><td class="field-body">local, global</td>
+</tr>
+<tr class="field"><th class="field-name">Argumento(s):</th><td class="field-body">ninguno</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Incluido/Ejecutado:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">incluido</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>El script local <tt class="docutils literal"><span class="pre">$VIRTUAL_ENV/bin/predeactivate</span></tt> es incluido antes de que el entorno
+actual sea desactivado, y puede ser usado para deshabilitar o limpiar
+configuraciones en tu entorno. <tt class="docutils literal"><span class="pre">$VIRTUAL_ENV</span></tt> hace referencia al entorno viejo
+al momento de ejecutar este script.</p>
+<p>El script global <tt class="docutils literal"><span class="pre">$WORKON_HOME/predeactivate</span></tt> es incluido antes de que el
+entorno actual sea desactivado. <tt class="docutils literal"><span class="pre">$VIRTUAL_ENV</span></tt> hace referencia al entorno viejo
+al momento de ejecutar este script.</p>
+</div>
+<div class="section" id="postdeactivate">
+<span id="scripts-postdeactivate"></span><h2>postdeactivate<a class="headerlink" href="#postdeactivate" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Global/Local:</th><td class="field-body">local, global</td>
+</tr>
+<tr class="field"><th class="field-name">Argumento(s):</th><td class="field-body">ninguno</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Incluido/Ejecutado:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">incluido</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>El script <tt class="docutils literal"><span class="pre">$VIRTUAL_ENV/bin/postdeactivate</span></tt> es incluido luego de que el
+entorno actual sea desactivado, y puede ser usado para deshabilitar o limpiar
+configuraciones en tu entorno. El path hacia el entorno que recientemente se ha
+desactivado está disponible en <tt class="docutils literal"><span class="pre">$VIRTUALENVWRAPPER_LAST_VIRTUALENV</span></tt>.</p>
+</div>
+<div class="section" id="prermvirtualenv">
+<span id="scripts-prermvirtualenv"></span><h2>prermvirtualenv<a class="headerlink" href="#prermvirtualenv" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Global/Local:</th><td class="field-body">global</td>
+</tr>
+<tr class="field"><th class="field-name">Argumento(s):</th><td class="field-body">nombre de entorno</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Incluido/Ejecutado:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">ejecutado</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>EL script <tt class="docutils literal"><span class="pre">$WORKON_HOME/prermvirtualenv</span></tt> es ejecutado como un programa externo
+antes de que el entorno sea eliminado. El path absoluto hacia el entorno es
+pasado como argumento al script.</p>
+</div>
+<div class="section" id="postrmvirtualenv">
+<span id="scripts-postrmvirtualenv"></span><h2>postrmvirtualenv<a class="headerlink" href="#postrmvirtualenv" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Global/Local:</th><td class="field-body">global</td>
+</tr>
+<tr class="field"><th class="field-name">Argumento(s):</th><td class="field-body">nombre de entorno</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Incluido/Ejecutado:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">ejecutado</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>El script <tt class="docutils literal"><span class="pre">$WORKON_HOME/postrmvirtualenv</span></tt> es ejecutado como un programa externo
+luego de que el entorno sea eliminado. El path absoluto hacia el directorio del
+entorno es pasado como argumento al script.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="plugins.html" title="Extender Virtualenvwrapper"
+             >next</a></li>
+        <li class="right" >
+          <a href="hooks.html" title="Personalizar Virtualenvwrapper"
+             >previous</a> |</li>
+        <li><a href="index.html">virtualenvwrapper v2.5.3 documentation</a> &raquo;</li>
+          <li><a href="hooks.html" >Personalizar Virtualenvwrapper</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Doug Hellmann.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

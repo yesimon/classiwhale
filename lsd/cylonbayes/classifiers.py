@@ -166,11 +166,17 @@ class CylonBayesClassifier(Classifier):
     Contains instance variable:
     self.prof 
     """
-    def convert_rating(rating):
+    def convert_rating(self, rating):
         if isinstance(rating.status, Status):
             u = User(id=rating.status.user_profile_id)
             setattr(rating.status, 'user', u)
         return rating
+
+    def convert_status(self, status):
+        if isinstance(status, Status):
+            u = User(id=status.user_profile_id)
+            setattr(status, 'user', u)
+        return status
 
     def force_train(self):
         """Concrete method for Classifier"""
@@ -182,7 +188,7 @@ class CylonBayesClassifier(Classifier):
             '-rated_time').select_related('status')
         train_set = []
         for rating in ratings_list:
-            convert_rating(rating)
+            self.convert_rating(rating)
             train_set.append((rating.status, rating.rating))
         map(mb.train, train_set)
         mb_model.save()
@@ -191,17 +197,18 @@ class CylonBayesClassifier(Classifier):
         mb = CylonBayesData(extractor=BaltarExtractor)
         train_set = []
         for rating in ratings:
-            convert_rating(rating)
+            self.convert_rating(rating)
             train_set.append((rating.status, rating.rating))
         map(mb.train, train_set)
         self.mb = mb
         return self
 
     def test_predict(self, statuses):
-        return predict(self, statuses, test=True)
+        return self.predict(statuses, test=True)
 
     def predict(self, statuses, test=False):
         """Concrete method for Classifier"""
+        map(self.convert_status, statuses)
         if test: mb = self.mb 
         else:
             mb_model = self.get_cylon_bayes_model()

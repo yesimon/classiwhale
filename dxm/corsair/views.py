@@ -10,8 +10,11 @@ import random
 import json
 from scikits.learn import svm, datasets
 from scikits.learn.metrics import roc_curve, auc
+
+from algorithmio.interface import classifier_library
 from corsair import conf
 from corsair.models import TrainingSet, PredictionStatistics
+import corsair.tasks
 
 def login_required(func):
     def wrapped(request, *args, **kwargs):
@@ -29,7 +32,7 @@ def login_required(func):
 def login(request):
     from django.contrib.auth import login as login_
     from django.contrib.auth.forms import AuthenticationForm
-    
+
     if request.POST:
         form = AuthenticationForm(request, request.POST)
         if form.is_valid():
@@ -57,48 +60,55 @@ def training_sets(request):
     return render_to_response('corsair/training_sets.html', {
         'request': request,
         'training_sets': training_sets,
+        'classifiers': classifier_library.classifiers,
     })
+
+@login_required
+def ajax_api(request, action=None):
+    results = {'success': False}
+    if request.is_ajax() and action:
+        if action == 'start_benchmark':
+            classifiers = request.POST.getlist('classifiers[]')
+            training_set = request.POST[u'training_set']
+            for classifier in classifiers:
+                stats = benchmark_test(training_set, classifier)
+#                corsair.tasks.benchmark.delay(training_set, classifier)
+            results['success'] = True
+            return HttpResponse(json.dumps(results))
+    else:
+        return HttpResponse(status=400)
+
+def benchmark_test(training_set, classifier):
+   t = TrainingSet.objects.get(name=training_set)
+   stats = t.benchmark(classifier, save=True)
+   return stats
+   
+    
+
 
 @login_required
 def benchmarks(request):
     benchmarks = PredictionStatistics.objects.all()
+    training_sets = TrainingSet.objects.all()
     return render_to_response('corsair/benchmarks.html', {
         'benchmarks': benchmarks,
         'request': request,
+        'training_sets': training_sets,
     })
 
 @login_required
 def benchmark_detail(request, benchmark):
-    iris = datasets.load_iris()
-    X = iris.data
-    y = iris.target
-    X, y = X[y!=2], y[y!=2]
-    n_samples, n_features = X.shape
-    p = range(n_samples)
-    random.seed(0)
-    random.shuffle(p)
-    X, y = X[p], y[p]
-    half = int(n_samples/2)
-    
-    # Add noisy features
-    X = np.c_[X,np.random.randn(n_samples, 200*n_features)]
-
-    # Run classifier
-    classifier = svm.SVC(kernel='linear', probability=True)
-    probas_ = classifier.fit(X[:half],y[:half]).predict_proba(X[half:])
+    stats = PredictionStatistics.objects.get(id=benchmark)
+    y = stats.raw_data['y_true']
+    y = np.ceil(np.divide(y.astype(float), 2.0))
+    probas_ = stats.raw_data['y_probas']
 
     # Compute ROC curve and area the curve
-    fpr, tpr, thresholds = roc_curve(y[half:], probas_[:,1])
-    print fpr
-    print tpr
-    print thresholds
+    fpr, tpr, thresholds = map(list, roc_curve(y, probas_))
 
-    fpr = list(fpr)
-    tpr = list(tpr)
     roc_coordinates = json.dumps(list(zip(fpr, tpr)))
-    print roc_coordinates
-    print
-    roc_auc = auc(fpr, tpr)
+    roc_auc = stats.auc
+
     return render_to_response('corsair/benchmark_detail.html', {
         'request': request,
         'roc_coordinates': roc_coordinates,
