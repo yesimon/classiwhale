@@ -19,6 +19,7 @@ $(document).keydown(function(event) {
 });
 
 function shouldUseHotkeys() {
+	if(window.$is_post_form_focused == undefined) return true;
     return !$is_post_form_focused;
 }
 
@@ -40,7 +41,7 @@ function hotkeyRateLike() {
     nextEntry = activeEntry.next();
 
     entry = activeEntry.closest(".status");
-    rate("up", entry.attr("id")); 	
+    rate("up", entry.attr("data-status")); 	
     likeButton = entry.find(".like");
     likeButton.next().removeClass('active');
     likeButton.next().addClass('inactive');
@@ -68,7 +69,7 @@ function hotkeyRateDislike() {
     nextEntry = activeEntry.next();
         
     entry = activeEntry.closest(".status");
-    rate("down", entry.attr("id")); 
+    rate("down", entry.attr("data-status")); 
     dislikeButton = entry.find(".dislike");
     dislikeButton.prev().removeClass('active');
     dislikeButton.prev().addClass('inactive');

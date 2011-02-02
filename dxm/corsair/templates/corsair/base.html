@@ -8,8 +8,16 @@
     <title>{% block title %}Corsair{% endblock %}</title> 
     <link rel="stylesheet" type="text/css" href="{% url corsair-media "js/jqplot/jquery.jqplot.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% url corsair-media "css/global.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% url corsair-media "css/colorbox.css" %}" />
+    <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/base/jquery-ui.css" /> 
+    <link rel="stylesheet" type="text/css" href="{% url corsair-media "css/ui.multiselect.css" %}" /> 
 
-    <script type="text/javascript" src="http{% if request.is_secure %}s{% endif %}://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript" src="http{% if request.is_secure %}s{% endif %}://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type="text/javascript" src="{% url corsair-media "js/jquery-ui-1.8.9.custom.min.js" %}"></script>
+    <script type="text/javascript" src="{% url corsair-media "js/ui.multiselect.js" %}"></script>
+    <script type="text/javascript" src="{% url corsair-media "js/jquery.dataTables.min.js" %}"></script>
+    <script type="text/javascript" src="{% url corsair-media "js/jquery.tmpl.min.js" %}"></script>
+    <script type="text/javascript" src="{% url corsair-media "js/jquery.colorbox-min.js" %}"></script>
     <script type="text/javascript" src="{% url corsair-media "js/jqplot/jquery.jqplot.min.js" %}"></script>
     <script type="text/javascript" src="{% url corsair-media "js/jqplot/jqplot.cursor.min.js" %}"></script>
     <script type="text/javascript" src="{% url corsair-media "js/jqplot/jqplot.highlighter.min.js" %}"></script>
@@ -38,25 +46,25 @@
         </ul>
       </div>
     </div>
-    <div id="nav">
-      {% block navigation %}
-      <ul class="inline">
-	<li class="{% navactive request 'corsair.views.training_sets' %}"><a href="{% url corsair-training_sets %}">Training Sets</a></li>
-	<li class="{% navactive request 'corsair.views.benchmarks' %}"><a href="{% url corsair-benchmarks %}">Benchmarks</a></li>
-      </ul>
-      {% endblock %}
-    </div>
-    <div id="content">
+    <div id="middle-wrapper" style="margin-bottom: 0.8em;margin-left:auto;margin-right:auto;min-width: 650px; width: 98%">
+      <div id="nav">
+	{% block navigation %}
+	<ul class="inline">
+	  <li class="{% navactive request 'corsair.views.training_sets' %}"><a href="{% url corsair-training_sets %}">Training Sets</a></li>
+	  <li class="{% navactive request 'corsair.views.benchmarks' %}"><a href="{% url corsair-benchmarks %}">Benchmarks</a></li>
+	</ul>
+	{% endblock %}
+      </div>
       {% block content_before %}
       {% endblock %}
       <div class="container">
-        {% block content %}
-          <div id="sidebar" class="column">
-          </div>
-          
-	  <div id="body" class="with-sidebar column">
-          </div>
-        {% endblock %}
+	{% block content %}
+	<div id="sidebar" class="column">
+	</div>
+	
+	<div id="body" class="with-sidebar column">
+	</div>
+	{% endblock %}
       </div>
     </div>
     <div id="footer">

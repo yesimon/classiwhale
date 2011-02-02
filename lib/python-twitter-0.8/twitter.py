@@ -2848,6 +2848,7 @@ class Api(object):
       A twitter.User instance representing that user
     '''
     url = '%s/users/show/%s.json' % (self.base_url, user)
+    print url
     json = self._FetchUrl(url)
     data = simplejson.loads(json)
     self._CheckForTwitterError(data)
@@ -2995,6 +2996,22 @@ class Api(object):
     data = simplejson.loads(json)
     self._CheckForTwitterError(data)
     return Status.NewFromJsonDict(data)
+
+  def FriendshipsOutgoing(self):
+    '''Returns a list of the ids of friendships outgoing
+
+    The twitter.Api instance must be authenticated.
+
+    Args:
+    Returns:
+      A list of ids
+    '''
+    url = '%s/friendships/outgoing.json' % (self.base_url)
+    json = self._FetchUrl(url, post_data={})
+    data = simplejson.loads(json)
+    self._CheckForTwitterError(data)
+    
+    return [x for x in data['ids']]
 
   def GetFavorites(self,
                    user=None,

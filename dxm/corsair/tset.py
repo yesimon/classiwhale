@@ -19,10 +19,13 @@ from corsair.models import TrainingSet
 
 userprofile_ids = [str(i) for i in range(100, 125)]
 
+userprofile_ids = [str(100)]
+
 ratings = Rating.objects.filter(user_profile__in=userprofile_ids)
 user_profiles = UserProfile.objects.filter(pk__in=userprofile_ids)
 name = 'CS229 Training Set'
 
+name = 'Mini Training Set'
 try:
     t = TrainingSet.objects.get(name=name)
 except:

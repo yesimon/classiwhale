@@ -1,3 +1,4 @@
+from __future__ import division
 from django.db import models
 from picklefield.fields import PickledObjectField
 from twitterauth.models import UserProfile, Rating
@@ -11,11 +12,20 @@ import random
 
 DEFAULT_MODEL = 'Rating'
     
-def round_away(num, split=0.0):
+def round_away(tup):
+    num, split = tup[0], tup[1]
     if num >= split: return 1
     else: return -1
 
-def round_binary(num, split=0.0):
+def round_np_away(array, split):
+    rounded = np.copy(array)
+    for i, num in enumerate(rounded):
+        if num >= split: rounded[i] = 1
+        else: rounded[i] = -1
+    return rounded
+
+def round_binary(tup):
+    num, split = tup[0], tup[1]
     if num >= split: return 1
     else: return 0
 
@@ -27,27 +37,29 @@ class TrainingSet(models.Model):
     user_profiles = models.ManyToManyField(UserProfile)
     ratings = models.ManyToManyField(Rating, blank=True, null=True)
     
+    def __unicode__(self):
+        return self.name
     
     def setup(self):
         profs = self.user_profiles.all()
         ratings = self.ratings.all()
         status_ids = set([r.status_id for r in ratings])
-        statuses = Status.objects.in_bulk(id__in=status_ids)
+        statuses = Status.objects.in_bulk(status_ids)
         training_set = {}
         for p in profs:
             data = {}
             data['user_profile'] = p
-            data['ratings'] = [r for r in ratings if r.user_profile_id == p.id]
+            data['ratings'] = [r for r in ratings if r.user_profile_id == p.user_id]
             for r in data['ratings']:
                 r.status = statuses[r.status_id]
-            training_set[p.id] = data
+            training_set[p.user_id] = data
         return training_set
 
-    def benchmark(self, classifier, n_folds=2, discrimination_bound=0.0, save=True):
+    def benchmark(self, classifier_name, n_folds=2, discrimination_bound=0.0, save=True):
         training_set = self.setup()
         probas = []
         expected = []
-        for prof_id, data in training_set:
+        for prof_id, data in training_set.iteritems():
             n = len(data['ratings'])
             if n_folds >= n:
                 continue
@@ -58,18 +70,22 @@ class TrainingSet(models.Model):
                 test_ratings = [data['ratings'][i] for i in range(n) if
                                 test_index[i]]
                 if len(train_ratings) < 1 or len(test_ratings) < 1: continue
-                classifier = classifier_library[classifier]
+                classifier = classifier_library.classifiers[classifier_name]
                 c = classifier(data['user_profile']).test_train(ratings=train_ratings)
                 y_pred = c.test_predict([rating.status for rating in test_ratings])
+#                print y_pred
                 probas.extend(map(round_proba, y_pred))
+#                print map(round_proba, y_pred)
                 expected.extend([rating.rating for rating in test_ratings])
-        raw_data = {'y_true': expected, 'y_probas': probas}
+        raw_data = {'y_true': np.array(expected), 'y_probas': np.array(probas)}
+#        print raw_data['y_probas']
+#        print raw_data
         stats = PredictionStatistics(training_set=self,
-                                     classifier=classifier,
+                                     classifier=classifier_name,
                                      model=DEFAULT_MODEL,
                                      n_folds=n_folds,
                                      raw_data=raw_data)
-        stats.calculate_statistcs()
+        stats.calculate_statistics()
         if save: stats.save()
         return stats
 
@@ -110,6 +126,7 @@ class PredictionStatistics(models.Model):
     raw_data = PickledObjectField()
     discrimination_bound = models.FloatField(default=0.0)
     n_folds = models.IntegerField()
+    auc = models.FloatField()
     ppv = models.FloatField()
     npv = models.FloatField()
     tpr = models.FloatField()
@@ -127,9 +144,17 @@ class PredictionStatistics(models.Model):
 
     def calculate_statistics(self):
         """Rely on labels being [-1 1] for array labels"""
-        y_true = np.array(self.raw_data['y_true'])
-        y_pred = np.array(map(round_away, 
-                              [(p, 0.5) for p in self.raw_data['y_probas']]))
+        y_true = self.raw_data['y_true']
+        y_pred = round_np_away(self.raw_data['y_probas'], 0.5)
+
+
+        # Compute ROC curve and area the curve
+        y = np.ceil(np.divide(y_true.astype(float), 2.0))
+        probas_ = self.raw_data['y_probas']
+        fpr, tpr, thresholds = roc_curve(y, probas_)
+        roc_auc = auc(fpr, tpr)
+        self.auc = roc_auc
+
         cm = confusion_matrix(y_true, y_pred, labels=[-1, 1])
         self.tn = cm[0, 0]
         self.tp = cm[1, 1]

@@ -22,7 +22,7 @@ def grabCanonicalUrl(url):
         if 'long_url' not in result: return url # Was not a bit.ly URL
         else: return result['long_url']
     except bitly_api.BitlyError as e:
-        print >> sys.stderr, str(e)
+#        print >> sys.stderr, str(e)
         return url
 
 def grabDomain(url):
