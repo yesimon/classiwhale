@@ -13,6 +13,9 @@
   display: inline;
   height: 60px;
   text-align:center;
+  position: fixed;
+  z-index: 1000;
+  top: 0px;
 }
 
 #nav .nav-bound { 
