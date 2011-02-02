@@ -44,7 +44,6 @@
 }
 
 .status-container {
-	background-color: #FFFFFF;
     width: 575px;
     float: left;
 	border:0px;
@@ -75,26 +74,22 @@
 }
 
 
-.status-container .header-wrapper {
-    background-color:#E3EBFC;
-}
-
 .status-container .header {
-    background: #BBCDF7 url('/static/img/title_bg.png') repeat 0 0;
+    background: #BBCDF7 url('/static/img/recent_title_bg.png') repeat 0 0;
     position:relative;
-    height:42px;
+    height:38px;
     padding-left:13px;
     padding-right:10px;
-    width: 470px;
+    margin: 0 2px;
 }
 
 
 .status-container .header .title {
-    font-family:Arial, Helvetica;
-    font-size:21px;
-    color:#1A1A1A;
+    font-family: Helvetica, Arial;
+    font-size: 18px;
+    color:#FFF;
     float:left;
-    margin-top:12px;
+    margin: 11px 0 0 7px;
 }
 
 
@@ -103,32 +98,71 @@
     font-size:13px;
     color:#222;
     float:right;
-    margin-top:15px;
+    list-style-type: none;
     margin-right:5px;
 }
 
-#content .status-container .header .links a:link,
-#content .status-container .header .links a:visited {
-    color:#143DA6;
+.status-container .header .links li {
+    display: block;
+    float: right;
+}
+
+.status-container .header .links li {
+    margin-top: 10px;
+    margin-left: 14px;
+    padding: 0px 4px 0px 8px;
+}
+
+.status-container .header .links li a {
+    color: #fff !important;
+    font-weight: bold;
+    font-size: 12px;
+    font-family: lucida grande;
+}
+
+.status-container .header .links li.active a {
+    color: #206E9F !important;
+}
+
+.status-container .header .links li.active {
+    margin-top: 8px;
+    margin-left: 10px;
+    background: url("/static/img/filter_btn.png") no-repeat top left;
+    padding: 0px 0px 0px 8px;
+}
+
+.status-container .header .links li.active a {
+    display: block;
+    width: 100%;
+    padding: 2px 4px;
+    background: url("/static/img/filter_btn.png") no-repeat top right;
+}
+
+
+
+
+.status-container .header .links a:link,
+.status-container .header .links a:visited {
+    color: white;
 }
 
 
 .status-container .header .left-bg {
-    background: #BBCDF7 url('/static/img/title_corners.png') repeat 0 0;
+    background: url('/static/img/title_corners.png') no-repeat 0 0;
     position:absolute;
-    top:0px;
-    left:0px;
-    width:10px;
-    height:42px;
+    top: 0px;
+    left: -2px;
+    width:7px;
+    height:38px;
 }
 
 .status-container .header .right-bg {
-    background: #BBCDF7 url('/static/img/title_corners.png') repeat -11px 0;
+    background: url('/static/img/title_corners.png') no-repeat scroll -8px 0;
     position:absolute;
-    top:0px;
-    right:0px;
-    width:10px;
-    height:42px;
+    top: 0px;
+    right: -2px;
+    width:7px;
+    height:38px;
 }
 
 
@@ -136,6 +170,7 @@
 .status-container .statuses {
 	border:1px solid #A0A0A0;
 	border-width: 0 1px 1px;
+	background-color: #fff;
 }
 
 

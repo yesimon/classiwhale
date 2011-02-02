@@ -205,7 +205,7 @@ INSTALLED_APPS = (
     'sentry.client.celery',
     'picklefield',
     'django_extensions',
-    'nexus',
+#    'nexus',
     'gargoyle',
     'tastypie',
     'base',
@@ -217,7 +217,9 @@ INSTALLED_APPS = (
     'search',
     'prediction',
     'multinomialbayes',
+    'confidence_bayes',
     'cylonbayes',
+    'whale',
 )
 
 if DEBUG == True:

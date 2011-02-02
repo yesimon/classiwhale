@@ -22,7 +22,7 @@ def public_timeline(request):
     api = twitter.Api()
     statuses = api.GetPublicTimeline()
     return render_to_response('public_timeline.html',
-        {'statuses': statuses, },
+        {'statuses': statuses},
         context_instance=RequestContext(request))
 
 
@@ -37,8 +37,6 @@ def ajax_public_timeline(request):
     results['success'] = 'True'
     html = t.render(RequestContext(request, results))
     return HttpResponse(html)
-
-
 
 @login_required
 def rating_history(request):
@@ -161,7 +159,6 @@ def ajax_timeline(request):
         },
         context_instance=RequestContext(request))
     
-
 def timeline(request):
     user = request.user
     if not user.is_authenticated() or 'access_token' not in request.session:
@@ -178,6 +175,7 @@ def timeline(request):
     Rating.appendTo(statuses, prof)
     return render_to_response('timeline.html',
         {
+          'whale': prof.whale,
           'statuses': statuses,
           'friends': friends
         },
@@ -227,9 +225,32 @@ def ajax_rate(request):
         rating_int = -1
     r = Rating(status=s, user_profile=prof, rating=rating_int)
     r.save()
+    prof.whale.exp = prof.whale.exp + 1
+    if prof.whale.exp == prof.whale.species.evolution.minExp:
+        prof.whale.species = prof.whale.species.evolution
+    prof.whale.save()
     results['success'] = 'True'
+    results['exp'] = prof.whale.exp
+    results['min-exp'] = prof.whale.species.minExp
+    results['max-exp'] = prof.whale.species.evolution.minExp
+    results['species'] = prof.whale.species.img.url
+    results['speciesName'] = prof.whale.species.name
     jsonResults = json.dumps(results)
     return HttpResponse(jsonResults, mimetype='application/json')
   
   
-  
+def post_status(request):
+    results = {'success':'False'}
+    user = request.user
+    if not user.is_authenticated() or 'access_token' not in request.session:
+        return HttpResponseRedirect(reverse('status.views.public_timeline'))
+    API = get_authorized_twitter_api(request.session['access_token'])
+    status = request.POST[u'status']
+    print("about to post status")
+    try:
+        API.PostUpdate(status)
+        results['success'] = 'True'
+    except twitter.TwitterError:
+        pass
+    jsonResults = json.dumps(results)
+    return HttpResponse(jsonResults, mimetype='application/json')

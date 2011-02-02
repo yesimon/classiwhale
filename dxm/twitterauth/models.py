@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from status.models import Status
-
+from whale.models import Whale, WhaleSpecies
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, primary_key=True)
@@ -18,6 +18,7 @@ class UserProfile(models.Model):
     training_statuses = models.ManyToManyField(Status, blank=True, null=True, related_name='training')
     active_classifier = models.CharField(max_length=50, blank=True, null=True)
     classifier_version = models.CharField(max_length=30, blank=True, null=True)
+    whale = models.OneToOneField(Whale, blank=True, null=True)
     
     def __unicode__(self):
         return "%s's profile" % self.screen_name
@@ -26,6 +27,10 @@ class UserProfile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         profile, created = UserProfile.objects.get_or_create(user=instance)
+        whale = Whale(species=WhaleSpecies.getDefaultSpecies())
+        whale.save()
+        profile.whale = whale
+        profile.save()
 
 post_save.connect(create_user_profile, sender=User)
 

@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Instalación &mdash; virtualenvwrapper v2.5.3 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '2.5.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="virtualenvwrapper v2.5.3 documentation" href="index.html" />
+    <link rel="next" title="Referencia de comandos" href="command_ref.html" />
+    <link rel="prev" title="virtualenvwrapper 2.5.3" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="command_ref.html" title="Referencia de comandos"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="index.html" title="virtualenvwrapper 2.5.3"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">virtualenvwrapper v2.5.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Instalación</a><ul>
+<li><a class="reference external" href="#instalacion-basica">Instalación básica</a></li>
+<li><a class="reference external" href="#workon-home">WORKON_HOME</a></li>
+<li><a class="reference external" href="#archivo-de-inicio-del-shell">Archivo de inicio del shell</a></li>
+<li><a class="reference external" href="#interprete-de-python-y-path">Intérprete de Python y $PATH</a></li>
+<li><a class="reference external" href="#inicio-rapido">Inicio rápido</a></li>
+<li><a class="reference external" href="#archivos-temporales">Archivos temporales</a></li>
+<li><a class="reference external" href="#actualizar-desde-1-x">Actualizar desde 1.x</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="index.html"
+                                  title="previous chapter">virtualenvwrapper 2.5.3</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="command_ref.html"
+                                  title="next chapter">Referencia de comandos</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/install.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="instalacion">
+<h1>Instalación<a class="headerlink" href="#instalacion" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="instalacion-basica">
+<h2>Instalación básica<a class="headerlink" href="#instalacion-basica" title="Permalink to this headline">¶</a></h2>
+<p>virtualenvwrapper debe ser instalado usando <a class="reference external" href="http://pypi.python.org/pypi/pip">pip</a>:</p>
+<div class="highlight-python"><pre>$ pip install virtualenvwrapper</pre>
+</div>
+<p>Querrás instalarlo dentro del site-packages global de Python, junto con
+virtualenv. Quizás necesites privilegios de administrador para hacer esto.</p>
+</div>
+<div class="section" id="workon-home">
+<h2>WORKON_HOME<a class="headerlink" href="#workon-home" title="Permalink to this headline">¶</a></h2>
+<p>La variable <tt class="docutils literal"><span class="pre">WORKON_HOME</span></tt> le indica a virtualenvwrapper cuál es el lugar de
+tus entornos virtuales. El default es <tt class="docutils literal"><span class="pre">$HOME/.virtualenvs</span></tt>.
+Este directorio debe ser creado antes de usar cualquier comando de
+virtualenvwrapper.</p>
+</div>
+<div class="section" id="archivo-de-inicio-del-shell">
+<span id="install-shell-config"></span><h2>Archivo de inicio del shell<a class="headerlink" href="#archivo-de-inicio-del-shell" title="Permalink to this headline">¶</a></h2>
+<p>Agrega estas dos líneas a tu archivo de inicio del shell (<tt class="docutils literal"><span class="pre">.bashrc</span></tt>, <tt class="docutils literal"><span class="pre">.profile</span></tt>,
+etc.) para configurar la ubicación dónde se van a guardar los entornos virtuales
+y los scripts instalados con este paquete:</p>
+<div class="highlight-python"><pre>export WORKON_HOME=$HOME/.virtualenvs
+source /usr/local/bin/virtualenvwrapper.sh</pre>
+</div>
+<p>Después de editar este, recarga el archivo de inicio (por ejemplo, ejecuta: <tt class="docutils literal"><span class="pre">source</span>
+<span class="pre">~/.bashrc</span></tt>).</p>
+</div>
+<div class="section" id="interprete-de-python-y-path">
+<h2>Intérprete de Python y $PATH<a class="headerlink" href="#interprete-de-python-y-path" title="Permalink to this headline">¶</a></h2>
+<p>Durante el inicio, <tt class="docutils literal"><span class="pre">virtualenvwrapper.sh</span></tt> busca el primer <tt class="docutils literal"><span class="pre">python</span></tt> en la
+variable <tt class="docutils literal"><span class="pre">$PATH</span></tt> y recuerda éste para su posterior uso. Esto elimina cualquier
+conflicto con los cambios en <tt class="docutils literal"><span class="pre">$PATH</span></tt>, permitiendo intérpretes dentro de
+entornos en los cuales virtualenvwrapper no está instalado. Debido a este
+comportamiento, es importante configurar la variable <tt class="docutils literal"><span class="pre">$PATH</span></tt> <strong>antes</strong> de
+hacer la inclusión de <tt class="docutils literal"><span class="pre">virtualenvwrapper.sh</span></tt> (mediante <tt class="docutils literal"><span class="pre">source</span></tt>). Por
+ejemplo:</p>
+<div class="highlight-python"><pre>export PATH=/usr/local/bin:$PATH
+source /usr/local/bin/virtualenvwrapper.sh</pre>
+</div>
+<p>Para reemplazar la búsqueda en <tt class="docutils literal"><span class="pre">$PATH</span></tt>, se puede configurar la variable
+<tt class="docutils literal"><span class="pre">VIRTUALENVWRAPPER_PYTHON</span></tt> hacia la ruta absoluta del intérprete a usar
+(también <strong>antes</strong> de incluir <tt class="docutils literal"><span class="pre">virtualenvwrapper.sh</span></tt>). Por ejemplo:</p>
+<div class="highlight-python"><pre>export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python
+source /usr/local/bin/virtualenvwrapper.sh</pre>
+</div>
+</div>
+<div class="section" id="inicio-rapido">
+<h2>Inicio rápido<a class="headerlink" href="#inicio-rapido" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Ejecuta: <tt class="docutils literal"><span class="pre">workon</span></tt></li>
+<li>Una lista de entornos, vacía, es impresa.</li>
+<li>Ejecuta: <tt class="docutils literal"><span class="pre">mkvirtualenv</span> <span class="pre">temp</span></tt></li>
+<li>Un nuevo entorno, <tt class="docutils literal"><span class="pre">temp</span></tt> es creado y activado.</li>
+<li>Ejecuta: <tt class="docutils literal"><span class="pre">workon</span></tt></li>
+<li>Esta vez, el entorno <tt class="docutils literal"><span class="pre">temp</span></tt> es incluido.</li>
+</ol>
+</div>
+<div class="section" id="archivos-temporales">
+<h2>Archivos temporales<a class="headerlink" href="#archivos-temporales" title="Permalink to this headline">¶</a></h2>
+<p>virtualenvwrapper crea archivos temporales en <tt class="docutils literal"><span class="pre">$TMPDIR</span></tt>. Si la variable no
+está configurada, este usa <tt class="docutils literal"><span class="pre">/tmp</span></tt>. Para cambiar la ubicación de los archivos
+temporales sólo para virtualenvwrapper, configura <tt class="docutils literal"><span class="pre">VIRTUALENVWRAPPER_TMPDIR</span></tt>.</p>
+</div>
+<div class="section" id="actualizar-desde-1-x">
+<h2>Actualizar desde 1.x<a class="headerlink" href="#actualizar-desde-1-x" title="Permalink to this headline">¶</a></h2>
+<p>El script de shell que contiene las funciones ha sido renombrado en la serie
+2.x para reflejar el hecho de que otros shells, además de bash, son soportados. En
+tu archivo de inicio del shell, cambia <tt class="docutils literal"><span class="pre">source</span>
+<span class="pre">/usr/local/bin/virtualenvwrapper_bashrc</span></tt> por <tt class="docutils literal"><span class="pre">source</span>
+<span class="pre">/usr/local/bin/virtualenvwrapper.sh</span></tt>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="command_ref.html" title="Referencia de comandos"
+             >next</a></li>
+        <li class="right" >
+          <a href="index.html" title="virtualenvwrapper 2.5.3"
+             >previous</a> |</li>
+        <li><a href="index.html">virtualenvwrapper v2.5.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Doug Hellmann.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

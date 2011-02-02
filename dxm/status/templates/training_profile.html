@@ -1,0 +1,14 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        setWhaleProgress({{whale.exp}}, {{whale.species.minExp}}, {{whale.species.evolution.minExp}});
+    });
+
+</script>
+
+<div class="training-pane">
+  <div class="whale-name"> {{ whale.name }} </div>
+     <div class="whale">
+          <img class="whale-photo" height="130px" width="130px" src="{{ whale.species.img.url }}" alt="{{ whale.species.name }}" /> 
+    </div>
+    <div class="whale-progress-bar"></div>
+</div>
