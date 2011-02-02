@@ -2,72 +2,111 @@
 
 {% block extra_js %}
 <script>
-$(document).ready(function(){
- 
-    l2 = [11, 9, 5, 12, 14];
-    l3 = [4, 8, 5, 3, 6];
-    l4 = [12, 6, 13, 11, 2];
-    l5 = [4, -3, 3, 6, 2, -2];    
- 
-    
-    plot1b = $.jqplot('chart1b',[l2, l3, l4],{
-       stackSeries: true,
-       showMarker: false,
-       seriesDefaults: {
-           fill: true
-       },
-       axes: {
-           xaxis: {
-               renderer: $.jqplot.CategoryAxisRenderer,
-               ticks: ["Mon", "Tue", "Wed", "Thr", "Fri"]
-           }
-       }
+function permalinkToBenchmark(benchmark) {
+    window.location=benchmark + "/";
+}
+$(document).ready(function() {
+    $(".datatable").dataTable({
+        "bJQueryUI": true,
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bSort": true,
+        "bInfo": true,
+        "bAutoWidth": false } );
+
+
+
+
+
+
+    $(".datatable > tbody > tr").each(function() {
+        $(this).click(function () {
+            var benchid = $(this).attr("data-benchmark_id");
+            permalinkToBenchmark(benchid);
+        });
     });
-    
-    plot1c = $.jqplot('chartdiv',[l5],{
-       stackSeries: true,
-       showMarker: false,
-       seriesDefaults: {
-           fill: true,
-           fillToZero: true,
-           rendererOptions: {
-               highlightMouseDown: true
-           }
-       }
+    //Add hover effect to rows
+    $(".datatable > tbody > tr > td").hover(function() {
+        $(this).parents('tr').addClass('highlight');
+        }, function() {
+        $(this).parents('tr').removeClass('highlight');
     });
- 
-    $('#chartdiv').bind('jqplotDataClick', 
-        function (ev, seriesIndex, pointIndex, data) {
-            $('#info1c').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
-        }
-    );
-    
-    $('#chartdiv').bind('jqplotDataHighlight', 
-        function (ev, seriesIndex, pointIndex, data) {
-            $('#info1b').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
-        }
-    );
-    
-    $('#chart1b').bind('jqplotDataUnhighlight', 
-        function (ev) {
-            $('#info1b').html('Nothing');
-        }
-    );
 });
- 
 </script>
 {% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% url corsair-media "css/demo_table_jui.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% url corsair-media "css/jquery-ui-1.8.4.custom.css" %}" />
+
+
+<style>
+table.datatable tbody tr.highlight td, tr.highlight td {
+	    background-color: #9DADC6 !important;
+	    cursor: pointer;
+	}
+
+#benchTable div.DataTables_sort_wrapper {
+padding-right: 20px;
+position: relative;
+}
+
+#benchTable div.DataTables_sort_wrapper span {
+margin-top: -8px;
+position: absolute;
+right: 0px;
+top: 50%;
+}
+</style>
+{% endblock %}
+
+
+
 
 {% block content %}
-<div><span>Moused Over: </span><span id="info1b">Nothing</span></div> 
- 
-<div id="chart1b" class="plot" style="width:400px;height:260px;"></div> 
- 
-<p>For the chart below, mouseover has been disabled and click handling is enabled by setting "highlightMouseDown: true".  For "fillToZero" area charts that have both negative and positive values as shown below, clicking in either the positive of negative regions will generate the same result.</p> 
- 
-<div><span>You Clicked: </span><span id="info1c">Nothing yet</span></div> 
- 
-<div id="chart1c" class="plot" style="width:400px;height:260px;"></div> 
-<div id="chartdiv" style="height:400px;width:300px; "></div>
+<div id="sidebar" style="background:#EEE;">
+  <h2>Training Sets</h2>
+  <ul id="training_set_list">
+    {% for training_set in training_sets %}
+    <li class="training_set">{{ training_set.name }}</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div id="content">
+  <div id="contentwrap" style="width:850px;">
+    <div class="demo_jui">
+    <table class="datatable" class="display" cellpadding="0" cellspacing="0" border="0" id="benchTable" style="width:100%;">
+      <thead>
+	<tr>
+	  <th class="header">Classifier</th>
+	  <th class="model">Model</th>
+	  <th title="Area Under ROC Curve" class="auc">AUC</th>
+	  <th title="Matthews Correlation Coefficient" class="mcc">MCC</th>
+	  <th class="acc">Accuracy</th>
+	  <th class="ppv">Precision</th>
+	  <th title="Negative Predictive Value" class="npv">NPV</th>
+	  <th class="tpr">Recall</th>
+	  <th class="tnr">Specificity</th>
+	</tr>
+      </thead>
+      <tbody>
+	{% for benchmark in benchmarks %}
+	<tr data-benchmark_id="{{ benchmark.id }}" class="{% cycle even odd %}">
+	  <td class="text" title="{{ benchmark.classifier }}">{{ benchmark.classifier }}</td>
+	  <td class="text" title="{{ benchmark.model }}">{{ benchmark.model }}</td>
+	  <td>{{ benchmark.auc|floatformat:3 }}</td>
+	  <td>{{ benchmark.mcc|floatformat:3 }}</td>
+	  <td>{{ benchmark.acc|floatformat:3 }}</td>
+	  <td>{{ benchmark.ppv|floatformat:3 }}</td>
+	  <td>{{ benchmark.npv|floatformat:3 }}</td>
+	  <td>{{ benchmark.tpr|floatformat:3 }}</td>
+	  <td>{{ benchmark.tnr|floatformat:3 }}</td>
+	</tr>
+	{% endfor %}
+      </tbody>
+    </table>
+    </div>
 {% endblock %}
+

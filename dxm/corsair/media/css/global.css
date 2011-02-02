@@ -118,6 +118,7 @@ ul.inline {
 }
 
 div#nav {
+    padding-left: 18em;
     font-size: 16px;
 }
 
@@ -130,6 +131,10 @@ div#nav ul li {
     background-color: #DADADA;
     border-top-left-radius: 16px 16px;
     border-top-right-radius: 16px 16px;
+}
+
+div#nav ul li:hover {
+    background-color: #9dadc6;
 }
 
 div#nav ul li a {
@@ -167,12 +172,14 @@ ul#training_set_list li {
     max-width: 1550px;
 }
 #header table { border:none; background:transparent; }
+
+
 #body, #sidebar { position: relative; }
 #body {
     background: #fff;
     max-width: 100%;
     overflow: hidden;
-    margin: 2em 0 2em 2em;
+    margin: 2em 0 2em 2em; 
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -197,12 +204,37 @@ ul#training_set_list li {
 
 /* sidebar */
 
+
+
 #sidebar {
-    float: right;
-    width: 300px;
-    margin: 0em 2em 2em 1.5em;
+    float: left;
+    width: 18em;
+    margin: 0em 0em 0em 1.5em;
+    margin: 0em 2em 2em 1.5em; 
     background: inherit;
     overflow: hidden;
+}
+
+#sidebar h2 {
+    padding: 0em 1em;
+}
+
+#sidebar ul {
+    margin: 0em;
+    padding: 0em;
+}
+
+#sidebar li {
+    list-style: none;
+    overflow: hidden;
+    padding: 1em 1em;
+    position: relative;
+}
+
+
+#sidebar li:hover {
+    background-color: #9dadc6;
+    cursor: pointer;
 }
 
 .sidebar-module {
@@ -267,7 +299,7 @@ ul#training_set_list li {
 }
 
 #chart { margin-bottom: 20px; }
-
+/*
 .button {
     cursor: pointer;
     display: inline-block;
@@ -280,12 +312,12 @@ ul#training_set_list li {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF', endColorstr='#DCDCDC'); /* for IE */
-    background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#DCDCDC)); /* for webkit browsers */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF', endColorstr='#DCDCDC'); // for IE 
+    background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#DCDCDC)); // for webkit browsers 
     background:-moz-linear-gradient(center top , #FFFFFF 0pt, #DCDCDC 100%) repeat scroll 0 0 transparent;
 }
-
-/* .button {
+*/
+.button {
     -webkit-box-shadow: rgba(0, 0, 0, 0.0976562) 0px 1px 3px;
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(white), to(gainsboro));
     border: 1px solid #94AFBD;
@@ -305,7 +337,7 @@ ul#training_set_list li {
     text-decoration: none;
     text-shadow: white 0px 1px 0px;
 }
-*/
+
 
 .button:hover {
     border:1px solid #3079d0;

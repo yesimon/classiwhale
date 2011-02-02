@@ -16,5 +16,6 @@ urlpatterns = patterns('',
     url(r'^training_sets/$', views.training_sets, name='corsair-training_sets'),
     url(r'^benchmarks/$', views.benchmarks, name='corsair-benchmarks'),
     url(r'^benchmarks/(.*?)/$', views.benchmark_detail, name='corsair-benchmark_detail'),
+    url(r'^ajax/api/(?P<action>.*?)/$', views.ajax_api, name='corsair-ajax_api'),
 )
                

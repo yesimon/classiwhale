@@ -1,12 +1,84 @@
 {% extends 'corsair/base.html' %}
 
 {% block extra_js %}
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $(".multiselect").multiselect({sortable:false});
+    $(".startBench").click(function (ev) {
+        ev.preventDefault();
+        var training_set = $(this).attr("data-training_set");
+        var benchbox = $("#startBenchBox").tmpl([{ training_set: training_set }]);
+        $.colorbox({width:"50%", height:"600px", html: benchbox});
+//        $.colorbox({width:"50%", inline:true, href:"#inlineStartBench"});
+        $(".multiselect").multiselect({sortable:false});
+        addSubmitBenchmarkHandler();
+     });
+    $("#startBenchForm").submit(function(event) {
+        event.preventDefault();
+        var training_set = $(this).attr("data-training_set");
+        var classifiers = [];
+        $("#startBenchForm :selected").each(function(i, selected){
+            classifiers[i] = $(selected).text();
+        });
+        alert(classifiers);
+        alert(training_set);
+    });
+
+});
+
+function addSubmitBenchmarkHandler() {
+   $("#startBenchForm").submit(function(event) {
+        event.preventDefault();
+        var training_set = $(this).attr("data-training_set");
+        var classifiers = [];
+        $("#startBenchForm :selected").each(function(i, selected){
+            classifiers[i] = $(selected).text();
+        });
+        if (classifiers.length == 0) {
+            alert('No classifiers selected');
+            return false;
+        }
+        $.post('{% url corsair-ajax_api "start_benchmark" %}', 
+               { 'classifiers[]': classifiers,
+                  training_set: training_set },
+                function(data) {
+                    data = JSON.parse(data);
+                    if (data.success) {
+                        $.colorbox.close();
+                    }
+                });
+    });
+}
+
+</script>
+
+
+<script type="text/x-jquery-tmpl" id="startBenchBox"> 
+  <h2>Run Benchmark</h2>
+  <h3>${training_set}</h3>
+  <form action="#" id="startBenchForm" data-training_set="${training_set}">
+    <select id="classifiers" class="multiselect" multiple="multiple" name="classifiers[]" style="width:600px; height: 300px;">
+      {% for classifier in classifiers %}
+      <option value="{{ classifier }}">{{ classifier }}</option>
+      {% endfor %}
+    </select>
+    <input type="submit" value="Submit" />
+  </form>
+</script>
+
 {% endblock %}
 
 {% block content %}
     <ul class="training_sets" id="training_set_list">
     {% for training_set in training_sets %}
-        <li>{{ training_set.name }}</li>
+        <li>
+	  <h3>{{ training_set.name }}</h3>
+	  <button class='button startBench' data-training_set="{{ training_set.name }}">Start Benchmark</button>
+	  <ul id="movieList"></ul>
+	</li>
     {% endfor %}
     </ul>
 {% endblock %}
+
+
