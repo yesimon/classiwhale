@@ -10,7 +10,14 @@
 					<div class="header">
 					    <div class="left-bg"></div>
 					    <div class="title">Recent Tweets</div>
-					    <div class="links"><a class="link" href="/">Unfiltered</a> &middot; <a class="link" href="/bayes/filter/">Filtered</a></div>
+					    <ul class="links">
+                            <li class="{% ifequal request.path "/" %}active{% endifequal %}">
+                                <a href="/">Unfiltered</a>
+                            </li>
+                            <li class="{% ifequal request.path "/bayes/filter/" %}active{% endifequal %}">
+                                <a href="/bayes/filter/">Filtered</a>
+                            </li>
+                        </ul>
 					    <div class="right-bg"></div>
 					</div>
 				</div>
