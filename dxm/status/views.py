@@ -104,14 +104,30 @@ def ajax_training_set_posts(request):
 
 
 def public_profile(request, username):
-    api = twitter.Api() # this should be authenticated if possible
-    statuses = api.GetUserTimeline(username)
+    api = twitter.Api()
+    if request.user.is_authenticated() and 'access_token' in request.session: #authenticate if possible
+        api = get_authorized_twitter_api(request.session['access_token'])
     user = api.GetUser(username)
+    try:
+        statuses = api.GetUserTimeline(username)
+    except twitter.TwitterError as err:
+        outgoing = api.FriendshipsOutgoing()
+        follow_request_sent = False
+        if(user.id in outgoing):
+            follow_request_sent = True
+        return render_to_response('protected_profile.html',
+            {
+             'username': username,
+             'friend': user,
+             'follow_request_sent': follow_request_sent
+             },
+             context_instance=RequestContext(request)) 
     max_id = statuses[0].GetId()
     
     return render_to_response('public_profile.html',
         {
-         'user': user,
+         'username': username,
+         'friend': user,
          'statuses': statuses,
          'max_id': max_id
         },
@@ -132,7 +148,9 @@ def ajax_user_timeline(request):
     max_id = request.GET[u'max_id']
     page = request.GET[u'page']
     
-    api = twitter.Api() # this should be authenticated if possible
+    api = twitter.Api()
+    if request.user.is_authenticated() and 'access_token' in request.session: #authenticate if possible
+        api = get_authorized_twitter_api(request.session['access_token'])
     results['statuses'] = api.GetUserTimeline(id=screenname, max_id=max_id, page=page)
     t = get_template('status_list.html')
     results['success'] = 'True'
@@ -249,6 +267,23 @@ def post_status(request):
     print("about to post status")
     try:
         API.PostUpdate(status)
+        results['success'] = 'True'
+    except twitter.TwitterError:
+        pass
+    jsonResults = json.dumps(results)
+    return HttpResponse(jsonResults, mimetype='application/json')
+
+
+def create_friendship(request):
+    results = {'success':'False'}
+    user = request.user
+    if not user.is_authenticated() or 'access_token' not in request.session:
+        return HttpResponseRedirect(reverse('status.views.public_timeline'))
+    API = get_authorized_twitter_api(request.session['access_token'])
+    username = request.POST[u'friend_username']
+    user_to_follow = API.GetUser(username)
+    try:
+        API.CreateFriendship(username)
         results['success'] = 'True'
     except twitter.TwitterError:
         pass

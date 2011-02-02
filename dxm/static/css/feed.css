@@ -43,6 +43,16 @@
   color: #000000;
 }
 
+#follow-user {
+  color: #0000AA;
+}
+
+#follow-user:hover{
+  color: #FF0000;
+  cursor: pointer;
+}
+
+
 .status-container {
 	background-color: #FFFFFF;
     width: 575px;
