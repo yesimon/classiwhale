@@ -6,9 +6,15 @@
  
 .status {
   border-bottom: 1px solid #CDCDCD;
-  padding: 8px 0px 10px;
+  padding: 20px 15px 10px;
   overflow: hidden;
 }
+
+
+.status:hover {
+  background-color: #EAF3F7;
+}
+
 
 .entry-active {
   border-left: 3px solid #697EF5;
@@ -55,7 +61,7 @@
 
 
 .status-container {
-    width: 575px;
+    width: 528px;
     float: left;
 	border:0px;
     padding:0px;
@@ -74,7 +80,7 @@
     color:#8F8F8F;
     font-family:'Helvetica Neue', 'Lucida Grande', Arial;
     font-size:20px;
-    width:515px;
+    width:465px;
 }
 
 .status-container .status-prompt {
@@ -206,43 +212,44 @@
 
 
 .rate-buttons {
-  float: left;
   padding: 0px;
-  margin: 0 12px 0 14px
+  margin: 6px 0 0px 4px;
 }
 
-.rate-buttons div {
-	margin-top: 4px;
-	height:23px;
-	width:23px;
-	cursor:pointer;
+.rate-buttons div.like,
+.rate-buttons div.dislike {
+	margin-right: 10px;
+	height: 22px;
+	width: 72px;
+	float: left;
+	cursor: pointer;
 }
 
 .rate-buttons div.like {
-  	background: url('/static/img/thumb_icons.png') no-repeat 0 0;
+  	background: url('/static/img/like_btns.png') no-repeat 0 0;
 }
 
 .rate-buttons div.dislike {
-  	background: url('/static/img/thumb_icons.png') no-repeat 0 -23px;
+  	background: url('/static/img/like_btns.png') no-repeat -72px 0px;
 }
 
 .rate-buttons div.like.inactive {
-  	background: url('/static/img/thumb_icons.png') no-repeat -46px 0;
+  	background: url('/static/img/like_btns.png') no-repeat 0 -44px;
 }
 
 .rate-buttons div.dislike.inactive {
-  	background: url('/static/img/thumb_icons.png') no-repeat -46px -23px;
+  	background: url('/static/img/like_btns.png') no-repeat -72px -44px;
 }
 
 
 .rate-buttons div.like:hover,
 .rate-buttons div.like.active {
-	background-position: -23px 0;
+	background-position: 0 -22px;
 }
 
 .rate-buttons div.dislike:hover,
 .rate-buttons div.dislike.active {
-	background-position: -23px -23px;
+	background-position: -72px -22px;
 }
 
 

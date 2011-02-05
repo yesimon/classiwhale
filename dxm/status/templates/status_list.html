@@ -5,11 +5,6 @@
 {% for status in statuses %}
 
 <div class="status" data-status="{{ status.AsJsonString }}">
-
-	<div class="rate-buttons">
-		<div class="like{{ status.likeClass }}"></div> 
-		<div class="dislike{{ status.dislikeClass }}"></div>
-	</div>
 	
 	<div class="tweet-usr-profile">
 		<a href="/profile/{{ status.GetUser.GetScreenName }}">
@@ -29,6 +24,11 @@
 				</a> 
 			</i>
 		</p>
+        <div class="rate-buttons">
+            <div class="like{{ status.likeClass }}"></div> 
+            <div class="dislike{{ status.dislikeClass }}"></div>
+            <div class="clear"></div>
+        </div>
 	</div>
 
 </div>
