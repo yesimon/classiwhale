@@ -28,7 +28,7 @@
 #nav .logo {
     float:left;
     display:block;
-    background: url("/static/img/nav_logo.png") no-repeat top left;
+    background: url("/static/img/white_logo.png") no-repeat left center;
     width: 202px;
     height: 60px;
 }
