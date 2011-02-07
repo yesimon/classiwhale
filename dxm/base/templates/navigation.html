@@ -10,30 +10,17 @@
 		<ul>
 		    <!--
 			{% if user.is_authenticated %}
-			    <li>
-			    	<a href="{% url twitterauth.views.twitter_logout %}">Logout</a>
-			    </li>
 			{% else %}
 			    <li>
 			      <a id="login">Login</a>
   		    	<a href="{% url twitterauth.views.twitter_login %}">Login</a> 
 			    </li>
 			{% endif %}
-			-->
-		    <li class="{% navactive request 'django.views.generic.simple.direct_to_template' %}">
-		    	<a href="/about">About</a>
-		    </li>
 		    
 		    <li class="{% navactive request 'status.views.public_timeline' %}">
 		    	<a href="{% url status.views.public_timeline %}">Recent</a>
 		    </li>
-		    <li class="{% navactive request 'status.views.rating_history' %}">
-		    	<a href="{% url status.views.rating_history %}">Profile</a>
-		    </li>
-		    <li class="separator"></li>
-		    <li class="{% navactive request 'status.views.timeline' %}">
-		    	<a href="{% url status.views.timeline %}">Home</a>
-		    </li>
+-->
 		    <li class="searchContainer">
 			    <div>
 			    	<script type="text/javascript">
@@ -59,10 +46,53 @@
 				    </form>
 			    </div>
 		    </li>
+		    
 		{% if user.is_authenticated %}
-		    <li class="{% navactive request '' %}">
-		    <a href="/">{{ user.get_profile.screen_name }}</a>
+		    <script type="text/javascript">
+            function hideUserMenu(){
+                $('#nav .user-btn .collapse').show();
+                $('#nav .user-btn .expand').hide();
+            }
+            $(function(){
+                $(document).click(hideUserMenu);
+                $('#nav .user-btn .option a').click( function(e) {
+                    document.location = $(this).attr('href');
+                    return false;
+                });
+                $('#nav .user-btn .collapse').click( function(e) {
+                    $('#nav .user-btn .collapse').hide();
+                    $('#nav .user-btn .expand').show();
+                    return false;
+                });
+            });
+            </script>
+		    <li class="user-btn">
+		        <div class="collapse">
+		            <a class="name">{{ user.get_profile.screen_name }}</a>
+		        </div>
+		        
+                <div class="expand" onclick="hideUserMenu()">
+                    <a class="name">kkansky</a>
+                    <div class="clear"></div>
+                    <div class="option"><a href="/">Settings</a></div>
+                    <div class="option"><a href="/about">About ClassiWhale</a></div>
+                    <div class="option"><a href="{% url twitterauth.views.twitter_logout %}">Sign Out</a></div>
+                    
+                    <div class="arrow"></div>
+                    <div class="tl-back"></div>
+                    <div class="foot">
+                        <div class="bl-back"></div>
+                    </div>
+                </div>
 		    </li>
+		    
+            <li class="nav-link {% navactive request 'status.views.timeline' %}">
+                <a href="{% url status.views.timeline %}">Home</a>
+            </li>
+            <li class="separator"></li>
+            <li class="nav-link {% navactive request 'status.views.rating_history' %}">
+                <a href="{% url status.views.rating_history %}">Profile</a>
+            </li>
 		{% endif %}
 		</ul>
 	</div>
