@@ -1,0 +1,29 @@
+.status-post .status-post-char-count {
+  float: right;
+}
+
+.status-post .status-post-alert {
+  float: left;
+  color: #DD0000;
+  padding: 0px 12px 0px 20px;
+}
+
+.status-post .status-post-button {
+  float: left;
+}
+
+.status-post .status-post-button:hover {
+  float: left;
+  cursor: pointer;
+  color: #1E2746;
+}
+
+.autocomplete-entry .autocomplete-image {
+  float: left;
+  padding: 0px 12px 0px 0px;
+}
+
+.autocomplete-entry .autocomplete-names .autocomplete-name {
+  font-size: 10pt;
+  color: #888888;
+}
