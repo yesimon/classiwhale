@@ -1,0 +1,17 @@
+#aboutBackground{
+    background-color:#1E2746; 
+    padding:25px;
+    color: white;
+    height: 400px;
+}
+
+
+#aboutTitle {
+    min-width: 500px;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+#aboutContent {
+    font-size: 17px;
+}
