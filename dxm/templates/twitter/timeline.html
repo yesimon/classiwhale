@@ -1,0 +1,60 @@
+{% extends "panes.html" %}
+
+{% block title %}
+Recent Tweets
+{% endblock %}
+
+
+
+
+{% block middle %} 
+
+    <script type="text/javascript">
+    $(function() {
+        $(window).infinitescroll({
+            url: "/status/ajax_timeline/",
+            appendTo: ".statuses"
+        });
+        
+        $(window).bind('infinitescroll.finish', function() {
+            addRateLinkHandlers();
+        });
+    });
+    </script>
+
+    <script type="text/javascript">
+    
+    // Attaches the click handler for input text.
+    // Gets input out of the text box and sends it
+    // to the twitpost function (in twitpost.js).
+    function startPostHandler() {
+        $('#status-post-button').unbind('click').click(
+              function() {
+                 $input_text = $('#postinput').val();
+                 twitpost($input_text);
+                 return false;
+              });
+        $is_post_form_focused = false;
+        $('#postinput').unbind('focus').focus(function() { $is_post_form_focused = true; });
+        $('#postinput').unbind('blur').blur(function() { $is_post_form_focused = false; });      
+    }
+    $(document).ready(startPostHandler);	
+    </script>
+
+	<div class="status-prompt">
+	    <div>What&#39;s happening?</div>
+	    <div class="status-post">
+                <input type="text" id="postinput"/>
+		<div id="status-post-button">Post!</div>
+            </div>
+	</div>
+	
+	{% load base_extras %}
+    {% load tweets %}
+
+    <div class="statuses">
+	   {% include 'twitter/status_list.html' %}
+    </div>
+    
+{% endblock %}
+

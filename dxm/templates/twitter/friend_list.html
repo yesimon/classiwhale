@@ -1,0 +1,16 @@
+<div class="friends">
+
+    {% for friend in friends %}
+    
+    <div class="user" id="user-{{ friend.id }}">
+        <a href="/profile/{{ friend.screen_name }}">
+            <img class="photo" width="48" height="48" src="{{ friend.profile_image_url }}" alt="{{ friend.name }}" />
+            <span class="screen_name">{{ friend.screen_name }}</span>
+        </a>
+    </div>
+    
+    {% empty %}
+    There are no friends to display.
+    {% endfor %}
+
+</div>

@@ -1,0 +1,261 @@
+from __future__ import division
+from django.db import models
+from django.core import serializers
+from profile.models import UserProfile
+from datetime import datetime
+from email.utils import parsedate
+from time import mktime
+import json
+
+
+class TwitterUserProfile(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    user = models.ForeignKey(UserProfile, blank=True, null=True)
+    oauth_token = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    oauth_secret = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    screen_name = models.CharField(max_length=32, blank=True, null=True)
+    profile_image_url = models.URLField(blank=True, null=True)
+    profile_use_background_image = models.BooleanField(default=False)
+    profile_sidebar_border_color = models.CharField(max_length=16, blank=True, null=True)
+    profile_background_title = models.CharField(max_length=255, blank=True, null=True)
+    profile_sidebar_fill_color = models.CharField(max_length=16, blank=True, null=True)
+    profile_background_image_url = models.URLField(blank=True, null=True)
+    profile_background_color = models.CharField(max_length=16, blank=True, null=True)
+    profile_link_color = models.CharField(max_length=16, blank=True, null=True)
+    utc_offset = models.IntegerField(blank=True, null=True)
+    verified = models.BooleanField(default=False)
+    protected = models.BooleanField(default=False)
+    location = models.CharField(max_length=160, blank=True, null=True)
+    url = models.URLField(blank=True, null=True)
+    friends_count = models.IntegerField(default=0)
+    followers_count = models.IntegerField(default=0)
+    statuses_count = models.IntegerField(default=0)
+    description = models.CharField(max_length=160, blank=True, null=True)
+
+    last_updated = models.DateTimeField(auto_now=True)
+    ratings = models.ManyToManyField('Status', blank=True, through='Rating')
+    training_statuses = models.ManyToManyField('Status', blank=True, null=True, related_name='training')
+    active_classifier = models.CharField(max_length=50, blank=True, null=True)
+    classifier_version = models.CharField(max_length=30, blank=True, null=True)
+    whale = models.OneToOneField('whale.Whale', blank=True, null=True)
+    
+    available_fields = ('id', 'name', 'screen_name', 'profile_image_url', 
+                        'profile_use_background_image', 
+                        'profile_sidebar_border_color', 
+                        'profile_sidebar_fill_color', 
+                        'profile_background_image_url', 
+                        'profile_background_color', 
+                        'profile_link_color', 
+                        'verified', 'protected', 'location', 'url', 
+                        'friends_count', 'followers_count', 'statuses_count', 
+                        'description', 'utc_offset')
+
+    def __unicode__(self):
+        return "%s's twitter profile" % self.screen_name
+
+    def save(self, *args, **kwargs):
+        field_dict = {}
+        for key, value in self.iteritems():
+            if key in self.available_fields:
+                field_dict[key] = value
+        user = TwitterUserProfile(**field_dict)
+        super(TwitterUserProfile, user).save(*args, **kwargs)
+
+
+    def as_json_string(self):
+        try: json_string = self.json
+        except AttributeError:
+            json_dict = {}
+            for field in self.available_fields:
+                json_dict[field] = self.__getattribute__(field)
+            json_string = json.dumps(json_dict)
+        return json_string
+
+    @classmethod
+    def construct_from_dict(cls, data):
+        field_dict = {}
+        for key, value in data.iteritems():
+            if key in cls.available_fields:
+                field_dict[key] = value
+        user = cls(**field_dict)
+        return user
+
+    def deconstruct_to_dict(self):
+        data = {}
+        for field in self.available_fields:
+            data[field] = getattr(self, field) 
+        return data
+
+class Status(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    text = models.CharField(max_length=200, blank=True, null=True)
+    user = models.ForeignKey('TwitterUserProfile', blank=True, null=True)
+    place = models.CharField(max_length=255, blank=True, null=True)
+    source = models.CharField(max_length=255, blank=True, null=True)
+    content_length = models.IntegerField(blank=True, null=True)
+    punctuation = models.IntegerField(blank=True, null=True)
+    has_hyperlink = models.BooleanField(default=False)
+    hyperlinks = models.ManyToManyField('Hyperlink', blank=True, null=True)
+    hashtags = models.ManyToManyField('Hashtag', blank=True, null=True)
+    ats = models.ManyToManyField('TwitterUserProfile', related_name="status_ats", blank=True, null=True)
+    created_at = models.DateTimeField(blank=True, null=True)
+    in_reply_to_user_id = models.IntegerField(blank=True, null=True)
+    in_reply_to_status_id = models.BigIntegerField(blank=True, null=True)
+    
+    available_fields = ('id', 'text', 'user', 'place', 'source', 'created_at',
+                        'in_reply_to_user_id', 'in_reply_to_status_id')
+
+    def save(self, *args, **kwargs):
+        field_dict = {}
+        for key, value in self.iteritems():
+            if key in self.available_fields:
+                field_dict[key] = value
+        user = TwitterUserProfile(**field_dict)
+        super(TwitterUserProfile, user).save(*args, **kwargs)
+
+
+    class Meta:
+        ordering = ["-id"]
+        verbose_name_plural = "statuses"
+
+    def __unicode__(self):
+        return unicode(self.id)
+
+
+    def as_json_string(self):
+        a =  self.__dict__
+        print serializers.serialize("json", [self , ])
+        try: print json.dumps(a)
+        except: print 'failed'
+        return json.dumps(self.__dict__)
+                
+
+    def relative_created_at(self):
+        '''Get a human redable string representing the posting time
+
+        Returns:
+          A human readable string representing the posting time
+        '''
+        fudge = 1.25
+        td  = datetime.utcnow() - self.created_at
+        delta = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+
+        if delta < (1 * fudge):
+          return 'about a second ago'
+        elif delta < (60 * (1/fudge)):
+          return 'about %d seconds ago' % (delta)
+        elif delta < (60 * fudge):
+          return 'about a minute ago'
+        elif delta < (60 * 60 * (1/fudge)):
+          return 'about %d minutes ago' % (delta / 60)
+        elif delta < (60 * 60 * fudge) or delta / (60 * 60) == 1:
+          return 'about an hour ago'
+        elif delta < (60 * 60 * 24 * (1/fudge)):
+          return 'about %d hours ago' % (delta / (60 * 60))
+        elif delta < (60 * 60 * 24 * fudge) or delta / (60 * 60 * 24) == 1:
+          return 'about a day ago'
+        else:
+          return 'about %d days ago' % (delta / (60 * 60 * 24))        
+
+    @classmethod
+    def construct_from_dict(cls, data):
+        if 'user' not in data:
+            raise KeyError
+        data['user'] = TwitterUserProfile.construct_from_dict(data['user'])
+        data['created_at'] = datetime.fromtimestamp(mktime(parsedate(data['created_at'])))
+        field_dict = {}
+        for key, value in data.iteritems():
+            if key in cls.available_fields:
+                field_dict[key] = value
+        status = Status(**field_dict)
+
+        return status
+
+
+    @staticmethod
+    def construct_from_dicts(dicts):
+        return map(Status.construct_from_dict, dicts)
+
+    @staticmethod
+    def fullCreate(data):
+        """Create status from dictionary"""
+        status = Status.objects.create(
+                                id = data['id'],
+                                text = data['text'],
+                                user = data['user'],
+                                place = data['place'],
+                                source = data['source'],
+                                in_reply_to_user_id = data['in_reply_to_user_id'],
+                                in_reply_to_status_id = data['in_reply_to_status_id'],
+                                has_hyperlink = data['has_hyperlink'],
+                                content_length = data['content_length'],
+                                punctuation = data['punctuation']
+                                      )
+        
+        if 'hashtags' in data:
+            for tag in data['hashtags']:
+                ht, created = Hashtag.objects.get_or_create(text = tag)
+                status.hashtags.add(ht)
+
+        if 'hyperlinks' in data:
+            for link in data['hyperlinks']:
+                hl, created = Hyperlink.objects.get_or_create(text = link)
+                status.hyperlinks.add(hl)
+
+        if 'ats' in data:
+            for name in data['ats']:
+                user, created = UserProfile.objects.get_or_create(screen_name = name)
+                status.ats.add(user)
+
+
+
+
+
+
+
+
+
+
+class Rating(models.Model):
+    user = models.ForeignKey('TwitterUserProfile') 
+    status = models.ForeignKey('Status') 
+    rating = models.IntegerField(blank=True, null=True)
+    rated_time = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name_plural = "Ratings"
+        get_latest_by = "rated_time"
+        ordering = ['-rated_time']
+
+    @staticmethod
+    def appendTo(statuses, prof):
+        ratings = Rating.objects.filter(user=prof.id,
+                                        status__in=[s.id for s in statuses])
+        rd = dict([(r.status_id, r) for r in ratings])
+        for s in statuses:
+            try:
+                r = rd[s.id]
+                s.rating = r.rating
+                if r.rating == 1:
+                    s.likeClass = ' active'
+                    s.dislikeClass = ' inactive'
+                if r.rating == -1:
+                    s.likeClass = ' inactive'
+                    s.dislikeClass = ' active'
+            except KeyError:
+                continue
+
+class Hashtag(models.Model):
+    text = models.CharField(max_length=140, unique=True)
+    
+    def __unicode__(self):
+        return unicode(self.text)
+    
+    
+class Hyperlink(models.Model):
+    text = models.CharField(max_length=255, unique=True)
+    
+    def __unicode__(self):
+        return unicode(self.text)
+

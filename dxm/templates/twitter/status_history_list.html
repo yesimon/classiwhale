@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block extra_js %}
+ <script type="text/javascript">
+ $(document).ready(function() {
+    loadStatusesAJAX();
+});
+
+
+
+function loadStatusesAJAX() {
+    entries = $(".entry")
+    rating_array = new Array();
+    $.each(entries, function(entry) {
+        status_array = $(this).attr("id").split(" ");
+        status_id = status_array[0];
+        rating_array[status_id] = status_array[1];
+        $(this).attr("id", status_id);
+        url = "http://api.twitter.com/1/statuses/show.json?id=" + status_id + "\"";
+        $.ajax({
+            dataType: "jsonp",   
+            url: url,
+            success: function(data) {
+                clearTimeout(tm);
+                $("#" + data.id_str).html(generateStatusHTML(data));
+                rate_buttons = entries.filter("#" + data.id_str).children(".rate-buttons");
+                if (rating_array[data.id_str] == "like") {
+                    like = rate_buttons.children(".like");
+                    like.addClass("active");
+                    like.siblings().addClass("inactive");
+                }
+                if (rating_array[data.id_str] == "dislike") {
+                    dislike = rate_buttons.children(".dislike");
+                    dislike.addClass("active");
+                    dislike.siblings().addClass("inactive");
+                }
+                },
+                error: function(e) { alert("AJAX error!"); },
+            beforeSend: setHeader
+        });
+    })
+    tm = setTimeout(function(){
+        $("div.statuses").html("Not Found or API Error");
+        clearInterval(tm);
+    },5000);
+}
+
+
+function generateStatusHTML(data) {
+    var html = "<div class=\"rate-buttons\">\n" +
+        "<div class=\"like\"></div>\n" +
+        "<div class=\"dislike\"></div>\n" +
+    "</div>\n\n" +
+    "<div class=\"tweet-usr-profile\">\n" +
+        "<a href=\"http://twitter.com/" + data.user.screen_name + "\">\n" +
+            "<img class=\"photo\" width=\"48\" height=\"48\" src=\"" + data.user.profile_image_url +  "\" alt=\"" + data.user.screen_name + "\" />\n" +
+        "</a>\n" +
+    "</div>\n" + 
+    "<div class=\"tweet-body\">\n" +
+        "<p>\n" +
+            "<a class=\"twtr-user\" href=\"http://twitter.com/" + data.user.screen_name + "\">\n" +
+                data.user.screen_name +
+            "</a> " + data.text + "<a class=\"tweet-hlink\" href=\"http://twitpic.com/20seue\" target=\"_blank\"></a>\n" +
+            "<i>\n" +
+                "<a class=\"tweet-timestamp\" href=\"http://twitter.com/" + data.user.screen_name + "/status/" + data.id_str + "\" target=\"_blank\">\n" +
+                    relative_time(data.created_at) +
+                "</a>\n" +
+            "</i>\n" +
+        "</p>\n" +
+    "</div>\n";
+    return html;
+}
+
+
+function setHeader(xhr) {
+    // TODO: Use this to set authentication headers to access protected tweets
+    xhr.setRequestHeader('someheader', 'headertext');
+}
+
+</script>
+
+{% endblock %}
+
+{% block title %}
+My Ratings
+{% endblock %}
+
+{% block content %} 
+
+<div class="statuses">
+{% for rating in ratings %}
+
+    <div class="entry" id="{{ rating.id }} {{ rating.rating }}">
+    <p>Loading...{{ rating.id }}</p>
+    <p><img src="http://www.classiwhale.com/static/spinner.gif" /></p>
+    </div>
+
+    {% empty %} 
+    There are no posts to display. 
+{% endfor %}
+
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+

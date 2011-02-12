@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Tweed: Search for User
+{% endblock %}
+ 
+{% block extra_js %}
+<script type="text/javascript">
+$( document ).ready( 
+	function() {
+		$('#searchSubmit').click( 
+			function() {
+				q = $('#q').val();
+				$('#results')
+					.html('&nbsp;')
+					.load('{% url search.views.user_search %}?q=' + encodeURI(q));
+			}
+		);
+		$( '#spinner' ).hide();
+	}
+);
+
+$( document ).ajaxStart(
+	function() {
+		$( '#spinner' ).show();
+	}
+).ajaxStop(
+	function() {
+		$( '#spinner' ).hide();
+	}
+);
+</script>
+{% endblock %}
+
+{% block content %}
+<div>
+	<input id="query" type="text" />
+	<input id="searchSubmit" type="submit" value="Search" />
+	<br />
+	
+	<span class="hint">Type in a username to search for a user</span>
+	<div class="margin">
+		<span id="spinner"><img src="/static/spinner.gif" /></span>
+		<div id="content">
+			<div id="results">
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
