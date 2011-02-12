@@ -105,20 +105,29 @@ def ajax_training_set_posts(request):
 
 def public_profile(request, username):
     api = twitter.Api()
+    user = request.user
     if request.user.is_authenticated() and 'access_token' in request.session: #authenticate if possible
         api = get_authorized_twitter_api(request.session['access_token'])
-    user = api.GetUser(username)
+    friend = api.GetUser(username)
+    
+    friends = api.GetFriends()
+    prof = user.get_profile()
+    
     try:
         statuses = api.GetUserTimeline(username)
+        Rating.appendTo(statuses, prof)
     except twitter.TwitterError as err:
         outgoing = api.FriendshipsOutgoing()
         follow_request_sent = False
         if(user.id in outgoing):
             follow_request_sent = True
+            
         return render_to_response('protected_profile.html',
             {
+             'whale': prof.whale,
+             'friends': friends,
              'username': username,
-             'friend': user,
+             'friend': friend,
              'follow_request_sent': follow_request_sent
              },
              context_instance=RequestContext(request)) 
@@ -126,8 +135,10 @@ def public_profile(request, username):
     
     return render_to_response('public_profile.html',
         {
+         'whale': prof.whale,
+         'friends': friends,
          'username': username,
-         'friend': user,
+         'friend': friend,
          'statuses': statuses,
          'max_id': max_id
         },
@@ -181,7 +192,6 @@ def timeline(request):
     user = request.user
     if not user.is_authenticated() or 'access_token' not in request.session:
         return HttpResponseRedirect(reverse('status.views.public_timeline'))
-    prof = user.get_profile()
 #    if 'access_token' not in request.session:
 #        return HttpResponseRedirect(reverse('status.views.public_timeline'))
 #    prof = UserProfile.objects.get(pk=request.session['_auth_user_id'])
@@ -189,8 +199,9 @@ def timeline(request):
     
     statuses = api.GetFriendsTimeline()
     friends = api.GetFriends()
-    
+    prof = user.get_profile()
     Rating.appendTo(statuses, prof)
+    
     return render_to_response('timeline.html',
         {
           'whale': prof.whale,

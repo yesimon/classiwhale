@@ -9,7 +9,10 @@
 				<div class="header-wrapper">
 					<div class="header">
 					    <div class="left-bg"></div>
-					    <div class="title">Recent Tweets</div>
+					    <div class="title">
+                            {% block title %}
+                            {% endblock %}
+                        </div>
 					    <ul class="links">
                             <li class="{% ifequal request.path "/" %}active{% endifequal %}">
                                 <a href="/">Unfiltered</a>
