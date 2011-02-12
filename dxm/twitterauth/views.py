@@ -8,7 +8,6 @@ from twitterauth.utils import get_request_token, get_authorization_url, get_acce
 
 from urlparse import parse_qsl
 import oauth2 as oauth
-import twitter
 
 
 CONSUMER_KEY = getattr(settings, 'CONSUMER_KEY')

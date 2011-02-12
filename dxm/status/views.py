@@ -14,12 +14,12 @@ from status.models import *
 from datetime import datetime
 from email.utils import parsedate
 from time import mktime
-import twitter
+import python_twitter
 import json
 
 
 def public_timeline(request):
-    api = twitter.Api()
+    api = python_twitter.Api()
     statuses = api.GetPublicTimeline()
     return render_to_response('public_timeline.html',
         {'statuses': statuses},
@@ -30,7 +30,7 @@ def ajax_public_timeline(request):
     '''Get more recent public posts via ajax - currently does not support 
     checking of the latest since_id for already down tweets'''
     results = {'success': 'False'}
-    api = twitter.Api()
+    api = python_twitter.Api()
 #    since_id = request.GET.since_id
     results['statuses'] = api.GetPublicTimeline()
     t = get_template('status_list.html')
@@ -104,13 +104,13 @@ def ajax_training_set_posts(request):
 
 
 def public_profile(request, username):
-    api = twitter.Api()
+    api = python_twitter.Api()
     if request.user.is_authenticated() and 'access_token' in request.session: #authenticate if possible
         api = get_authorized_twitter_api(request.session['access_token'])
     user = api.GetUser(username)
     try:
         statuses = api.GetUserTimeline(username)
-    except twitter.TwitterError as err:
+    except python_twitter.TwitterError as err:
         outgoing = api.FriendshipsOutgoing()
         follow_request_sent = False
         if(user.id in outgoing):
@@ -122,14 +122,11 @@ def public_profile(request, username):
              'follow_request_sent': follow_request_sent
              },
              context_instance=RequestContext(request)) 
-    max_id = statuses[0].GetId()
-    
     return render_to_response('public_profile.html',
         {
          'username': username,
          'friend': user,
          'statuses': statuses,
-         'max_id': max_id
         },
         context_instance=RequestContext(request)) 
     
@@ -148,7 +145,7 @@ def ajax_user_timeline(request):
     max_id = request.GET[u'max_id']
     page = request.GET[u'page']
     
-    api = twitter.Api()
+    api = python_twitter.Api()
     if request.user.is_authenticated() and 'access_token' in request.session: #authenticate if possible
         api = get_authorized_twitter_api(request.session['access_token'])
     results['statuses'] = api.GetUserTimeline(id=screenname, max_id=max_id, page=page)
@@ -169,7 +166,6 @@ def ajax_timeline(request):
     page = request.GET[u'page']
     
     statuses = api.GetFriendsTimeline(page=page)
-    # this next call is slow as hell, not efficient
     Rating.appendTo(statuses, request.user.get_profile())
     return render_to_response('status_list.html',
         {
@@ -227,7 +223,7 @@ def ajax_rate(request):
     if (not POST.has_key(u'rating')) or (not POST.has_key(u'status')):
         return HttpResponseBadRequest("rating and/or status parameters missing")
     u, rating, status = (request.user, POST[u'rating'], 
-                         twitter.Status.NewFromJsonDict(json.loads(POST[u'status'])))
+                         python_twitter.Status.NewFromJsonDict(json.loads(POST[u'status'])))
     if not u.is_authenticated():
         return HttpResponseBadRequest("Must be logged in")
     prof = u.get_profile()
@@ -268,7 +264,7 @@ def post_status(request):
     try:
         API.PostUpdate(status)
         results['success'] = 'True'
-    except twitter.TwitterError:
+    except python_twitter.TwitterError:
         pass
     jsonResults = json.dumps(results)
     return HttpResponse(jsonResults, mimetype='application/json')
@@ -285,7 +281,7 @@ def create_friendship(request):
     try:
         API.CreateFriendship(username)
         results['success'] = 'True'
-    except twitter.TwitterError:
+    except python_twitter.TwitterError:
         pass
     jsonResults = json.dumps(results)
     return HttpResponse(jsonResults, mimetype='application/json')

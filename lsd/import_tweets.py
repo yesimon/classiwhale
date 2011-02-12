@@ -14,7 +14,7 @@ RATER_PASSWORD = 'testtest'
 
 ############ Script ##############
 
-import twitter
+import python_twitter
 import pickle
 import itertools
 from datetime import datetime
@@ -46,7 +46,7 @@ def GetTweets(file, USERS=None, COUNT_DEFAULT=50, COUNT={}, **kwargs):
     as tweeters and value the number of tweets to get. Falls back on 
     COUNT_DEFAULT
     """
-    api = twitter.Api()
+    api = python_twitter.Api()
     t = {'statuses': {}, 'users': {}}
     for u in USERS:
         try: n = COUNT[u]

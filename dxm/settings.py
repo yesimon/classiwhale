@@ -101,7 +101,8 @@ CONSUMER_KEY = 'H3jdfPuU3srfX2uo7LFQ1w'
 CONSUMER_SECRET = 'Fe0iHcfi8nubMBzjbcUuf6zRW8Nn9VgMJkiHcCdKwSw'
 
 AUTHENTICATION_BACKENDS = (
-    'backends.twitteroauth.TwitterBackend',
+#    'backends.twitteroauth.TwitterBackend',
+    'twitter.auth.TwitterAuthentication',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -118,8 +119,9 @@ IGNORABLE_404_STARTS = ('/cgi-bin/', '/_vti_bin', '/_vti_inf', '/static/')
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',
+    'django.template.loaders.filesystem.load_template_source',
+
 #     'django.template.loaders.eggs.load_template_source',
 )
 
@@ -213,6 +215,8 @@ INSTALLED_APPS = (
     'twitterauth',
     'backends',
     'feedback',
+    'twitter',
+    'profile',
     'status',
     'search',
     'prediction',

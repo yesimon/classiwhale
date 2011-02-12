@@ -5,7 +5,7 @@ from status.models import Status
 from whale.models import Whale, WhaleSpecies
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, primary_key=True)
+    user = models.OneToOneField(User, primary_key=True, related_name='twitter_userprofile')
     access_token = models.CharField(max_length=255, blank=True, null=True, editable=False)
     screen_name = models.CharField(max_length=30, blank=True, null=True)
     profile_image_url = models.URLField(blank=True, null=True)
@@ -18,7 +18,7 @@ class UserProfile(models.Model):
     training_statuses = models.ManyToManyField(Status, blank=True, null=True, related_name='training')
     active_classifier = models.CharField(max_length=50, blank=True, null=True)
     classifier_version = models.CharField(max_length=30, blank=True, null=True)
-    whale = models.OneToOneField(Whale, blank=True, null=True)
+    whale = models.OneToOneField(Whale, blank=True, null=True, related_name='twitter_whale')
     
     def __unicode__(self):
         return "%s's profile" % self.screen_name

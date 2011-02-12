@@ -18,7 +18,7 @@ from scipy.sparse import dok_matrix, csc_matrix, lil_matrix
 
 from twitterauth.models import UserProfile, Rating
 from status.models import Status
-from twitter import User
+from python_twitter import User
 from algorithmio.classifier import Classifier
 from django.core.cache import cache
 from cylonbayes.models import *

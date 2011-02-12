@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 """Twitter Authentication backend for Django
 
@@ -18,7 +19,7 @@ from django.contrib.auth.models import User
 from twitterauth.models import UserProfile
 from whale.models import Whale, WhaleSpecies
 
-import twitter
+import python_twitter
 
 CONSUMER_KEY = getattr(settings, 'CONSUMER_KEY')
 CONSUMER_SECRET = getattr(settings, 'CONSUMER_SECRET')
@@ -32,7 +33,7 @@ class TwitterBackend:
     def authenticate(self, access_token):
         '''authenticates the token by requesting user information from twitter
         '''
-        twitter_api = twitter.Api(consumer_key=CONSUMER_KEY, 
+        twitter_api = python_twitter.Api(consumer_key=CONSUMER_KEY, 
                                   consumer_secret=CONSUMER_SECRET,
                                   access_token_key=access_token.key,
                                   access_token_secret=access_token.secret)

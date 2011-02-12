@@ -3,7 +3,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from time import mktime
 from email.utils import parsedate
-from datetime import datetime
+
 
 class Hashtag(models.Model):
     text = models.CharField(max_length=140, unique=True)

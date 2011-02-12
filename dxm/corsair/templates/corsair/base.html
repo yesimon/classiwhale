@@ -11,8 +11,11 @@
     <link rel="stylesheet" type="text/css" href="{% url corsair-media "css/colorbox.css" %}" />
     <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/base/jquery-ui.css" /> 
     <link rel="stylesheet" type="text/css" href="{% url corsair-media "css/ui.multiselect.css" %}" /> 
-
+    {% block extra_css %}
+    {% endblock %}
+    
     <script type="text/javascript" src="http{% if request.is_secure %}s{% endif %}://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type="text/javascript" src="{% url corsair-media "js/less-1.0.41.min.js" %}"></script>
     <script type="text/javascript" src="{% url corsair-media "js/jquery-ui-1.8.9.custom.min.js" %}"></script>
     <script type="text/javascript" src="{% url corsair-media "js/ui.multiselect.js" %}"></script>
     <script type="text/javascript" src="{% url corsair-media "js/jquery.dataTables.min.js" %}"></script>
@@ -27,14 +30,13 @@
     <script type="text/javascript" src="{% url corsair-media "js/jqplot/jqplot.categoryAxisRenderer.min.js" %}"></script>
     {% block extra_js %}
     {% endblock %}
-    {% block extra_css %}
-    {% endblock %}
     <script type="text/javascript">
     </script>
   </head>
 
   <body>
     {% block body %}
+
     <div id="header"> 
       <div class="container">
         <h1><a href="{% url corsair %}"><img src="{% url corsair-media "img/disruption_web.gif" %}" border="0" width="32"/>Corsair</a></h1>
@@ -46,13 +48,16 @@
         </ul>
       </div>
     </div>
+
     <div id="middle-wrapper" style="margin-bottom: 0.8em;margin-left:auto;margin-right:auto;min-width: 650px; width: 98%">
       <div id="nav">
 	{% block navigation %}
+	{% if request.user.is_authenticated %}
 	<ul class="inline">
 	  <li class="{% navactive request 'corsair.views.training_sets' %}"><a href="{% url corsair-training_sets %}">Training Sets</a></li>
 	  <li class="{% navactive request 'corsair.views.benchmarks' %}"><a href="{% url corsair-benchmarks %}">Benchmarks</a></li>
 	</ul>
+	{% endif %}
 	{% endblock %}
       </div>
       {% block content_before %}

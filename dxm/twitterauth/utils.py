@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.http import HttpResponse
 
-import twitter
+import python_twitter
 from urlparse import parse_qsl
 import oauth2 as oauth
 
@@ -21,7 +21,7 @@ SIGNIN_URL        = 'https://api.twitter.com/oauth/authenticate'
 
 def get_authorized_twitter_api(access_token_string):
     access_token = oauth.Token.from_string(access_token_string)
-    api = twitter.Api(consumer_key=CONSUMER_KEY,
+    api = python_twitter.Api(consumer_key=CONSUMER_KEY,
                       consumer_secret=CONSUMER_SECRET,
                       access_token_key=access_token.key,
                       access_token_secret=access_token.secret

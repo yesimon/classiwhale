@@ -1,5 +1,9 @@
 {% extends 'corsair/base.html' %}
 
+{% block extra_css %}
+<link rel="stylesheet/less" type="text/css" href="{% url corsair-media "css/training_sets.less" %}" />
+
+
 {% block extra_js %}
 
 <script type="text/javascript">
@@ -75,7 +79,6 @@ function addSubmitBenchmarkHandler() {
         <li>
 	  <h3>{{ training_set.name }}</h3>
 	  <button class='button startBench' data-training_set="{{ training_set.name }}">Start Benchmark</button>
-	  <ul id="movieList"></ul>
 	</li>
     {% endfor %}
     </ul>
