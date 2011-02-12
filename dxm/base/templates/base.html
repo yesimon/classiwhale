@@ -7,13 +7,15 @@
     {% compress css %}
 
     <link rel="stylesheet" href="/static/css/base.css" />
+    <link rel="stylesheet" href="/static/css/about.css" />
     <link rel="stylesheet" href="/static/css/navigation.css" />
     <link rel="stylesheet" href="/static/css/feed.css" />
     <link rel="stylesheet" href="/static/feedback/feedback.css"/>
     <link rel="stylesheet" href="/static/css/panes.css" />
     <link rel="stylesheet" href="/static/css/friends.css" />
     <link rel="stylesheet" href="/static/css/training_profile.css" />
-    <link rel="stylesheet" href="/static/css/jquery-ui-1.8.9.custom.css" />
+    <link rel="stylesheet" href="/static/css/jquery-ui-all.css" />
+    <link rel="stylesheet" href="/static/css/twitpost.css" />
 
 
     {% block extra_css %}
@@ -22,15 +24,15 @@
     {% endcompress %}
     <script type="text/javascript" src="/static/js/jquery-1.4.4.min.js"></script>
     {% compress js %}
+    <script type="text/javascript" src="/static/js/jquery.corners.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery.scrollTo.js"></script>
     <script type="text/javascript" src="/static/js/jquery.infinitescroll.js"></script>
     <script type="text/javascript" src="/static/js/jquery.oauthpopup.js"></script>
-    <script type="text/javascript" src="/static/js/jquery-ui-1.8.9.custom.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-ui-all.js"></script>
     <script src="/static/feedback/jquery.form.js"></script>
     <script src="/static/feedback/feedback.js"></script>
     <script type="text/javascript" src="/static/js/base.js"></script>
     <script type="text/javascript" src="/static/js/rating.js"></script>
-    <script type="text/javascript" src="/static/js/twitpost.js"></script>
     <script type="text/javascript" src="/static/js/training_profile.js"></script>
 
 
@@ -65,7 +67,7 @@
 <body>
     {% include "navigation.html" %}
     {% include "feedback/button.html" %}
-
+    <div id="background"></div>
     <div id="middle">
         <div id="content">
         	

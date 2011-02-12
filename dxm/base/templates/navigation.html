@@ -8,6 +8,8 @@
 		    <a href="{% url twitter.views.public_timeline %}" class="logo"></a>
 		{% endif %}
 		<ul>
+
+<!--
 		  {% if user.is_authenticated %}
 		    <li>
 		      <a href="{% url twitter.views.twitter_logout %}">Logout</a>
@@ -15,7 +17,7 @@
 		  {% else %}
 		    <li>
 		      <a id="login">Login</a>
-<!--  		      <a href="{% url twitter.views.twitter_login %}">Login</a> -->
+  		      <a href="{% url twitter.views.twitter_login %}">Login</a> 
 		    </li>
 		  {% endif %}
 		  
@@ -33,6 +35,7 @@
 		    <li class="{% navactive request 'twitter.views.timeline' %}">
 		    	<a href="{% url twitter.views.timeline %}">Home</a>
 		    </li>
+-->
 		    <li class="searchContainer">
 			    <div>
 			    	<script type="text/javascript">
@@ -58,10 +61,58 @@
 				    </form>
 			    </div>
 		    </li>
+		    
 		{% if user.is_authenticated %}
+
 		    <li class="{% navactive request '' %}">
 		    <a href="/">{{ user.first_name }} {{ user.last_name }}</a>
-		    </li>
+
+		    <script type="text/javascript">
+            function hideUserMenu(){
+                $('#nav .user-btn .collapse').show();
+                $('#nav .user-btn .expand').hide();
+            }
+            $(function(){
+                $(document).click(hideUserMenu);
+                $('#nav .user-btn .option a').click( function(e) {
+                    document.location = $(this).attr('href');
+                    return false;
+                });
+                $('#nav .user-btn .collapse').click( function(e) {
+                    $('#nav .user-btn .collapse').hide();
+                    $('#nav .user-btn .expand').show();
+                    return false;
+                });
+            });
+            </script>
+		    <li class="user-btn">
+		        <div class="collapse">
+		            <a class="name">{{ user.first_name }} {{ user.last_name }}</a></div>
+		        
+                <div class="expand" onclick="hideUserMenu()">
+                    <a class="name">{{ user.first_name }} {{ user.last_name }}</a>
+                    <div class="clear"></div>
+                    <div class="option"><a href="/">Settings</a></div>
+                    <div class="option"><a href="/about">About ClassiWhale</a></div>
+                    <div class="option"><a href="{% url twitter.views.twitter_logout %}">Sign Out</a></div>
+                    
+                    <div class="arrow"></div>
+                    <div class="tl-back"></div>
+                    <div class="foot">
+                        <div class="bl-back"></div>
+                    </div>
+                </div>
+
+
+		   </li>
+		    
+            <li class="nav-link {% navactive request 'twitter.views.timeline' %}">
+                <a href="{% url twitter.views.timeline %}">Home</a>
+            </li>
+            <li class="separator"></li>
+            <li class="nav-link {% navactive request 'status.views.rating_history' %}">
+                <a href="{% url status.views.rating_history %}">Profile</a>
+            </li>
 		{% endif %}
 		</ul>
 	</div>

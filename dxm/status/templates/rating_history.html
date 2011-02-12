@@ -1,12 +1,10 @@
-{% extends "base.html" %}
+{% extends "panes.html" %}
 
 {% block extra_js %}
  <script type="text/javascript">
  $(document).ready(function() {
     loadStatusesAJAX();
 });
-
-
 
 function loadStatusesAJAX() {
     entries = $(".entry")

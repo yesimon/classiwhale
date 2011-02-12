@@ -1,18 +1,16 @@
-{% extends "base.html" %}
+{% extends "panes.html" %}
 
 {% block title %}
 {{ username }} on ClassiWhale
 {% endblock %}
 
-
-{% block content %} 
+{% block middle %} 
 
 	<div class="status-prompt">
 	    <div>{{ friend.name }}</div>
 	    <img class="photo" width="48" height="48" src="{{ friend.GetProfileImageUrl }}" alt="{{ friend.name }} " /> 
 		
 	</div>
-	
 	
     <script type="text/javascript">
     $(function() {
@@ -27,12 +25,10 @@
         });
     });
     </script>
-
-
+    
     <div class="statuses">
 	   {% include 'status_list.html' %}
 	</div>
-	
 	
 {% endblock %}
 

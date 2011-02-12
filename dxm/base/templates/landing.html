@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+
+<head>
+    <link rel="shortcut icon" href="/static/img/favicon.png"/>
+    {% load compress %}
+    {% compress css %}
+
+    <link rel="stylesheet" href="/static/css/base.css" />
+    <link rel="stylesheet" href="/static/css/navigation.css" />
+    <link rel="stylesheet" href="/static/css/feed.css" />
+    <link rel="stylesheet" href="/static/feedback/feedback.css"/>
+    <link rel="stylesheet" href="/static/css/panes.css" />
+    <link rel="stylesheet" href="/static/css/friends.css" />
+    <link rel="stylesheet" href="/static/css/training_profile.css" />
+    <link rel="stylesheet" href="/static/css/jquery-ui-1.8.9.custom.css" />
+    <link rel="stylesheet" href="/static/css/landingPage.css" />
+
+    {% block extra_css %}
+    {% endblock %}
+
+    {% endcompress %}
+    <script type="text/javascript" src="/static/js/jquery-1.4.4.min.js"></script>
+    {% compress js %}
+    <script type="text/javascript" src="/static/js/jquery.scrollTo.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.infinitescroll.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.oauthpopup.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-ui-1.8.9.custom.min.js"></script>
+    <script src="/static/feedback/jquery.form.js"></script>
+    <script src="/static/feedback/feedback.js"></script>
+    <script type="text/javascript" src="/static/js/base.js"></script>
+    <script type="text/javascript" src="/static/js/rating.js"></script>
+    <script type="text/javascript" src="/static/js/twitpost.js"></script>
+    <script type="text/javascript" src="/static/js/training_profile.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("button").button();
+        });
+    </script>
+
+
+    {% if GOOGLE_ANALYTICS_KEY %}
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-20334343-1']);
+      _gaq.push(['_setDomainName', '.classiwhale.com']);
+      _gaq.push(['_trackPageview']);
+      
+      (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    {% endif %}
+
+    {% block extra_js %}
+    {% endblock %}
+
+    {% endcompress %}
+
+    
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+</head>
+
+
+<body>
+    <div id="backgroundLanding">
+	{% load base_extras %}
+    <div id="nav">	
+		<div class="nav-bound">
+            <a class="logo"></a>
+        </div>
+	</div>
+	<div class="clear"></div>
+
+
+    {% include "feedback/button.html" %}
+
+    <div id="middle">
+        <div id="content">
+            <div id="landingTop">
+                <div id="landingWhale">
+                    <div class="leftbg"></div>
+                        Meet your whale
+                    <div class="rightbg"></div>
+                </div>
+                <div id="landingLogin">
+                    <div class="leftbg"></div>
+                    <div id="landingText">
+                        Would you like to participate in Classiwhale? <br/> <br/> First you need to login via Twitter!
+                    </div>
+                    <button id="buttonLogin" class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all"> <span class="ui_button-text">Login with Twitter </span></button>                              
+                    <div class="rightbg"></div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div id="landingSpace"></div>
+            <div id="landingBottom">
+                <div id="landingClassiWhale">
+                    <div id="landingWhyTitle">Why ClassiWhale? </div>
+                    <div id="landingReasons">
+                        <ul>
+                            <li>Cuz its awesome</li> <br/>
+                            <li>Cuz Emilio helped develop it</li> <br/>
+                            <li>Did I mention it is awesome?</li> <br/>
+                        </ul>                       
+                   </div>
+                    <br/><br/>                    
+                   <button id="buttonFind" class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all"> <span class="ui_button-text">Find Out More </span></button>                                  
+                </div>
+                <div id="landingPublicity">
+                    <div id="pubTitle">Recent Publicity</div>
+                    <div id="pubReasons">
+                        <ul>
+                            <li>Czfadsssssssssssssss sssssuz its awesome</li> <br/>
+                            <li>Cuz Emilio helped develop it</li> <br/>
+                            <li>Did I mention it is awesome?</li> <br/>
+                        </ul>                       
+                    </div>                
+                </div>            
+            </div>         	
+        </div>
+        <br/><br/>
+    </div>
+
+    <div id="footer">
+        {% block footer %}
+        {% endblock %}
+    </div>
+    </div>
+</body>
+
+
+</html>
