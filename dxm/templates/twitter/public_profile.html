@@ -9,7 +9,7 @@
 
 	<div class="status-prompt">
 	    <div>{{ friend.name }}</div>
-	    <img class="photo" width="48" height="48" src="{{ friend.GetProfileImageUrl }}" alt="{{ friend.name }} " /> 
+	    <img class="photo" width="48" height="48" src="{{ friend.profile_image_url }}" alt="{{ friend.name }} " /> 
 		
 	</div>
 	
@@ -19,7 +19,7 @@
         $(window).infinitescroll({
             url: "/status/ajax_user_timeline/",
             appendTo: ".statuses",
-            getParams: 'screenname={{ friend.GetScreenName|urlencode }}&max_id={{ max_id }}'
+            getParams: 'screenname={{ friend.screen_name|urlencode }}&max_id={{ max_id }}'
         });
         
         $(window).bind('infinitescroll.finish', function() {
@@ -30,7 +30,7 @@
 
 
     <div class="statuses">
-	   {% include 'status_list.html' %}
+	   {% include 'twitter/status_list.html' %}
 	</div>
 	
 	
