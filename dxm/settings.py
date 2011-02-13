@@ -207,7 +207,7 @@ INSTALLED_APPS = (
     'sentry.client.celery',
     'picklefield',
     'django_extensions',
-#    'nexus',
+    'nexus',
     'gargoyle',
     'tastypie',
     'base',

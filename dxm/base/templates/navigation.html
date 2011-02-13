@@ -64,9 +64,6 @@
 		    
 		{% if user.is_authenticated %}
 
-		    <li class="{% navactive request '' %}">
-		    <a href="/">{{ user.first_name }} {{ user.last_name }}</a>
-
 		    <script type="text/javascript">
             function hideUserMenu(){
                 $('#nav .user-btn .collapse').show();
@@ -87,7 +84,8 @@
             </script>
 		    <li class="user-btn">
 		        <div class="collapse">
-		            <a class="name">{{ user.first_name }} {{ user.last_name }}</a></div>
+		            <a class="name">{{ user.first_name }} {{ user.last_name }}</a>
+		        </div>
 		        
                 <div class="expand" onclick="hideUserMenu()">
                     <a class="name">{{ user.first_name }} {{ user.last_name }}</a>
@@ -102,9 +100,7 @@
                         <div class="bl-back"></div>
                     </div>
                 </div>
-
-
-		   </li>
+		    </li>
 		    
             <li class="nav-link {% navactive request 'twitter.views.timeline' %}">
                 <a href="{% url twitter.views.timeline %}">Home</a>
