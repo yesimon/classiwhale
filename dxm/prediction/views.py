@@ -37,7 +37,7 @@ def train_classifier(request):
 
 
 @login_required
-@render_to('predicted_friends_timeline.html')
+@render_to('twitter/timeline.html')
 def predicted_friends_timeline(request):
     prof = request.user.get_profile()
     tp = TwitterUserProfile.objects.get(user=prof)

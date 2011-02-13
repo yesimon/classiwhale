@@ -14,23 +14,20 @@ RATER_PASSWORD = 'testtest'
 
 ############ Script ##############
 
-import python_twitter
 import pickle
 import itertools
 from datetime import datetime
-from status.models import Status
-from twitterauth.models import UserProfile, Rating
-from django.db import transaction
-from django.contrib.auth.models import User
 from email.utils import parsedate
 from time import mktime
+from django.db import transaction
+from django.contrib.auth.models import User
+from twython import Twython
+
+from twitter.models import *
 
 
 
 
-
-#d = datetime(2010, 9, 25, 0, 0, 0)
-#since_date = d.isoformat()
 
 
         
@@ -46,22 +43,26 @@ def GetTweets(file, USERS=None, COUNT_DEFAULT=50, COUNT={}, **kwargs):
     as tweeters and value the number of tweets to get. Falls back on 
     COUNT_DEFAULT
     """
-    api = python_twitter.Api()
+    api = Twython()
     t = {'statuses': {}, 'users': {}}
     for u in USERS:
         try: n = COUNT[u]
         except: n = COUNT_DEFAULT
         try: 
-            user=api.GetUser(u)
-            timeline = api.GetUserTimeline(id=u, count=n)
-            t['users'][user.id] = user
-            t['statuses'][user.id] = timeline
+            user=api.showUser(u)
+            timeline = api.getUserTimeline(id=u, count=n)
+            t['users'][user['id']] = user
+            t['statuses'][user['id']] = timeline
         except: 
             print "User: '{0}' has protected tweets".format(u)
     pickle.dump(t, file)
 
 def FullCreateUser(user, fake=False):
     """Full create user/userprofile from api user object"""
+    tp = TwitterUserProfile.construct_from_dict(user)
+    tp.save()
+    return tp
+"""
     u, created = User.objects.get_or_create(id=user.id, username=user.id)
     if created: 
         if fake: u.set_password(RATER_PASSWORD)
@@ -82,33 +83,24 @@ def FullCreateUser(user, fake=False):
         p.description = user.description
         p.save()
     return u, p
-    
+"""
     
     
 def CreateStatus(status):
-    """Full create status from api status object. Does not guarantee
+    """Full create status from python dict status. Guarantee
     foreignkey references exist in database"""
-    created_at = datetime.fromtimestamp(mktime(parsedate(status.created_at)))
-    content_length = len(status.text)
-    s = Status(
-                id = status.id,
-                text = status.text,
-                created_at = created_at,
-                content_length= content_length,
-               )
-    s.author_id = status.user.id
-    #s.in_reply_to_user_id = status.in_reply_to_user_id
-    #s.in_reply_to_status_id = status.in_reply_to_status_id  
+    status = Status.construct_from_dict(status)
     return s
+
 
 def AddStatuses(statuses):
     """Adds and returns full set of statuses (ids) stored in t as django Status 
     model instances
     """
-    s_ids = [s.GetId() for s in statuses]
+    s_ids = [s['id'] for s in statuses]
     s_found = Status.objects.in_bulk(s_ids)
     status_set = s_found.values()
-    s_toadd = [s for s in statuses if s.id not in 
+    s_toadd = [s for s in statuses if s['id'] not in 
                [sid for sid in s_found]]
     status_create_set = map(CreateStatus, s_toadd)
     save_instances(status_create_set)

@@ -79,6 +79,11 @@ class TwitterUserProfile(models.Model):
         user = cls(**field_dict)
         return user
 
+    @staticmethod
+    def construct_from_dicts(dicts):
+        return map(TwitterUserProfile.construct_from_dict, dicts)
+
+
     def deconstruct_to_dict(self):
         data = {}
         for field in self.available_fields:

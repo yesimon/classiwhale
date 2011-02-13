@@ -13,16 +13,15 @@ setup_environ(settings)
     
 ######## Script Begin #######
 
-from twitterauth.models import UserProfile, Rating
-from status.models import Status
+from twitter.models import *
 from corsair.models import TrainingSet
 
 userprofile_ids = [str(i) for i in range(100, 125)]
 
 userprofile_ids = [str(100)]
 
-ratings = Rating.objects.filter(user_profile__in=userprofile_ids)
-user_profiles = UserProfile.objects.filter(pk__in=userprofile_ids)
+ratings = Rating.objects.filter(user__in=userprofile_ids)
+user_profiles = TwitterUserProfile.objects.filter(pk__in=userprofile_ids)
 name = 'CS229 Training Set'
 
 name = 'Mini Training Set'

@@ -8,8 +8,8 @@ classifier_library.register(CylonBayesClassifier)
 classifier_library.register(MultinomialBayesClassifier)
 
 def get_predictions(prof, statuses, session=None):
-    """Statuses could be list of ids, list of api status objects, or list of
-    django status models, inspect to decide next steps"""
+    """Statuses could be list of ids, or list of django status models, 
+    inspect to decide next steps"""
     if statuses is None: return None
     if statuses[0] in (int, long):
         statuses = Status.objects.filter(id__in=statuses)

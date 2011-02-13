@@ -62,7 +62,7 @@ def timeline(request):
     api = get_authorized_twython(twitter_tokens)
     statuses = Status.construct_from_dicts(api.getFriendsTimeline())
     friends = api.getFriendsStatus()
-#    Rating.appendTo(statuses, tp)
+    Rating.appendTo(statuses, tp)
     return render_to_response('twitter/timeline.html',
         {
           'whale': user_profile.whale,

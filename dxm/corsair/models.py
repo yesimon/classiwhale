@@ -1,14 +1,14 @@
 from __future__ import division
 from django.db import models
 from picklefield.fields import PickledObjectField
-from twitterauth.models import UserProfile, Rating
-from status.models import Status 
 from scikits.learn import cross_val
 from scikits.learn.metrics import confusion_matrix, roc_curve, auc, precision_recall_curve, explained_variance_score
 from algorithmio.interface import classifier_library
 import numpy as np
 import random
 
+from twitter.models import *
+from profile.models import *
 
 DEFAULT_MODEL = 'Rating'
     

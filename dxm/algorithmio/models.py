@@ -1,6 +1,6 @@
 from django.db import models
-from status.models import Status
-from twitterauth.models import UserProfile
+from twitter.models import *
+from profile.models import *
 
 # Create your models here.
 
