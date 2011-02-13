@@ -75,7 +75,7 @@ class TwitterUserProfile(models.Model):
         field_dict = {}
         for key, value in data.iteritems():
             if key in cls.available_fields:
-                field_dict[key] = value
+                field_dict[str(key)] = value       
         user = cls(**field_dict)
         return user
 
@@ -135,7 +135,7 @@ class Status(models.Model):
         field_dict = {}
         for key, value in data.iteritems():
             if key in cls.available_fields:
-                field_dict[key] = value
+                field_dict[str(key)] = value
         status = Status(**field_dict)
         setattr(status, 'json', json_string)
         return status
