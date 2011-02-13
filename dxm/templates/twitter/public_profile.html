@@ -1,19 +1,16 @@
-{% extends "base.html" %}
+{% extends "panes.html" %}
 
 {% block title %}
 {{ username }} on ClassiWhale
 {% endblock %}
 
+{% block middle %} 
 
-{% block content %} 
-
-	<div class="status-prompt">
-	    <div>{{ friend.name }}</div>
-	    <img class="photo" width="48" height="48" src="{{ friend.profile_image_url }}" alt="{{ friend.name }} " /> 
-		
-	</div>
-	
-	
+    <div class="status-prompt">
+        <div>{{ friend.name }}</div>
+        <img class="photo" width="48" height="48" src="{{ friend.profile_image_url }}" alt="{{ friend.name }} " /> 
+    </div>
+    
     <script type="text/javascript">
     $(function() {
         $(window).infinitescroll({
@@ -27,13 +24,11 @@
         });
     });
     </script>
-
-
+    
     <div class="statuses">
-	   {% include 'twitter/status_list.html' %}
-	</div>
-	
-	
+       {% include 'twitter/status_list.html' %}
+    </div>
+    
 {% endblock %}
 
 
