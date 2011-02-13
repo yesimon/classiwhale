@@ -28,8 +28,8 @@
 		    <li class="{% navactive request 'twitter.views.public_timeline' %}">
 		    	<a href="{% url twitter.views.public_timeline %}">Recent</a>
 		    </li>
-		    <li class="{% navactive request 'status.views.rating_history' %}">
-		    	<a href="{% url status.views.rating_history %}">Profile</a>
+		    <li class="{% navactive request 'twitter.views.rating_history' %}">
+		    	<a href="{% url twitter.views.rating_history %}">Profile</a>
 		    </li>
 		    <li class="separator"></li>
 		    <li class="{% navactive request 'twitter.views.timeline' %}">
@@ -110,8 +110,8 @@
                 <a href="{% url twitter.views.timeline %}">Home</a>
             </li>
             <li class="separator"></li>
-            <li class="nav-link {% navactive request 'status.views.rating_history' %}">
-                <a href="{% url status.views.rating_history %}">Profile</a>
+            <li class="nav-link {% navactive request 'twitter.views.rating_history' %}">
+                <a href="{% url twitter.views.rating_history %}">Profile</a>
             </li>
 		{% endif %}
 		</ul>

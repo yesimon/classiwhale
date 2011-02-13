@@ -106,7 +106,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-AUTH_PROFILE_MODULE = 'twitterauth.UserProfile'
+AUTH_PROFILE_MODULE = 'profile.UserProfile'
 
 # These login urls require the path relative to the direct mount of / on the ip
 # address. This is a django restriction.

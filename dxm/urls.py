@@ -51,14 +51,14 @@ urlpatterns = patterns('',
         {'login_url': '/accounts/login/'}),
         
     (r'^status/recent/$', 'twitter.views.public_timeline'),
-    (r'^status/ajax_rate/$', 'status.views.ajax_rate'),
+    (r'^status/ajax_rate/$', 'twitter.views.ajax_rate'),
     (r'^status/ajax_public_timeline/$', 'twitter.views.ajax_public_timeline'),
     (r'^status/ajax_user_timeline/$', 'status.views.ajax_user_timeline'),
     (r'^status/ajax_timeline/$', 'twitter.views.ajax_timeline'),
     (r'^status/ajax_training_set_posts/$', 'status.views.ajax_training_set_posts'),
     (r'^status/post/$', 'status.views.post_status'),
     (r'^status/create_friendship/$', 'status.views.create_friendship'),
-    (r'^history/$', 'status.views.rating_history'),
+    (r'^history/$', 'twitter.views.rating_history'),
     (r'^profile/(?P<username>\w+)/$', 'status.views.public_profile'),
     (r'^login/$', 'status.views.training_login'),
     (r'^training/$', 'status.views.training_set_posts'),
@@ -68,9 +68,6 @@ urlpatterns = patterns('',
     
     (r'^feedback/ajax/(.*?)$', 'feedback.views.handle_ajax'),
     
-    (r'^bayes/train/$', 'prediction.views.train_multinomial_bayes'),
-    (r'^bayes/predict/$', 'prediction.views.predicted_friends_timeline'),
-    (r'^bayes/filter/$', 'prediction.views.filtered_friends_timeline'),
     (r'^algorithm/train/$', 'prediction.views.train_classifier'),
     (r'^algorithm/predict/$', 'prediction.views.predicted_friends_timeline')
 )
