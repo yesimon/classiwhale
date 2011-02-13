@@ -147,7 +147,10 @@ api_table  = {
 		'url': '/friendships/show.json',
 		'method': 'GET',
 	},
-	
+    'friendshipsOutgoing': {
+        'url': '/friendships/outgoing.json',
+        'method': 'GET',
+    },	
 	# Profile methods
 	'updateProfile': {
 		'url': '/account/update_profile.json',

@@ -59,7 +59,7 @@ class TwitterUserProfile(models.Model):
         field_dict = {}
         for key, value in self.__dict__.iteritems():
             if key in self.available_fields:
-                field_dict[key] = value
+                field_dict[str(key)] = value
         user = TwitterUserProfile(**field_dict)
         super(TwitterUserProfile, user).save(*args, **kwargs)
 
@@ -108,7 +108,7 @@ class Status(models.Model):
         field_dict = {}
         for key, value in self.__dict__.iteritems():
             if key in self.available_fields:
-                field_dict[key] = value
+                field_dict[str(key)] = value
         status = Status(**field_dict)
         super(Status, status).save(*args, **kwargs)
 

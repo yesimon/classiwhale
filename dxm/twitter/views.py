@@ -89,11 +89,73 @@ def ajax_timeline(request):
         },
         context_instance=RequestContext(request))
 
+def public_profile(request, username):
+    if request.user.is_authenticated() and 'twitter_tokens' in request.session:
+        twitter_tokens = request.session['twitter_tokens']
+        api = get_authorized_twython(twitter_tokens)
+    else: # Get public api if no authentication possible
+        api = Twython()
+    friend = api.showUser(screen_name=username)
+    
+    friends = api.getFriendsStatus()
+    prof = request.user.get_profile()
+    
+    try:
+        statuses = Status.construct_from_dicts(api.getUserTimeline(screen_name=username))
+    except TwythonError:
+        outgoing = api.friendshipsOutgoing()
+        follow_request_sent = False
+        if request.user.id in outgoing:
+            follow_request_sent = True
+        return render_to_response('twitter/protected_profile.html',
+            {
+             'whale': prof.whale,
+             'friends': friends,
+             'username': username,
+             'friend': friend,
+             'follow_request_sent': follow_request_sent
+             },
+             context_instance=RequestContext(request)) 
+    return render_to_response('twitter/public_profile.html',
+        {
+         'whale': prof.whale,
+         'friends': friends,
+         'username': username,
+         'friend': friend,
+         'statuses': statuses,
+        },
+        context_instance=RequestContext(request)) 
+
+def ajax_user_timeline(request):
+    results = {'success': 'False'}
+    if request.method != u'GET':
+        return HttpResponseBadRequest('Must be GET request')
+    if not request.GET.has_key(u'screenname'):
+        return HttpResponseBadRequest('screenname missing')
+    if not request.GET.has_key(u'max_id'):
+        return HttpResponseBadRequest('start id missing')
+    if not request.GET.has_key(u'page'):
+        return HttpResponseBadRequest('page number missing')
+    screenname = request.GET[u'screenname']
+    max_id = request.GET[u'max_id']
+    page = request.GET[u'page']
+    
+    if request.user.is_authenticated() and 'twitter_tokens' in request.session:
+        twitter_tokens = request.session['twitter_tokens']
+        api = get_authorized_twython(twitter_tokens)
+    else: # Get public api if no authentication possible
+        api = Twython()
+
+    results['statuses'] = api.getUserTimeline(screen_name=screenname, max_id=max_id, page=page)
+    t = get_template('twitter/status_list.html')
+    results['success'] = 'True'
+    html = t.render(RequestContext(request, results))
+    return HttpResponse(html)
+
 def post_status(request):
     results = {'success':'False'}
-    user = request.user
-    if not user.is_authenticated() or 'access_token' not in request.session:
-        return HttpResponseRedirect(reverse('status.views.public_timeline'))
+    if not request.user.is_authenticated() or 'twitter_tokens' not in request.session:
+        return HttpResponseRedirect(reverse('twitter.views.public_timeline'))
     twitter_tokens = request.session['twitter_tokens']
     API = get_authorized_twython(twitter_tokens)
     status = request.POST[u'status']
@@ -108,9 +170,8 @@ def post_status(request):
 
 def create_friendship(request):
     results = {'success':'False'}
-    user = request.user
-    if not user.is_authenticated() or 'access_token' not in request.session:
-        return HttpResponseRedirect(reverse('status.views.public_timeline'))
+    if not request.user.is_authenticated() or 'twitter_tokens' not in request.session:
+        return HttpResponseRedirect(reverse('twitter.views.public_timeline'))
     twitter_tokens = request.session['twitter_tokens']
     API = get_authorized_twython(twitter_tokens)
     username = request.POST[u'friend_username']
