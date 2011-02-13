@@ -11,12 +11,12 @@ from django.contrib.auth import login, logout, authenticate
 from datetime import datetime
 from email.utils import parsedate
 from time import mktime
-from twython import Twython
+from twython import Twython, TwythonError
 import json
 
 from profile.models import UserProfile
 from twitter.models import TwitterUserProfile, Status, Rating
-from twitter.utils import get_authorized_twython
+from twitter.utils import get_authorized_twython, full_create_status
 
 from whale.models import Whale, WhaleSpecies
 
@@ -62,7 +62,7 @@ def timeline(request):
     api = get_authorized_twython(twitter_tokens)
     statuses = Status.construct_from_dicts(api.getFriendsTimeline())
     friends = api.getFriendsStatus()
-    Rating.appendTo(statuses, tp)
+#    Rating.appendTo(statuses, tp)
     return render_to_response('twitter/timeline.html',
         {
           'whale': user_profile.whale,
@@ -89,6 +89,77 @@ def ajax_timeline(request):
         },
         context_instance=RequestContext(request))
 
+def post_status(request):
+    results = {'success':'False'}
+    user = request.user
+    if not user.is_authenticated() or 'access_token' not in request.session:
+        return HttpResponseRedirect(reverse('status.views.public_timeline'))
+    twitter_tokens = request.session['twitter_tokens']
+    API = get_authorized_twython(twitter_tokens)
+    status = request.POST[u'status']
+    try:
+        API.updateStatus(status=status)
+        results['success'] = 'True'
+    except TwythonError:
+        pass
+    jsonResults = json.dumps(results)
+    return HttpResponse(jsonResults, mimetype='application/json')
+
+
+def create_friendship(request):
+    results = {'success':'False'}
+    user = request.user
+    if not user.is_authenticated() or 'access_token' not in request.session:
+        return HttpResponseRedirect(reverse('status.views.public_timeline'))
+    twitter_tokens = request.session['twitter_tokens']
+    API = get_authorized_twython(twitter_tokens)
+    username = request.POST[u'friend_username']
+    try:
+        API.createFriendship(screen_name=username)
+        results['success'] = 'True'
+    except TwythonError:
+        pass
+    jsonResults = json.dumps(results)
+    return HttpResponse(jsonResults, mimetype='application/json')
+
+def ajax_rate(request):
+    results = {'success':'False'}
+    if request.method != u'POST':
+        return HttpResponseBadRequest("Only allows POST requests")
+    POST = request.POST
+    if (not POST.has_key(u'rating')) or (not POST.has_key(u'status')):
+        return HttpResponseBadRequest("rating and/or status parameters missing")
+    u = request.user
+    if not u.is_authenticated():
+        return HttpResponseBadRequest("Must be logged in")
+
+    rating = POST[u'rating']
+    status = Status.construct_from_dict(json.loads(POST[u'status']))
+    tp = TwitterUserProfile.objects.get(id=request.session['twitter_tokens']['user_id'])
+    prof = u.get_profile()
+    status.save_with_user()
+
+    if rating == u"up":
+        rating_int = 1
+    elif rating == u"down":
+        rating_int = -1
+    try: r = Rating.objects.get(status=status, user=tp)
+    except Rating.DoesNotExist: r = Rating(status=status, user=tp)
+    r.rating = rating_int
+    r.save()
+    prof.whale.exp += 1
+    if prof.whale.exp == prof.whale.species.evolution.minExp:
+        prof.whale.species = prof.whale.species.evolution
+    prof.whale.save()
+    results['success'] = 'True'
+    results['exp'] = prof.whale.exp
+    results['min-exp'] = prof.whale.species.minExp
+    results['max-exp'] = prof.whale.species.evolution.minExp
+    results['species'] = prof.whale.species.img.url
+    results['speciesName'] = prof.whale.species.name
+    jsonResults = json.dumps(results)
+    return HttpResponse(jsonResults, mimetype='application/json')
+
 
 @login_required
 def rating_history(request):
@@ -106,7 +177,7 @@ def rating_history(request):
         elif detail.rating < 0: rating = 'dislike'
         else: pass
         ratings.append({'id':detail.status_id, 'rating':rating})
-    return render_to_response('rating_history.html',
+    return render_to_response('twitter/rating_history.html',
         {'ratings': ratings},
         context_instance=RequestContext(request)) 
 

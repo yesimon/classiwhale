@@ -3,10 +3,11 @@ from django.db import models
 from django.core import serializers
 from profile.models import UserProfile
 from datetime import datetime
-from email.utils import parsedate
+from email.utils import parsedate, formatdate
 from time import mktime
 import json
 
+JSON_COMPACT = (',',':')
 
 class TwitterUserProfile(models.Model):
     id = models.BigIntegerField(primary_key=True)
@@ -27,7 +28,7 @@ class TwitterUserProfile(models.Model):
     verified = models.BooleanField(default=False)
     protected = models.BooleanField(default=False)
     location = models.CharField(max_length=160, blank=True, null=True)
-    url = models.URLField(blank=True, null=True)
+    url = models.URLField(verify_exists=False, blank=True, null=True)
     friends_count = models.IntegerField(default=0)
     followers_count = models.IntegerField(default=0)
     statuses_count = models.IntegerField(default=0)
@@ -56,7 +57,7 @@ class TwitterUserProfile(models.Model):
 
     def save(self, *args, **kwargs):
         field_dict = {}
-        for key, value in self.iteritems():
+        for key, value in self.__dict__.iteritems():
             if key in self.available_fields:
                 field_dict[key] = value
         user = TwitterUserProfile(**field_dict)
@@ -64,12 +65,9 @@ class TwitterUserProfile(models.Model):
 
 
     def as_json_string(self):
-        try: json_string = self.json
-        except AttributeError:
-            json_dict = {}
-            for field in self.available_fields:
-                json_dict[field] = self.__getattribute__(field)
-            json_string = json.dumps(json_dict)
+        json_dict = self.deconstruct_to_dict()
+        try: json_string = json.dumps(json_dict, separators=JSON_COMPACT)
+        except: pass
         return json_string
 
     @classmethod
@@ -108,12 +106,11 @@ class Status(models.Model):
 
     def save(self, *args, **kwargs):
         field_dict = {}
-        for key, value in self.iteritems():
+        for key, value in self.__dict__.iteritems():
             if key in self.available_fields:
                 field_dict[key] = value
-        user = TwitterUserProfile(**field_dict)
-        super(TwitterUserProfile, user).save(*args, **kwargs)
-
+        status = Status(**field_dict)
+        super(Status, status).save(*args, **kwargs)
 
     class Meta:
         ordering = ["-id"]
@@ -122,14 +119,49 @@ class Status(models.Model):
     def __unicode__(self):
         return unicode(self.id)
 
+    def save_with_user(self):
+        try: TwitterUserProfile.objects.get(id=self.user.id)
+        except TwitterUserProfile.DoesNotExist:
+            self.user.save()
+        self.save()
+
+    @classmethod
+    def construct_from_dict(cls, data):
+        if 'user' not in data:
+            raise KeyError
+        json_string = json.dumps(data, separators=JSON_COMPACT)
+        data['user'] = TwitterUserProfile.construct_from_dict(data['user'])
+        data['created_at'] = datetime.fromtimestamp(mktime(parsedate(data['created_at'])))
+        field_dict = {}
+        for key, value in data.iteritems():
+            if key in cls.available_fields:
+                field_dict[key] = value
+        status = Status(**field_dict)
+        setattr(status, 'json', json_string)
+        return status
+
+    def deconstruct_to_dict(self):
+        try: return json.loads(self.json)
+        except AttributeError: pass
+        data = {}
+        for field in self.available_fields:
+            data[field] = getattr(self, field) 
+        data['user'] = TwitterUserProfile.deconstruct_to_dict(self.user)
+        data['created_at'] = formatdate(timeval=mktime(self.created_at.timetuple()),
+                                        localtime=False, usegmt=True)
+
+        return data
 
     def as_json_string(self):
-        a =  self.__dict__
-        print serializers.serialize("json", [self , ])
-        try: print json.dumps(a)
-        except: print 'failed'
-        return json.dumps(self.__dict__)
-                
+        try: return self.json
+        except AttributeError: pass
+        json_dict = self.deconstruct_to_dict()
+        json_string = json.dumps(json_dict, separators=JSON_COMPACT)
+        return json_string
+
+    @staticmethod
+    def construct_from_dicts(dicts):
+        return map(Status.construct_from_dict, dicts)
 
     def relative_created_at(self):
         '''Get a human redable string representing the posting time
@@ -157,25 +189,6 @@ class Status(models.Model):
           return 'about a day ago'
         else:
           return 'about %d days ago' % (delta / (60 * 60 * 24))        
-
-    @classmethod
-    def construct_from_dict(cls, data):
-        if 'user' not in data:
-            raise KeyError
-        data['user'] = TwitterUserProfile.construct_from_dict(data['user'])
-        data['created_at'] = datetime.fromtimestamp(mktime(parsedate(data['created_at'])))
-        field_dict = {}
-        for key, value in data.iteritems():
-            if key in cls.available_fields:
-                field_dict[key] = value
-        status = Status(**field_dict)
-
-        return status
-
-
-    @staticmethod
-    def construct_from_dicts(dicts):
-        return map(Status.construct_from_dict, dicts)
 
     @staticmethod
     def fullCreate(data):
@@ -227,6 +240,7 @@ class Rating(models.Model):
         verbose_name_plural = "Ratings"
         get_latest_by = "rated_time"
         ordering = ['-rated_time']
+        unique_together = ("user", "status")
 
     @staticmethod
     def appendTo(statuses, prof):
