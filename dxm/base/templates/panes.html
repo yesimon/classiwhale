@@ -17,8 +17,8 @@
                             <li class="{% ifequal request.path "/" %}active{% endifequal %}">
                                 <a href="/">Unfiltered</a>
                             </li>
-                            <li class="{% ifequal request.path "/bayes/filter/" %}active{% endifequal %}">
-                                <a href="/bayes/filter/">Filtered</a>
+                            <li class="{% ifequal request.path "/algorithm/predict/" %}active{% endifequal %}">
+                                <a href="{% url prediction.views.predicted_friends_timeline %}">Filtered</a>
                             </li>
                         </ul>
 					    <div class="right-bg"></div>

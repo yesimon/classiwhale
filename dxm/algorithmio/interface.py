@@ -1,4 +1,4 @@
-from status.models import *
+from twitter.models import *
 from multinomialbayes.classifiers import MultinomialBayesClassifier
 from cylonbayes.classifiers import CylonBayesClassifier
 from algorithmio.classifier import ClassifierLibrary

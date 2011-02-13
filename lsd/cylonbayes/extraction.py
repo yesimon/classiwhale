@@ -1,4 +1,4 @@
-import status.management.commands.extract as extract
+import twitter.management.commands.extract as extract
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 from nltk.collocations import BigramCollocationFinder

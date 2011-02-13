@@ -13,22 +13,23 @@ setup_environ(settings)
     
 ######## Script Begin #######
 
-import numpy as np
-from scipy.sparse import dok_matrix, csc_matrix, lil_matrix
-
-from twitterauth.models import UserProfile, Rating
-from status.models import Status
-from python_twitter import User
-from algorithmio.classifier import Classifier
-from django.core.cache import cache
-from cylonbayes.models import *
-from cylonbayes.extraction import BaltarExtractor
-from django.core.exceptions import MultipleObjectsReturned
 from operator import itemgetter
 import collections
 import copy 
 import random
 from math import exp
+from django.core.cache import cache
+from django.core.exceptions import MultipleObjectsReturned
+import numpy as np
+from scipy.sparse import dok_matrix, csc_matrix, lil_matrix
+
+from twitter.models import *
+
+from algorithmio.classifier import Classifier
+
+from cylonbayes.models import *
+from cylonbayes.extraction import BaltarExtractor
+
 
 
 class CylonBayesData(object):
@@ -166,17 +167,6 @@ class CylonBayesClassifier(Classifier):
     Contains instance variable:
     self.prof 
     """
-    def convert_rating(self, rating):
-        if isinstance(rating.status, Status):
-            u = User(id=rating.status.user_profile_id)
-            setattr(rating.status, 'user', u)
-        return rating
-
-    def convert_status(self, status):
-        if isinstance(status, Status):
-            u = User(id=status.user_profile_id)
-            setattr(status, 'user', u)
-        return status
 
     def force_train(self):
         """Concrete method for Classifier"""
@@ -188,7 +178,6 @@ class CylonBayesClassifier(Classifier):
             '-rated_time').select_related('status')
         train_set = []
         for rating in ratings_list:
-            self.convert_rating(rating)
             train_set.append((rating.status, rating.rating))
         map(mb.train, train_set)
         mb_model.save()
@@ -197,7 +186,6 @@ class CylonBayesClassifier(Classifier):
         mb = CylonBayesData(extractor=BaltarExtractor)
         train_set = []
         for rating in ratings:
-            self.convert_rating(rating)
             train_set.append((rating.status, rating.rating))
         map(mb.train, train_set)
         self.mb = mb
@@ -208,7 +196,6 @@ class CylonBayesClassifier(Classifier):
 
     def predict(self, statuses, test=False):
         """Concrete method for Classifier"""
-        map(self.convert_status, statuses)
         if test: mb = self.mb 
         else:
             mb_model = self.get_cylon_bayes_model()
