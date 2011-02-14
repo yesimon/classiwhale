@@ -68,28 +68,24 @@
 }
 
 
-.status-container .status-prompt div {
-    color:#8F8F8F;
+.status-container .status-prompt {
+    color:#0D3867;
     font-family: Arial;
     font-size:16px;
-    font-weight:bold;
-    margin-bottom:10px;
-}
-
-.status-container .status-prompt input {
-    color:#8F8F8F;
-    font-family:'Helvetica Neue', 'Lucida Grande', Arial;
-    font-size:20px;
-    width:465px;
-}
-
-.status-container .status-prompt {
     background-color:#F8F8F8;
-    padding:15px 25px 23px;
+    padding:15px 25px;
     border:1px solid #A0A0A0;
     border-bottom:1px solid #CDCDCD;
 }
 
+.status-container .status-prompt input {
+    color:black;
+    font-family:'Helvetica Neue', 'Lucida Grande', Arial;
+    font-size:15px;
+    width:460px;
+    padding: 6px 5px;
+    margin-bottom: 10px;
+}
 
 .status-container .header {
     background: #BBCDF7 url('/static/img/recent_title_bg.png') repeat 0 0;

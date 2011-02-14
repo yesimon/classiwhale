@@ -3,11 +3,11 @@
 $(function()
 {
     var currentSlide = 1;
-    var slideout = setTimeout(nextSlide, 5000);
+    var slideout = setTimeout(nextSlide, 7000);
     
     $('#landingSlideshow .controls .page').click(function(){
         gotoSlide($(this).attr('slide'));
-        slideout = setTimeout(nextSlide, 10000);
+        slideout = setTimeout(nextSlide, 12000);
         return false;
     });
     
@@ -49,6 +49,6 @@ $(function()
         currentSlide ++;
         if (currentSlide == 4) currentSlide = 1;
         gotoSlide(currentSlide + '');
-        slideout = setTimeout(nextSlide, 6000);
+        slideout = setTimeout(nextSlide, 8000);
     }
 });
