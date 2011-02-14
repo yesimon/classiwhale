@@ -20,7 +20,6 @@ body {
 } 
 
 #landingTop .leftbg {
-    float:left;
     background: url('/static/img/landing/landbox_top_left.png') no-repeat;
     height: 236px;
     width:11px;
@@ -30,7 +29,6 @@ body {
 }    
 
 #landingTop .rightbg {
-    float:right;
     background: url('/static/img/landing/landbox_top_right.png') no-repeat;
     height: 236px;
     width:11px;
@@ -41,12 +39,12 @@ body {
 
 
 #landingLogin{
-    float: left;
+    float: right;
     background: url('/static/img/landing/landbox_top_center.png') repeat-x;
     height: 236px;
     width: 260px;
     overflow:visible;
-    margin:0 11px 0 11px;
+    margin: 0 51px 0 0;
     position: relative;
 }
 
@@ -172,92 +170,114 @@ body {
  */
 
 
-#landingSpace{
-  min-width:500px;
-  height:75px;
+#landingSpace {
+    min-width:500px;
+    height:59px;
 }
 
-#landingClassiWhale{
-  float: left;
-  width:55%;
-  height:100%; 
+#landingPublicity {
+    float: right;
+    color: white;
+    margin-right: 49px;
+    height: 339px;
+    width: 264px;
+    background: url('/static/img/landing/recent_center_bg.png') repeat-x;
+    position:relative;
 }
 
-#landingPublicity{
-  float: left;
-  width:45%;
-  height:100%; 
-  margin-top: -15px;
-  background: url("/static/img/landingPage/publicity.png") no-repeat;
+#landingPublicity .rightbg {
+    background: url('/static/img/landing/recent_right_bg.png') no-repeat;
+    height: 339px;
+    width:8px;
+    right:-8px;
+    top: 0px;
+    position: absolute;
 }
 
-#landingWhyTitle{
-  color: white;
-  text-align: left;
-  font-weight: bold;
-  font-size: 30px;
+#landingPublicity .leftbg {
+    background: url('/static/img/landing/recent_left_bg.png') no-repeat;
+    height: 339px;
+    width:8px;
+    left:-8px;
+    top: 0px;
+    position: absolute;
 }
 
+
+#landingPublicity .wrapper {
+    margin: 15px 18px 0 13px;
+}
+
+#landingPublicity .title {
+    font-size: 18px;
+    margin-bottom: 14px;
+}   
+
+#landingPublicity .item {
+    margin-top: 20px;
+    line-height: 17px;
+} 
+
+#landingPublicity .item span {
+    display:block;
+    font-size: 12px;
+    color: #B0CCFF;
+}
+
+#landingPublicity .more {
+    font-size: 10px;
+    position: absolute;
+    bottom: 20px;
+    font-weight: bold;
+}
+
+#landingPublicity .more a {
+    color: white;
+    font-size: 12px;
+}
+
+#landingPublicity .more a:hover {
+    text-decoration: underline;
+}
+
+
+
+/*
+ ************************
+ *   Why ClassiWhale?
+ ************************
+ */
 
 #landingReasons {
+    float: left; 
+    margin-left: 5px;
+}
+
+#landingReasons .title {
+  color: #e2e2e2;
+  text-align: left;
+  font-size: 30px;
+  font-family: Times New Roman,Arial;
+  margin-top: 15px;
+  letter-spacing: 1px;
+}
+
+#landingReasons .reasons {
     padding-top: 20px;
     padding-left: 40px;
-    color: white;
+    color: #e2e2e2;
     text-align: left;
-    font-size: 20px;
-    list-style-image: url("/static/img/landingPage/check.png");
+    font-size: 17px;
+    list-style-image: url("/static/img/landing/check_short.png");
 }
 
-#pubReasons{
-    color: white;
-    padding-top: 20px;
-    padding-left: 30px;
-    padding-right: 110px;
-    text-align: left;
-    font-size: 20px;
+
+#landingReasons .reasons li {
+    margin: 15px 0 18px -8px;
 }
 
-#pubReasons ul{
-    list-style:none;
-    font-weight:italic; 
-}
-#pubTitle{
-    color: white;
-    padding-top: 20px;
-    padding-left: 20px;
-    text-align: left;
-    font-size: 25px;
-    font-weight: bold;
-}
-
-#buttonLogin:hover{
-    border: 1px solid #448dae; 
-    background: #79c9ec url(/static/img/landingPage/ui-bg_glass_75_79c9ec_1x400.png) 50% 50% repeat-x; 
-    color: #026890;
-
-}
-
-#buttonFind:hover{
-    border: 1px solid #448dae; 
-    background: #79c9ec url(/static/img/landingPage/ui-bg_glass_75_79c9ec_1x400.png) 50% 50% repeat-x; 
-    color: #026890;
-}
-
-#buttonLogin{
-    width: 218px;
-    height: 30px;
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    margin: 15px;
-}
-
-#buttonFind{
-    width: 218px;
-    height: 30px;
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    margin: 15px;
+#landingReasons a.find-more {
+    display:block;
+    margin-top: 38px; 
 }
 
