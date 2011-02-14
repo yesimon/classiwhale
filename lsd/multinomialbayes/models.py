@@ -6,7 +6,7 @@ class MultinomialBayesModel(models.Model):
     protocol 2 (default for picklefield)"""
     data = PickledObjectField(compress=True)
     version = models.CharField(max_length=50)
-    user_profile = models.ForeignKey('twitterauth.UserProfile')
+    user_profile = models.ForeignKey('twitter.TwitterUserProfile')
     last_modified = models.DateTimeField(auto_now=True)
 
 

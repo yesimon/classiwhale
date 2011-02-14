@@ -13,18 +13,17 @@ setup_environ(settings)
 
 import numpy as np
 from scipy.sparse import dok_matrix, csc_matrix, lil_matrix
-
-from extraction import SimpleExtractor
-from twitterauth.models import UserProfile, Rating
-from status.models import Status
-from algorithmio.classifier import Classifier
-from django.core.cache import cache
-from multinomialbayes.models import *
 from django.core.exceptions import MultipleObjectsReturned
+from django.core.cache import cache
 from operator import itemgetter
 import collections
 import copy 
 
+from extraction import SimpleExtractor
+from algorithmio.classifier import Classifier
+
+from multinomialbayes.models import *
+from twitter.models import *
 
 
 class MultinomialBayesCommonData():

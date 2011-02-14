@@ -6,8 +6,6 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.views.generic.simple import direct_to_template
 from tastypie.api import Api
-from twitterauth.api.resources import RatingResource, UserProfileResource
-from status.api.resources import StatusResource
 import mimetypes
 
 URL_LIST = {
@@ -21,9 +19,7 @@ admin.autodiscover()
 nexus.autodiscover()
 
 v1_api = Api(api_name='v1')
-v1_api.register(RatingResource())
-v1_api.register(UserProfileResource())
-v1_api.register(StatusResource())
+
 
 urlpatterns = patterns('',
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
