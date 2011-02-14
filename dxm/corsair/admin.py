@@ -1,11 +1,11 @@
 from django.contrib import admin
-from corsair.models import TrainingSet, PredictionStatistics
+from corsair.models import TwitterTrainingSet, PredictionStatistics
 
-class TrainingSetAdmin(admin.ModelAdmin):
+class TwitterTrainingSetAdmin(admin.ModelAdmin):
     pass
 
 class PredictionStatisticsAdmin(admin.ModelAdmin):
     list_display = ('classifier', 'training_set', 'model', 'created')
 
-admin.site.register(TrainingSet, TrainingSetAdmin)
+admin.site.register(TwitterTrainingSet, TwitterTrainingSetAdmin)
 admin.site.register(PredictionStatistics, PredictionStatisticsAdmin)

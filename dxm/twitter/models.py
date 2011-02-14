@@ -55,12 +55,15 @@ class TwitterUserProfile(models.Model):
     def __unicode__(self):
         return "%s's twitter profile" % self.screen_name
 
-    def save(self, *args, **kwargs):
-        field_dict = {}
-        for key, value in self.__dict__.iteritems():
-            if key in self.available_fields:
-                field_dict[str(key)] = value
-        user = TwitterUserProfile(**field_dict)
+    def save(self, override=False, *args, **kwargs):
+        if override:
+            user = self
+        else:
+            field_dict = {}
+            for key, value in self.__dict__.iteritems():
+                if key in self.available_fields:
+                    field_dict[str(key)] = value
+            user = TwitterUserProfile(**field_dict)
         super(TwitterUserProfile, user).save(*args, **kwargs)
 
 

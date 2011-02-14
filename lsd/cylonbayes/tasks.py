@@ -1,9 +1,10 @@
 from celery.decorators import task, periodic_task
 from celery.task.schedules import crontab
 from datetime import datetime, timedelta
-from twitterauth.models import UserProfile
 from django.db.models import Max
 from cylonbayes.classifiers import CylonBayesClassifier
+from twitter.models import *
+
 
 @periodic_task(run_every=timedelta(hours=4))
 def train_all():
@@ -15,10 +16,10 @@ def train_all():
     """
 
     # Annotate with most recent rated time and trained time
-    profs = UserProfile.objects.filter(active_classifier=
-        'CylonBayesClassifier').annotate(
-            rated_time=Max('rating__rated_time'), 
-            trained_time=Max('multinomialbayesmodel__last_modified'))
+    profs = TwitterUserProfile.objects.filter(active_classifier=
+              'CylonBayesClassifier').annotate(
+              rated_time=Max('rating__rated_time'), 
+              trained_time=Max('cylonbayesmodel__last_modified'))
     # Check whether user needs training
     train_profs = []
     for p in profs:

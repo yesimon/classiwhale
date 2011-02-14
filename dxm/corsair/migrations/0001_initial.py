@@ -8,39 +8,40 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'TrainingSet'
-        db.create_table('corsair_trainingset', (
+        # Adding model 'TwitterTrainingSet'
+        db.create_table('corsair_twittertrainingset', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=30)),
         ))
-        db.send_create_signal('corsair', ['TrainingSet'])
+        db.send_create_signal('corsair', ['TwitterTrainingSet'])
 
-        # Adding M2M table for field user_profiles on 'TrainingSet'
-        db.create_table('corsair_trainingset_user_profiles', (
+        # Adding M2M table for field users on 'TwitterTrainingSet'
+        db.create_table('corsair_twittertrainingset_users', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('trainingset', models.ForeignKey(orm['corsair.trainingset'], null=False)),
-            ('userprofile', models.ForeignKey(orm['twitterauth.userprofile'], null=False))
+            ('twittertrainingset', models.ForeignKey(orm['corsair.twittertrainingset'], null=False)),
+            ('twitteruserprofile', models.ForeignKey(orm['twitter.twitteruserprofile'], null=False))
         ))
-        db.create_unique('corsair_trainingset_user_profiles', ['trainingset_id', 'userprofile_id'])
+        db.create_unique('corsair_twittertrainingset_users', ['twittertrainingset_id', 'twitteruserprofile_id'])
 
-        # Adding M2M table for field ratings on 'TrainingSet'
-        db.create_table('corsair_trainingset_ratings', (
+        # Adding M2M table for field ratings on 'TwitterTrainingSet'
+        db.create_table('corsair_twittertrainingset_ratings', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('trainingset', models.ForeignKey(orm['corsair.trainingset'], null=False)),
-            ('rating', models.ForeignKey(orm['twitterauth.rating'], null=False))
+            ('twittertrainingset', models.ForeignKey(orm['corsair.twittertrainingset'], null=False)),
+            ('rating', models.ForeignKey(orm['twitter.rating'], null=False))
         ))
-        db.create_unique('corsair_trainingset_ratings', ['trainingset_id', 'rating_id'])
+        db.create_unique('corsair_twittertrainingset_ratings', ['twittertrainingset_id', 'rating_id'])
 
         # Adding model 'PredictionStatistics'
         db.create_table('corsair_predictionstatistics', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('training_set', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['corsair.TrainingSet'])),
+            ('training_set', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['corsair.TwitterTrainingSet'])),
             ('classifier', self.gf('django.db.models.fields.CharField')(max_length=50)),
             ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('model', self.gf('django.db.models.fields.CharField')(max_length=50)),
             ('raw_data', self.gf('picklefield.fields.PickledObjectField')()),
             ('discrimination_bound', self.gf('django.db.models.fields.FloatField')(default=0.0)),
             ('n_folds', self.gf('django.db.models.fields.IntegerField')()),
+            ('auc', self.gf('django.db.models.fields.FloatField')()),
             ('ppv', self.gf('django.db.models.fields.FloatField')()),
             ('npv', self.gf('django.db.models.fields.FloatField')()),
             ('tpr', self.gf('django.db.models.fields.FloatField')()),
@@ -57,14 +58,14 @@ class Migration(SchemaMigration):
 
     def backwards(self, orm):
         
-        # Deleting model 'TrainingSet'
-        db.delete_table('corsair_trainingset')
+        # Deleting model 'TwitterTrainingSet'
+        db.delete_table('corsair_twittertrainingset')
 
-        # Removing M2M table for field user_profiles on 'TrainingSet'
-        db.delete_table('corsair_trainingset_user_profiles')
+        # Removing M2M table for field users on 'TwitterTrainingSet'
+        db.delete_table('corsair_twittertrainingset_users')
 
-        # Removing M2M table for field ratings on 'TrainingSet'
-        db.delete_table('corsair_trainingset_ratings')
+        # Removing M2M table for field ratings on 'TwitterTrainingSet'
+        db.delete_table('corsair_twittertrainingset_ratings')
 
         # Deleting model 'PredictionStatistics'
         db.delete_table('corsair_predictionstatistics')
@@ -108,8 +109,9 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         'corsair.predictionstatistics': {
-            'Meta': {'object_name': 'PredictionStatistics'},
+            'Meta': {'ordering': "['-created']", 'object_name': 'PredictionStatistics'},
             'acc': ('django.db.models.fields.FloatField', [], {}),
+            'auc': ('django.db.models.fields.FloatField', [], {}),
             'classifier': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'discrimination_bound': ('django.db.models.fields.FloatField', [], {'default': '0.0'}),
@@ -126,63 +128,102 @@ class Migration(SchemaMigration):
             'tnr': ('django.db.models.fields.FloatField', [], {}),
             'tp': ('django.db.models.fields.IntegerField', [], {}),
             'tpr': ('django.db.models.fields.FloatField', [], {}),
-            'training_set': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['corsair.TrainingSet']"})
+            'training_set': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['corsair.TwitterTrainingSet']"})
         },
-        'corsair.trainingset': {
-            'Meta': {'object_name': 'TrainingSet'},
+        'corsair.twittertrainingset': {
+            'Meta': {'object_name': 'TwitterTrainingSet'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'}),
-            'ratings': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['twitterauth.Rating']", 'null': 'True', 'blank': 'True'}),
-            'user_profiles': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['twitterauth.UserProfile']", 'symmetrical': 'False'})
+            'ratings': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['twitter.Rating']", 'null': 'True', 'blank': 'True'}),
+            'users': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['twitter.TwitterUserProfile']", 'symmetrical': 'False'})
         },
-        'status.hashtag': {
+        'profile.userprofile': {
+            'Meta': {'object_name': 'UserProfile'},
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
+            'whale': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['whale.Whale']", 'unique': 'True', 'null': 'True', 'blank': 'True'})
+        },
+        'twitter.hashtag': {
             'Meta': {'object_name': 'Hashtag'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'text': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '140'})
         },
-        'status.hyperlink': {
+        'twitter.hyperlink': {
             'Meta': {'object_name': 'Hyperlink'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'text': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'})
         },
-        'status.status': {
-            'Meta': {'ordering': "['-id']", 'object_name': 'Status'},
-            'ats': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'status_ats'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['twitterauth.UserProfile']"}),
-            'content_length': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'has_hyperlink': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'hashtags': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['status.Hashtag']", 'null': 'True', 'blank': 'True'}),
-            'hyperlinks': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['status.Hyperlink']", 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.BigIntegerField', [], {'primary_key': 'True'}),
-            'in_reply_to_status': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'status_replies'", 'null': 'True', 'to': "orm['status.Status']"}),
-            'in_reply_to_user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'user_replies'", 'null': 'True', 'to': "orm['twitterauth.UserProfile']"}),
-            'punctuation': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'text': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'user_profile': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['twitterauth.UserProfile']", 'null': 'True', 'blank': 'True'})
-        },
-        'twitterauth.rating': {
-            'Meta': {'ordering': "['-rated_time']", 'object_name': 'Rating'},
+        'twitter.rating': {
+            'Meta': {'ordering': "['-rated_time']", 'unique_together': "(('user', 'status'),)", 'object_name': 'Rating'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'rated_time': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'rating': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'status': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['status.Status']"}),
-            'user_profile': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['twitterauth.UserProfile']"})
+            'status': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['twitter.Status']"}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['twitter.TwitterUserProfile']"})
         },
-        'twitterauth.userprofile': {
-            'Meta': {'object_name': 'UserProfile'},
-            'access_token': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+        'twitter.status': {
+            'Meta': {'ordering': "['-id']", 'object_name': 'Status'},
+            'ats': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'status_ats'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['twitter.TwitterUserProfile']"}),
+            'content_length': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'has_hyperlink': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'hashtags': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['twitter.Hashtag']", 'null': 'True', 'blank': 'True'}),
+            'hyperlinks': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['twitter.Hyperlink']", 'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.BigIntegerField', [], {'primary_key': 'True'}),
+            'in_reply_to_status_id': ('django.db.models.fields.BigIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'in_reply_to_user_id': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'place': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'punctuation': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'source': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'text': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['twitter.TwitterUserProfile']", 'null': 'True', 'blank': 'True'})
+        },
+        'twitter.twitteruserprofile': {
+            'Meta': {'object_name': 'TwitterUserProfile'},
             'active_classifier': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'classifier_version': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '160', 'null': 'True', 'blank': 'True'}),
-            'location': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'followers_count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'friends_count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'id': ('django.db.models.fields.BigIntegerField', [], {'primary_key': 'True'}),
+            'last_updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'location': ('django.db.models.fields.CharField', [], {'max_length': '160', 'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'oauth_secret': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'oauth_token': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'profile_background_color': ('django.db.models.fields.CharField', [], {'max_length': '16', 'null': 'True', 'blank': 'True'}),
+            'profile_background_image_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'profile_background_title': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'profile_image_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'profile_link_color': ('django.db.models.fields.CharField', [], {'max_length': '16', 'null': 'True', 'blank': 'True'}),
+            'profile_sidebar_border_color': ('django.db.models.fields.CharField', [], {'max_length': '16', 'null': 'True', 'blank': 'True'}),
+            'profile_sidebar_fill_color': ('django.db.models.fields.CharField', [], {'max_length': '16', 'null': 'True', 'blank': 'True'}),
+            'profile_use_background_image': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'protected': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'ratings': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['status.Status']", 'symmetrical': 'False', 'through': "orm['twitterauth.Rating']", 'blank': 'True'}),
-            'screen_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
-            'training_statuses': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'training'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['status.Status']"}),
+            'ratings': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['twitter.Status']", 'symmetrical': 'False', 'through': "orm['twitter.Rating']", 'blank': 'True'}),
+            'screen_name': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
+            'statuses_count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'training_statuses': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'training'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['twitter.Status']"}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
-            'verified': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['profile.UserProfile']", 'null': 'True', 'blank': 'True'}),
+            'utc_offset': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'verified': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'whale': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['whale.Whale']", 'unique': 'True', 'null': 'True', 'blank': 'True'})
+        },
+        'whale.whale': {
+            'Meta': {'object_name': 'Whale'},
+            'exp': ('django.db.models.fields.IntegerField', [], {'default': '0', 'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'default': "'My Whale'", 'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'species': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'to': "orm['whale.WhaleSpecies']", 'null': 'True', 'blank': 'True'})
+        },
+        'whale.whalespecies': {
+            'Meta': {'object_name': 'WhaleSpecies'},
+            'evolution': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['whale.WhaleSpecies']", 'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'img': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'minExp': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'default': "'Baby Whale'", 'max_length': '50', 'unique': 'True', 'null': 'True', 'blank': 'True'})
         }
     }
 

@@ -13,7 +13,7 @@ from scikits.learn.metrics import roc_curve, auc
 
 from algorithmio.interface import classifier_library
 from corsair import conf
-from corsair.models import TrainingSet, PredictionStatistics
+from corsair.models import TwitterTrainingSet, PredictionStatistics
 import corsair.tasks
 
 def login_required(func):
@@ -56,7 +56,7 @@ def logout(request):
 
 @login_required
 def training_sets(request):
-    training_sets = TrainingSet.objects.all()
+    training_sets = TwitterTrainingSet.objects.all()
     return render_to_response('corsair/training_sets.html', {
         'request': request,
         'training_sets': training_sets,
@@ -79,7 +79,7 @@ def ajax_api(request, action=None):
         return HttpResponse(status=400)
 
 def benchmark_test(training_set, classifier):
-   t = TrainingSet.objects.get(name=training_set)
+   t = TwitterTrainingSet.objects.get(name=training_set)
    stats = t.benchmark(classifier, save=True)
    return stats
    
@@ -89,7 +89,7 @@ def benchmark_test(training_set, classifier):
 @login_required
 def benchmarks(request):
     benchmarks = PredictionStatistics.objects.all()
-    training_sets = TrainingSet.objects.all()
+    training_sets = TwitterTrainingSet.objects.all()
     return render_to_response('corsair/benchmarks.html', {
         'benchmarks': benchmarks,
         'request': request,

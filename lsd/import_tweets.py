@@ -34,7 +34,7 @@ from twitter.models import *
 class Container:
     
     def __init__(self, dictionary):
-        self.__dict__ = dictionary
+        self.__dict__.update(dictionary)
         
 def GetTweets(file, USERS=None, COUNT_DEFAULT=50, COUNT={}, **kwargs):
     """

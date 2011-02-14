@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 from django.template import RequestContext
 from django.template.loader import get_template
 from django.shortcuts import render_to_response
@@ -295,9 +296,12 @@ def twitter_return(request, window_type):
     request.session['twitter_tokens'] = twitter_tokens
 
     # No need to call authorize because of get_authorized_tokens()
+
+    # Probable bug - need to fix when TwitterUserProfile already exists without
+    # user having logged in.
     try:
-        tp = TwitterUserProfile.objects.get(id=twitter_tokens['user_id'])
         user = User.objects.get(username=username)
+        tp = TwitterUserProfile.objects.get(id=user.id)
     except:
         # Create User, UserProfile, TwitterUserProfile
         twitter_user = api.verifyCredentials()
@@ -311,7 +315,7 @@ def twitter_return(request, window_type):
         user = User(username=username, first_name=first_name, last_name=last_name)
         user.set_unusable_password()
         user.save()
-        
+
         up = UserProfile(user=user)
         whale = Whale(species=WhaleSpecies.getDefaultSpecies())
         whale.save()

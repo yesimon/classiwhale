@@ -8,20 +8,14 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Changing field 'UserProfile.whale'
-        db.alter_column('twitterauth_userprofile', 'whale_id', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['whale.Whale'], unique=True, null=True))
-
-        # Adding unique constraint on 'UserProfile', fields ['whale']
-        db.create_unique('twitterauth_userprofile', ['whale_id'])
+        # Changing field 'CylonBayesModel.user_profile'
+        db.alter_column('cylonbayes_cylonbayesmodel', 'user_profile_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['twitter.TwitterUserProfile']))
 
 
     def backwards(self, orm):
         
-        # Removing unique constraint on 'UserProfile', fields ['whale']
-        db.delete_unique('twitterauth_userprofile', ['whale_id'])
-
-        # Changing field 'UserProfile.whale'
-        db.alter_column('twitterauth_userprofile', 'whale_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['whale.Whale'], null=True))
+        # Changing field 'CylonBayesModel.user_profile'
+        db.alter_column('cylonbayes_cylonbayesmodel', 'user_profile_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['twitterauth.UserProfile']))
 
 
     models = {
@@ -61,53 +55,84 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'status.hashtag': {
+        'cylonbayes.cylonbayesmodel': {
+            'Meta': {'object_name': 'CylonBayesModel'},
+            'data': ('picklefield.fields.PickledObjectField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'last_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'user_profile': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['twitter.TwitterUserProfile']"}),
+            'version': ('django.db.models.fields.CharField', [], {'max_length': '50'})
+        },
+        'profile.userprofile': {
+            'Meta': {'object_name': 'UserProfile'},
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
+            'whale': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['whale.Whale']", 'unique': 'True', 'null': 'True', 'blank': 'True'})
+        },
+        'twitter.hashtag': {
             'Meta': {'object_name': 'Hashtag'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'text': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '140'})
         },
-        'status.hyperlink': {
+        'twitter.hyperlink': {
             'Meta': {'object_name': 'Hyperlink'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'text': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'})
         },
-        'status.status': {
-            'Meta': {'ordering': "['-id']", 'object_name': 'Status'},
-            'ats': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'status_ats'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['twitterauth.UserProfile']"}),
-            'content_length': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'has_hyperlink': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'hashtags': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['status.Hashtag']", 'null': 'True', 'blank': 'True'}),
-            'hyperlinks': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['status.Hyperlink']", 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.BigIntegerField', [], {'primary_key': 'True'}),
-            'in_reply_to_status': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'status_replies'", 'null': 'True', 'to': "orm['status.Status']"}),
-            'in_reply_to_user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'user_replies'", 'null': 'True', 'to': "orm['twitterauth.UserProfile']"}),
-            'punctuation': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'text': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'user_profile': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['twitterauth.UserProfile']", 'null': 'True', 'blank': 'True'})
-        },
-        'twitterauth.rating': {
-            'Meta': {'ordering': "['-rated_time']", 'object_name': 'Rating'},
+        'twitter.rating': {
+            'Meta': {'ordering': "['-rated_time']", 'unique_together': "(('user', 'status'),)", 'object_name': 'Rating'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'rated_time': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'rating': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'status': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['status.Status']"}),
-            'user_profile': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['twitterauth.UserProfile']"})
+            'status': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['twitter.Status']"}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['twitter.TwitterUserProfile']"})
         },
-        'twitterauth.userprofile': {
-            'Meta': {'object_name': 'UserProfile'},
-            'access_token': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+        'twitter.status': {
+            'Meta': {'ordering': "['-id']", 'object_name': 'Status'},
+            'ats': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'status_ats'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['twitter.TwitterUserProfile']"}),
+            'content_length': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'has_hyperlink': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'hashtags': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['twitter.Hashtag']", 'null': 'True', 'blank': 'True'}),
+            'hyperlinks': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['twitter.Hyperlink']", 'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.BigIntegerField', [], {'primary_key': 'True'}),
+            'in_reply_to_status_id': ('django.db.models.fields.BigIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'in_reply_to_user_id': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'place': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'punctuation': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'source': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'text': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['twitter.TwitterUserProfile']", 'null': 'True', 'blank': 'True'})
+        },
+        'twitter.twitteruserprofile': {
+            'Meta': {'object_name': 'TwitterUserProfile'},
             'active_classifier': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'classifier_version': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '160', 'null': 'True', 'blank': 'True'}),
-            'location': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'followers_count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'friends_count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'id': ('django.db.models.fields.BigIntegerField', [], {'primary_key': 'True'}),
+            'last_updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'location': ('django.db.models.fields.CharField', [], {'max_length': '160', 'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'oauth_secret': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'oauth_token': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'profile_background_color': ('django.db.models.fields.CharField', [], {'max_length': '16', 'null': 'True', 'blank': 'True'}),
+            'profile_background_image_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'profile_background_title': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'profile_image_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'profile_link_color': ('django.db.models.fields.CharField', [], {'max_length': '16', 'null': 'True', 'blank': 'True'}),
+            'profile_sidebar_border_color': ('django.db.models.fields.CharField', [], {'max_length': '16', 'null': 'True', 'blank': 'True'}),
+            'profile_sidebar_fill_color': ('django.db.models.fields.CharField', [], {'max_length': '16', 'null': 'True', 'blank': 'True'}),
+            'profile_use_background_image': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'protected': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'ratings': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['status.Status']", 'symmetrical': 'False', 'through': "orm['twitterauth.Rating']", 'blank': 'True'}),
-            'screen_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
-            'training_statuses': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'training'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['status.Status']"}),
+            'ratings': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['twitter.Status']", 'symmetrical': 'False', 'through': "orm['twitter.Rating']", 'blank': 'True'}),
+            'screen_name': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
+            'statuses_count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'training_statuses': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'training'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['twitter.Status']"}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['profile.UserProfile']", 'null': 'True', 'blank': 'True'}),
+            'utc_offset': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'verified': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'whale': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['whale.Whale']", 'unique': 'True', 'null': 'True', 'blank': 'True'})
         },
@@ -120,10 +145,12 @@ class Migration(SchemaMigration):
         },
         'whale.whalespecies': {
             'Meta': {'object_name': 'WhaleSpecies'},
+            'evolution': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['whale.WhaleSpecies']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'img': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'minExp': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'default': "'Baby Whale'", 'max_length': '50', 'unique': 'True', 'null': 'True', 'blank': 'True'})
         }
     }
 
-    complete_apps = ['twitterauth']
+    complete_apps = ['cylonbayes']

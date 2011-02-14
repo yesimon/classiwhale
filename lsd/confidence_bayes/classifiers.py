@@ -17,8 +17,6 @@ import numpy as np
 from scipy.sparse import dok_matrix, csc_matrix, lil_matrix
 
 from extraction import SimpleExtractor
-from twitterauth.models import UserProfile, Rating
-from status.models import Status
 from algorithmio.classifier import Classifier
 from django.core.cache import cache
 from classifiers.models import *
@@ -26,6 +24,8 @@ from django.core.exceptions import MultipleObjectsReturned
 from operator import itemgetter
 import collections
 import copy 
+
+from twitter.models import TwitterUserProfile, Rating, Status
 
 
 

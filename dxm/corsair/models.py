@@ -32,24 +32,24 @@ def round_binary(tup):
 def round_proba(num):
     return (num + 1) / 2
 
-class TrainingSet(models.Model):
+class TwitterTrainingSet(models.Model):
     name = models.CharField(max_length=30, unique=True)
-    user_profiles = models.ManyToManyField(UserProfile)
+    users = models.ManyToManyField(TwitterUserProfile)
     ratings = models.ManyToManyField(Rating, blank=True, null=True)
     
     def __unicode__(self):
         return self.name
     
     def setup(self):
-        profs = self.user_profiles.all()
+        profs = self.users.all()
         ratings = self.ratings.all()
         status_ids = set([r.status_id for r in ratings])
         statuses = Status.objects.in_bulk(status_ids)
         training_set = {}
         for p in profs:
             data = {}
-            data['user_profile'] = p
-            data['ratings'] = [r for r in ratings if r.user_profile_id == p.user_id]
+            data['user'] = p
+            data['ratings'] = [r for r in ratings if r.user_id == p.user_id]
             for r in data['ratings']:
                 r.status = statuses[r.status_id]
             training_set[p.user_id] = data
@@ -71,7 +71,7 @@ class TrainingSet(models.Model):
                                 test_index[i]]
                 if len(train_ratings) < 1 or len(test_ratings) < 1: continue
                 classifier = classifier_library.classifiers[classifier_name]
-                c = classifier(data['user_profile']).test_train(ratings=train_ratings)
+                c = classifier(data['user']).test_train(ratings=train_ratings)
                 y_pred = c.test_predict([rating.status for rating in test_ratings])
 #                print y_pred
                 probas.extend(map(round_proba, y_pred))
@@ -94,14 +94,14 @@ class TrainingSet(models.Model):
                             save=False):
         """Returns a random training set for users already using the relevant
         classifier. Or else returns a random training set. The format is a dict
-        where keys are user_profile_ids and values are dicts with ratings,
+        where keys are twitter user_profile_ids and values are dicts with ratings,
         clicks, and other test data"""
         random.seed()
         if classifier:
-            profs = UserProfile.objects.filter(active_classifier=
+            profs = TwitterUserProfile.objects.filter(active_classifier=
                 classifier).sorted_by('?').select_related('ratings')[:50]
         else:
-            profs = UserProfile.objects.all().sorted_by(
+            profs = TwitterUserProfile.objects.all().sorted_by(
                 '?').select_related('ratings')[:50]
         ratings = []
         for p in profs:
@@ -109,7 +109,7 @@ class TrainingSet(models.Model):
         success = False
         while save and not success:
             try: 
-                t = TrainingSet(user_profiles=profs, ratings=ratings,
+                t = TwitterTrainingSet(users=profs, ratings=ratings,
                     name='random_{0}'.format(random.randint(0, 100000000000)))
                 t.save()
             except:
@@ -119,7 +119,7 @@ class TrainingSet(models.Model):
 
 class PredictionStatistics(models.Model):
     """raw_data is a dict containing y_true, y_probas keys"""
-    training_set = models.ForeignKey(TrainingSet)
+    training_set = models.ForeignKey(TwitterTrainingSet)
     classifier = models.CharField(max_length=50)
     created = models.DateTimeField(auto_now_add=True)
     model = models.CharField(max_length=50)

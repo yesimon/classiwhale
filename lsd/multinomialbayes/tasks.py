@@ -1,9 +1,9 @@
 from celery.decorators import task, periodic_task
 from celery.task.schedules import crontab
 from datetime import datetime, timedelta
-from twitterauth.models import UserProfile
 from django.db.models import Max
 from multinomialbayes.classifiers import MultinomialBayesClassifier
+from twitter.models import TwitterUserProfile
 
 @task()
 def add(x, y):
@@ -21,7 +21,7 @@ def train_all():
     """
 
     # Annotate with most recent rated time and trained time
-    profs = UserProfile.objects.filter(active_classifier=
+    profs = TwitterUserProfile.objects.filter(active_classifier=
         'MultinomialBayesClassifier').annotate(
             rated_time=Max('rating__rated_time'), 
             trained_time=Max('multinomialbayesmodel__last_modified'))
