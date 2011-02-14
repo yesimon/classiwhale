@@ -8,6 +8,15 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
+        # Deleting model 'TrainingSet'
+        db.delete_table('corsair_trainingset')
+
+        # Removing M2M table for field ratings on 'TrainingSet'
+        db.delete_table('corsair_trainingset_ratings')
+
+        # Removing M2M table for field user_profiles on 'TrainingSet'
+        db.delete_table('corsair_trainingset_user_profiles')
+
         # Adding model 'TwitterTrainingSet'
         db.create_table('corsair_twittertrainingset', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -31,33 +40,35 @@ class Migration(SchemaMigration):
         ))
         db.create_unique('corsair_twittertrainingset_ratings', ['twittertrainingset_id', 'rating_id'])
 
-        # Adding model 'PredictionStatistics'
-        db.create_table('corsair_predictionstatistics', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('training_set', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['corsair.TwitterTrainingSet'])),
-            ('classifier', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('model', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('raw_data', self.gf('picklefield.fields.PickledObjectField')()),
-            ('discrimination_bound', self.gf('django.db.models.fields.FloatField')(default=0.0)),
-            ('n_folds', self.gf('django.db.models.fields.IntegerField')()),
-            ('auc', self.gf('django.db.models.fields.FloatField')()),
-            ('ppv', self.gf('django.db.models.fields.FloatField')()),
-            ('npv', self.gf('django.db.models.fields.FloatField')()),
-            ('tpr', self.gf('django.db.models.fields.FloatField')()),
-            ('tnr', self.gf('django.db.models.fields.FloatField')()),
-            ('acc', self.gf('django.db.models.fields.FloatField')()),
-            ('mcc', self.gf('django.db.models.fields.FloatField')()),
-            ('tp', self.gf('django.db.models.fields.IntegerField')()),
-            ('fp', self.gf('django.db.models.fields.IntegerField')()),
-            ('tn', self.gf('django.db.models.fields.IntegerField')()),
-            ('fn', self.gf('django.db.models.fields.IntegerField')()),
-        ))
-        db.send_create_signal('corsair', ['PredictionStatistics'])
+        # Changing field 'PredictionStatistics.training_set'
+        db.alter_column('corsair_predictionstatistics', 'training_set_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['corsair.TwitterTrainingSet']))
 
 
     def backwards(self, orm):
         
+        # Adding model 'TrainingSet'
+        db.create_table('corsair_trainingset', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=30, unique=True)),
+        ))
+        db.send_create_signal('corsair', ['TrainingSet'])
+
+        # Adding M2M table for field ratings on 'TrainingSet'
+        db.create_table('corsair_trainingset_ratings', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('trainingset', models.ForeignKey(orm['corsair.trainingset'], null=False)),
+            ('rating', models.ForeignKey(orm['twitterauth.rating'], null=False))
+        ))
+        db.create_unique('corsair_trainingset_ratings', ['trainingset_id', 'rating_id'])
+
+        # Adding M2M table for field user_profiles on 'TrainingSet'
+        db.create_table('corsair_trainingset_user_profiles', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('trainingset', models.ForeignKey(orm['corsair.trainingset'], null=False)),
+            ('userprofile', models.ForeignKey(orm['twitterauth.userprofile'], null=False))
+        ))
+        db.create_unique('corsair_trainingset_user_profiles', ['trainingset_id', 'userprofile_id'])
+
         # Deleting model 'TwitterTrainingSet'
         db.delete_table('corsair_twittertrainingset')
 
@@ -67,8 +78,8 @@ class Migration(SchemaMigration):
         # Removing M2M table for field ratings on 'TwitterTrainingSet'
         db.delete_table('corsair_twittertrainingset_ratings')
 
-        # Deleting model 'PredictionStatistics'
-        db.delete_table('corsair_predictionstatistics')
+        # Changing field 'PredictionStatistics.training_set'
+        db.alter_column('corsair_predictionstatistics', 'training_set_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['corsair.TrainingSet']))
 
 
     models = {

@@ -14,22 +14,22 @@ setup_environ(settings)
 ######## Script Begin #######
 
 from twitter.models import *
-from corsair.models import TrainingSet
+from corsair.models import TwitterTrainingSet
 
-userprofile_ids = [str(i) for i in range(100, 125)]
+twitteruserprofile_ids = [str(i) for i in range(100, 125)]
 
-userprofile_ids = [str(100)]
+#twitteruserprofile_ids = [str(100)]
 
-ratings = Rating.objects.filter(user__in=userprofile_ids)
-user_profiles = TwitterUserProfile.objects.filter(pk__in=userprofile_ids)
+ratings = Rating.objects.filter(user__in=twitteruserprofile_ids)
+twitter_user_profiles = TwitterUserProfile.objects.filter(pk__in=twitteruserprofile_ids)
 name = 'CS229 Training Set'
 
-name = 'Mini Training Set'
+#name = 'Mini Training Set'
 try:
-    t = TrainingSet.objects.get(name=name)
+    t = TwitterTrainingSet.objects.get(name=name)
 except:
-    t = TrainingSet(name=name)
+    t = TwitterTrainingSet(name=name)
     t.save()
 map(t.ratings.add, ratings)
-map(t.user_profiles.add, user_profiles)
+map(t.users.add, twitter_user_profiles)
 t.save()
