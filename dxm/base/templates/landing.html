@@ -32,12 +32,7 @@
     <script type="text/javascript" src="/static/js/rating.js"></script>
     <script type="text/javascript" src="/static/js/twitpost.js"></script>
     <script type="text/javascript" src="/static/js/training_profile.js"></script>
-
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $("button").button();
-        });
-    </script>
+    <script type="text/javascript" src="/static/js/landing_slideshow.js"></script>
 
 
     {% if GOOGLE_ANALYTICS_KEY %}
@@ -69,7 +64,6 @@
 
 
 <body>
-    <div id="backgroundLanding">
 	{% load base_extras %}
     <div id="nav">	
 		<div class="nav-bound">
@@ -80,25 +74,34 @@
 
 
     {% include "feedback/button.html" %}
-
+    
+    
     <div id="middle">
         <div id="content">
             <div id="landingTop">
-                <div id="landingWhale">
+                <div id="landingSlideshow">
                     <div class="leftbg"></div>
-                        Meet your whale
+                    <img class="slide one active" src="/static/img/landing/slide_one.png"/>
+                    <img class="slide two" src="/static/img/landing/slide_two.png"/>
+                    <img class="slide three " src="/static/img/landing/slide_three.png"/>
+                    <div class="controls">
+                        <div class="page active one" slide="1"><a>1</a></div>
+                        <div class="page two" slide="2"><a>2</a></div>
+                        <div class="page three" slide="3"><a>3</a></div>
+                    </div>
                     <div class="rightbg"></div>
                 </div>
                 <div id="landingLogin">
                     <div class="leftbg"></div>
-                    <div id="landingText">
-                        Would you like to participate in Classiwhale? <br/> <br/> First you need to login via Twitter!
-                    </div>
-                    <button id="buttonLogin" class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all"> <span class="ui_button-text">Login with Twitter </span></button>                              
-                    <div class="rightbg"></div>
+                    <img class="personal" src="/static/img/landing/personal_filter.png"/>
+                    <div class="btn-wrapper">
+                        <img class="button" src="/static/img/landing/sign_in_btn.png"/>or <a target="_blank" href="https://twitter.com/signup">create a new account</a>
+                    </div>  
+                <div class="rightbg"></div>
                 </div>
                 <div class="clear"></div>
             </div>
+            
             <div id="landingSpace"></div>
             <div id="landingBottom">
                 <div id="landingClassiWhale">
@@ -131,7 +134,6 @@
     <div id="footer">
         {% block footer %}
         {% endblock %}
-    </div>
     </div>
 </body>
 
