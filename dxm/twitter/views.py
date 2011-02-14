@@ -56,7 +56,7 @@ def ajax_public_timeline(request):
 def timeline(request):
     user = request.user
     if not user.is_authenticated() or 'twitter_tokens' not in request.session:
-        return HttpResponseRedirect(reverse('twitter.views.public_timeline'))
+        return HttpResponseRedirect('/landing/')
     twitter_tokens = request.session['twitter_tokens']
     user_profile = UserProfile.objects.get(user=user)
     tp = TwitterUserProfile.objects.get(id=twitter_tokens['user_id'])

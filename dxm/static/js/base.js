@@ -1,9 +1,9 @@
 $(document).ready(function() {
-    $('#login').click(function(){
+    $('#loginButton').click(function(){
         $.oauthpopup({
             path: '/twitterauth/login/popup/',
 	    callback: function(){
-	        window.location.reload();
+		window.location.replace("/");
 		}
 	    });
         });
