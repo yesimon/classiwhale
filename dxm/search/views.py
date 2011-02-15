@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
@@ -10,10 +10,10 @@ from twitter.utils import get_authorized_twython
 
 
 
-
-
-@login_required
 def index(request):    
+    if not request.user.is_authenticated() or 'twitter_tokens' not in request.session:
+        return HttpResponseRedirect("/")
+    
     term = request.GET.get('q')
     if term is not None:
         api = get_authorized_twython(request.session['twitter_tokens'])
@@ -23,11 +23,12 @@ def index(request):
                     'term': term
                 }, context_instance=RequestContext(request))
     else:
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect("/")
 
 
-@login_required
 def ajax_index(request):
+    if not request.user.is_authenticated() or 'twitter_tokens' not in request.session:
+        return HttpResponse("")
     if request.is_ajax():
         term = request.GET.get('q')
         page = request.GET.get('page')

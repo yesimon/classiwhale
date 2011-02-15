@@ -4,38 +4,9 @@
 	<div class="nav-bound">
 		{% if user.is_authenticated %}
 		    <a href="{% url twitter.views.timeline %}" class="logo"></a>
-		{% else %}
-		    <a href="{% url twitter.views.public_timeline %}" class="logo"></a>
 		{% endif %}
+		
 		<ul>
-
-<!--
-		  {% if user.is_authenticated %}
-		    <li>
-		      <a href="{% url twitter.views.twitter_logout %}">Logout</a>
-		    </li>
-		  {% else %}
-		    <li>
-		      <a id="login">Login</a>
-  		      <a href="{% url twitter.views.twitter_login %}">Login</a> 
-		    </li>
-		  {% endif %}
-		  
-		    <li class="{% navactive request 'django.views.generic.simple.direct_to_template' %}">
-		    	<a href="/about">About</a>
-		    </li>
-		    
-		    <li class="{% navactive request 'twitter.views.public_timeline' %}">
-		    	<a href="{% url twitter.views.public_timeline %}">Recent</a>
-		    </li>
-		    <li class="{% navactive request 'twitter.views.rating_history' %}">
-		    	<a href="{% url twitter.views.rating_history %}">Profile</a>
-		    </li>
-		    <li class="separator"></li>
-		    <li class="{% navactive request 'twitter.views.timeline' %}">
-		    	<a href="{% url twitter.views.timeline %}">Home</a>
-		    </li>
--->
 		    <li class="searchContainer">
 			    <div>
 			    	<script type="text/javascript">
@@ -106,8 +77,8 @@
                 <a href="{% url twitter.views.timeline %}">Home</a>
             </li>
             <li class="separator"></li>
-            <li class="nav-link {% navactive request 'twitter.views.rating_history' %}">
-                <a href="{% url twitter.views.rating_history %}">Profile</a>
+            <li class="nav-link">
+                <a href="/profile/{{ user.last_name }}">Profile</a>
             </li>
 		{% endif %}
 		</ul>

@@ -254,7 +254,7 @@ body {
 }
 
 #landingReasons .title {
-  color: #e2e2e2;
+  color: #EEE;
   text-align: left;
   font-size: 30px;
   font-family: Times New Roman,Arial;
@@ -265,7 +265,7 @@ body {
 #landingReasons .reasons {
     padding-top: 20px;
     padding-left: 40px;
-    color: #e2e2e2;
+    color: #EEE;
     text-align: left;
     font-size: 17px;
     list-style-image: url("/static/img/landing/check_short.png");
