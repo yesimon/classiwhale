@@ -25,7 +25,7 @@
 			    		}
 			    		
 			    	</script>
-				    <form action="{% url search.views.index %}" method="get">
+				    <form action="{% url twitter.views.search %}" method="get">
 					    <input type="text" id="q" name="q" onfocus="searchFocus(this)" onblur="searchBlur(this)" value="Search"/>
 					    <input type="submit" id="searchSubmit" alt="Search" />
 					    <div class="clear"></div>
@@ -61,7 +61,7 @@
                 <div class="expand" onclick="hideUserMenu()">
                     <a class="name">{{ user.first_name }} {{ user.last_name }}</a>
                     <div class="clear"></div>
-                    <div class="option"><a href="/">Settings</a></div>
+                    
                     <div class="option"><a href="/about">About ClassiWhale</a></div>
                     <div class="option"><a href="{% url twitter.views.twitter_logout %}">Sign Out</a></div>
                     

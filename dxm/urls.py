@@ -59,8 +59,8 @@ urlpatterns = patterns('',
 #    (r'^login/$', 'status.views.training_login'),
 #    (r'^training/$', 'status.views.training_set_posts'),
     
-    (r'^search/$', 'search.views.index'),
-    (r'^search/ajax/$', 'search.views.ajax_index'),
+    (r'^search/$', 'twitter.views.search'),
+    (r'^search/ajax/$', 'twitter.views.ajax_search'),
     
     (r'^feedback/ajax/(.*?)$', 'feedback.views.handle_ajax'),
     

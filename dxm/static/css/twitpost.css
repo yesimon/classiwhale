@@ -1,15 +1,18 @@
 .status-post .postinput {
     display:block;
-    width: 472px;
-    font-family: Ariel;
-    font-size: 20px;
+    width: 462px;
+    font-family: Arial;
+    font-size: 17px;
     color: #AAAAAA;
-    border-color: #AAAAAA;
-    border-width: 2px;
+    border-width: 0px;
+    margin: 5px 6px;
+    height: 42px;
 }
 
-.status-post #post-input-text {
-    padding: 0px 0px 20px 0px;
+#post-input-text {
+    margin: 7px 0 10px;
+    border: 1px solid #888;
+    background-color: white;
 }
 
 .status-prompt .title {

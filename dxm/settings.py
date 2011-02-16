@@ -214,7 +214,6 @@ INSTALLED_APPS = (
     'feedback',
     'twitter',
     'profile',
-    'search',
     'prediction',
     'multinomialbayes',
     'confidence_bayes',

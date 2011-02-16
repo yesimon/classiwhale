@@ -5,12 +5,12 @@ function twitpost(status) {
     	setTimeout('$(".status-post .status-post-alert").fadeOut("slow")', 750);
     } else {
         $.post(
-	    "/status/post/",
-            { status: status },
-	    function(data) {
-	       handleTwitResponse(data);
-	    }
-	       );
+	       "/status/post/",
+           { status: status },
+    	   function(data) {
+    	       handleTwitResponse(data);
+    	   }
+	    );
     }
 }
 
@@ -39,7 +39,7 @@ function startPostHandler(myarray) {
              twitpost($input_text);
              return false;
           });
-    $is_post_form_focused = false;
+
 	$('.status-post .postinput').unbind('autocomplete').autocomplete({ 
 	source: function(request, response) {
 		var last_at_index = request.term.lastIndexOf("@");
@@ -80,18 +80,19 @@ function startPostHandler(myarray) {
 						"</div> </a>" )
 				.appendTo( ul );
 	};
-	$post_form_showing_hint = true;
+	
     $('.status-post .postinput').unbind('focus').focus(function() { 
-    	$is_post_form_focused = true;
-    	$('.status-post .postinput').height("40px");
-    	$('.status-post .postinput').css({'color' : '#444444'});
-    	if($post_form_showing_hint) {
+    	$('.status-post .postinput').css('color','#444');
+    	if($.trim($('.status-post .postinput').val()) == "What's happening?") {
     		$('.status-post .postinput').val("");
-    		$post_form_showing_hint = false;
     	}
-    	
-     });
-    $('.status-post .postinput').unbind('blur').blur(function() { $is_post_form_focused = false; });
+    }).unbind('blur').blur(function() { 
+        if($.trim($('.status-post .postinput').val()) == "") {
+            $('.status-post .postinput').val("What's happening?");
+            $('.status-post .postinput').height("42px").css('color','#AAA');
+        }
+    });
+    
     $('.status-post .postinput').unbind('keyup').keyup(setPostCount);
     $('.status-post .postinput').autoResize({
         animateDuration : 300
