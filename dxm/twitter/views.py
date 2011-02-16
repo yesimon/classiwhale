@@ -30,8 +30,8 @@ DEFAULT_CLASSIFIER_VERSION = '0.1'
 LOGIN_REDIRECT_URL = getattr(settings, 'LOGIN_REDIRECT_URL')
 
     
-
-
+"""
+@login_required
 def public_timeline(request):
     api = Twython()
     statuses = map(Status.construct_from_dict, api.getPublicTimeline())
@@ -51,12 +51,12 @@ def ajax_public_timeline(request):
     results['success'] = 'True'
     html = t.render(RequestContext(request, results))
     return HttpResponse(html)
-
+"""
 
 def timeline(request):
     user = request.user
     if not user.is_authenticated() or 'twitter_tokens' not in request.session:
-        return HttpResponseRedirect('/landing/')
+        return render_to_response('landing.html')
     twitter_tokens = request.session['twitter_tokens']
     user_profile = UserProfile.objects.get(user=user)
     tp = TwitterUserProfile.objects.get(id=twitter_tokens['user_id'])
@@ -72,9 +72,10 @@ def timeline(request):
         },
         context_instance=RequestContext(request))
 
+
 def ajax_timeline(request):
     if not request.user.is_authenticated() or 'twitter_tokens' not in request.session:
-        return HttpResponseRedirect(reverse('twitter.views.public_timeline'))
+        return HttpResponse("")
     twitter_tokens = request.session['twitter_tokens']
     api = get_authorized_twython(twitter_tokens)
     tp = TwitterUserProfile.objects.get(id=twitter_tokens['user_id'])
@@ -90,12 +91,15 @@ def ajax_timeline(request):
         },
         context_instance=RequestContext(request))
 
+
 def public_profile(request, username):
     if request.user.is_authenticated() and 'twitter_tokens' in request.session:
         twitter_tokens = request.session['twitter_tokens']
         api = get_authorized_twython(twitter_tokens)
-    else: # Get public api if no authentication possible
-        api = Twython()
+    else: #require login
+        return HttpResponseRedirect("/")
+        # Get public api if no authentication possible
+        #api = Twython()
     friend = api.showUser(screen_name=username)
     
     friends = api.getFriendsStatus()
@@ -127,7 +131,11 @@ def public_profile(request, username):
         },
         context_instance=RequestContext(request)) 
 
+
 def ajax_user_timeline(request):
+    if not request.user.is_authenticated() or 'twitter_tokens' not in request.session:
+        return HttpResponse("")
+         
     results = {'success': 'False'}
     if request.method != u'GET':
         return HttpResponseBadRequest('Must be GET request')
@@ -141,7 +149,7 @@ def ajax_user_timeline(request):
     max_id = request.GET[u'max_id']
     page = request.GET[u'page']
     
-    if request.user.is_authenticated() and 'twitter_tokens' in request.session:
+    if 'twitter_tokens' in request.session:
         twitter_tokens = request.session['twitter_tokens']
         api = get_authorized_twython(twitter_tokens)
     else: # Get public api if no authentication possible
@@ -153,10 +161,11 @@ def ajax_user_timeline(request):
     html = t.render(RequestContext(request, results))
     return HttpResponse(html)
 
+
 def post_status(request):
     results = {'success':'False'}
     if not request.user.is_authenticated() or 'twitter_tokens' not in request.session:
-        return HttpResponseRedirect(reverse('twitter.views.public_timeline'))
+        return HttpResponse("")
     twitter_tokens = request.session['twitter_tokens']
     API = get_authorized_twython(twitter_tokens)
     status = request.POST[u'status']
@@ -172,7 +181,7 @@ def post_status(request):
 def create_friendship(request):
     results = {'success':'False'}
     if not request.user.is_authenticated() or 'twitter_tokens' not in request.session:
-        return HttpResponseRedirect(reverse('twitter.views.public_timeline'))
+        return HttpResponse("")
     twitter_tokens = request.session['twitter_tokens']
     API = get_authorized_twython(twitter_tokens)
     username = request.POST[u'friend_username']
@@ -183,6 +192,7 @@ def create_friendship(request):
         pass
     jsonResults = json.dumps(results)
     return HttpResponse(jsonResults, mimetype='application/json')
+
 
 def ajax_rate(request):
     results = {'success':'False'}
@@ -223,9 +233,9 @@ def ajax_rate(request):
     return HttpResponse(jsonResults, mimetype='application/json')
 
 
-@login_required
+"""
 def rating_history(request):
-    """Returns list of dicts giving tweet id and rating (like/dislike) for rated tweets"""
+    #Returns list of dicts giving tweet id and rating (like/dislike) for rated tweets
     # Paginator generates two database queries unfortunately - negating benefits?
     twitter_tokens = request.session['twitter_tokens']
     tp = TwitterUserProfile.objects.get(id=twitter_tokens['user_id'])
@@ -242,7 +252,7 @@ def rating_history(request):
     return render_to_response('twitter/rating_history.html',
         {'ratings': ratings},
         context_instance=RequestContext(request)) 
-
+"""
 
 
 def twitter_logout(request, next_page):
@@ -340,7 +350,7 @@ def twitter_return(request, window_type):
         return render_to_response("twitter/twitter_return.html", {},
                                   context_instance=RequestContext(request))
     else:
-        return HttpResponseRedirect("/status/recent/")
+        return HttpResponseRedirect("/")
 
 
 
