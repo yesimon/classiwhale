@@ -3,7 +3,7 @@ $(document).ready(function() {
 });
 
 
-
+/* Hotkeys disabled for now
 $(document).keydown(function(event) {
     if(shouldUseHotkeys()) {
         if (event.keyCode == 74) { // 'j'
@@ -17,6 +17,7 @@ $(document).keydown(function(event) {
         }
     }
 });
+*/
 
 function shouldUseHotkeys() {
 	if(window.$is_post_form_focused == undefined) return true;
