@@ -2,10 +2,9 @@
 
 <div id="nav">	
 	<div class="nav-bound">
-		{% if user.is_authenticated %}
-		    <a href="{% url twitter.views.timeline %}" class="logo"></a>
-		{% endif %}
+		<a href="{% url twitter.views.timeline %}" class="logo"></a>
 		
+        {% if user.is_authenticated %}
 		<ul>
 		    <li class="searchContainer">
 			    <div>
@@ -32,8 +31,6 @@
 				    </form>
 			    </div>
 		    </li>
-		    
-		{% if user.is_authenticated %}
 
 		    <script type="text/javascript">
             function hideUserMenu(){
@@ -80,8 +77,8 @@
             <li class="nav-link">
                 <a href="{% url twitter.views.public_profile twitter_user.screen_name %}">Profile</a>
             </li>
-		{% endif %}
 		</ul>
+        {% endif %}
 	</div>
 </div>
 <div class="clear"></div>

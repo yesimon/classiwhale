@@ -1,17 +1,22 @@
 #aboutBackground{
-    background-color:#1E2746; 
-    padding:25px;
-    color: white;
-    height: 400px;
+    background-color: rgba(30, 40, 70, 0.85); 
+    color: #F0F0F0;
+    margin: -10px auto auto;
+    width: 550px;
 }
 
+#aboutBackground .pad {
+    margin:25px;
+}
 
 #aboutTitle {
     min-width: 500px;
     font-weight: bold;
-    font-size: 40px;
+    font-size: 34px;
+    margin-top: 10px;
 }
 
 #aboutContent {
-    font-size: 17px;
+    font-size: 15px;
+    margin-top:30px;
 }
