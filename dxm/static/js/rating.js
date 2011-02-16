@@ -92,10 +92,11 @@ function rate(kind, status){
         "/status/ajax_rate/", 
         { rating: kind, status: status }, 
 	function(data) {
-	    setWhaleProgress(data.exp, data['min-exp'], data['max-exp']);
 	    var photo = $(".whale-photo")[0];
-	    if (photo.src != data.species)
+	    if (photo.src != data.species) {
 		photo.src = data.species;
+		setWhaleProgress(data.exp, data['min-exp'], data['max-exp']);
+	    }
 	}
     );
 }
@@ -103,6 +104,11 @@ function rate(kind, status){
 function rateLike() {
     entry = $(this).closest(".status");
     rate("up", entry.attr("data-status"));
+
+    if ($(this).hasClass('inactive') && $(this).next().hasClass('inactive'))
+    {
+	setWhaleProgress(whaleExp++, minExp, maxExp);
+    }
 
     $(this).next().removeClass('active');
     $(this).next().addClass('inactive');
@@ -117,6 +123,11 @@ function rateDislike() {
     entry = $(this).closest(".status");
     rate("down", entry.attr("data-status"));
     
+    if ($(this).hasClass('inactive') && $(this).next().hasClass('inactive'))
+    {
+	setWhaleProgress(whaleExp++, minExp, maxExp);
+    }
+
     $(this).prev().removeClass('active');
     $(this).prev().addClass('inactive');
     
