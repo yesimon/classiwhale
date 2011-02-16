@@ -96,17 +96,16 @@ def public_profile(request, username):
     if request.user.is_authenticated() and 'twitter_tokens' in request.session:
         twitter_tokens = request.session['twitter_tokens']
         api = get_authorized_twython(twitter_tokens)
-    else: #require login
+    else: # Require login
         return HttpResponseRedirect("/")
-        # Get public api if no authentication possible
-        #api = Twython()
     friend = api.showUser(screen_name=username)
     
     friends = api.getFriendsStatus()
     prof = request.user.get_profile()
-    
+    tp = TwitterUserProfile.objects.get(user=prof)
     try:
         statuses = Status.construct_from_dicts(api.getUserTimeline(screen_name=username))
+        Rating.appendTo(statuses, tp)
     except TwythonError:
         outgoing = api.friendshipsOutgoing()
         follow_request_sent = False
@@ -343,7 +342,7 @@ def twitter_return(request, window_type):
     # user having logged in.
     try:
         user = User.objects.get(username=username)
-        tp = TwitterUserProfile.objects.get(id=user.id)
+        tp = TwitterUserProfile.objects.get(user=user.id)
     except:
         # Create User, UserProfile, TwitterUserProfile
         twitter_user = api.verifyCredentials()

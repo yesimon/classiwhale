@@ -78,7 +78,7 @@
             </li>
             <li class="separator"></li>
             <li class="nav-link">
-                <a href="/profile/{{ user.last_name }}">Profile</a>
+                <a href="{% url twitter.views.public_profile twitter_user.screen_name %}">Profile</a>
             </li>
 		{% endif %}
 		</ul>
