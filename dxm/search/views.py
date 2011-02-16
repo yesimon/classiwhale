@@ -17,8 +17,8 @@ def index(request):
     term = request.GET.get('q')
     if term is not None:
         api = get_authorized_twython(request.session['twitter_tokens'])
-        statuses = TwitterUserProfile.construct_from_dicts(api.searchUsers(q=term))
-        return  render_to_response('search_index.html', {
+        statuses = Status.construct_from_search_dicts(api.searchTwitter(q=term)[u'results'])
+        return render_to_response('search_index.html', {
                     'statuses': statuses,
                     'term': term
                 }, context_instance=RequestContext(request))
@@ -33,7 +33,7 @@ def ajax_index(request):
         page = request.GET.get('page')
         if (term is not None and page is not None):
             api = get_authorized_twython(request.session['twitter_tokens'])
-            statuses = TwitterUserProfile.construct_from_dicts(api.searchUsers(q=term))
+            statuses = Status.construct_from_search_dicts(api.searchTwitter(q=term, page=page)[u'results'])
             return render_to_response('twitter/status_list.html', {
                                          'statuses': statuses
                                       }, context_instance=RequestContext(request))

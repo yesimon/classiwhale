@@ -23,9 +23,9 @@ from django.db import transaction
 from django.contrib.auth.models import User
 from twython import Twython
 
-from twitterauth.models import UserProfile as OldTwitterUserProfile
-from status.models import Status as OldStatus
-from twitterauth.models import Rating as OldRating
+#from twitterauth.models import UserProfile as OldTwitterUserProfile
+#from status.models import Status as OldStatus
+#from twitterauth.models import Rating as OldRating
 
 from twitter.models import *
 
@@ -52,6 +52,8 @@ def FixUserProfiles():
         tp = TwitterUserProfile.objects.get(id=twitter_id)
 
         tp.user = prof
+        tp.active_classifier = 'CylonBayesClassifier'
+        tp.classifier_version = '0.1'
         tp.save(override=True)
 
 
