@@ -63,3 +63,8 @@ function relative_time(time_value) {
        return (parseInt(delta / 86400)).toString() + ' days ago';
    }
 }
+
+
+
+
+

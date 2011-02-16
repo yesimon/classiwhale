@@ -112,12 +112,15 @@ class Status(models.Model):
     available_fields = ('id', 'text', 'user', 'place', 'source', 'created_at',
                         'in_reply_to_user_id', 'in_reply_to_status_id')
 
-    def save(self, *args, **kwargs):
-        field_dict = {}
-        for key, value in self.__dict__.iteritems():
-            if key in self.available_fields:
-                field_dict[str(key)] = value
-        status = Status(**field_dict)
+    def save(self, override=False, *args, **kwargs):
+        if override: 
+            status = self
+        else:
+            field_dict = {}
+            for key, value in self.__dict__.iteritems():
+                if key in self.available_fields:
+                    field_dict[str(key)] = value
+            status = Status(**field_dict)
         super(Status, status).save(*args, **kwargs)
 
     class Meta:
@@ -148,6 +151,21 @@ class Status(models.Model):
         setattr(status, 'json', json_string)
         return status
 
+    @classmethod
+    def construct_from_search_dict(cls, data):
+        if 'metadata' not in data:
+            raise KeyError
+        data['created_at'] = datetime.fromtimestamp(mktime(parsedate(data['created_at'])))
+        user = TwitterUserProfile(profile_image_url=data['profile_image_url'],
+                                  screen_name=data['from_user'])
+        data['user'] = user
+        field_dict = {}
+        for key, value in data.iteritems():
+            if key in cls.available_fields:
+                field_dict[str(key)] = value
+        status = Status(**field_dict)
+        return status
+
     def deconstruct_to_dict(self):
         try: return json.loads(self.json)
         except AttributeError: pass
@@ -170,6 +188,10 @@ class Status(models.Model):
     @staticmethod
     def construct_from_dicts(dicts):
         return map(Status.construct_from_dict, dicts)
+
+    @staticmethod
+    def construct_from_search_dicts(dicts):
+        return map(Status.construct_from_search_dict, dicts)
 
     def relative_created_at(self):
         '''Get a human redable string representing the posting time

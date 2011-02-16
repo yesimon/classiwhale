@@ -1,16 +1,18 @@
+
+
 function twitpost(status) {
     if(status.length == 0) {
     	$('.status-post .status-post-alert').replaceWith('<span class="status-post-alert"> Please enter a message </span>');
-    	$('#postinput').focus();
+    	$('.status-post .postinput').focus();
     	setTimeout('$(".status-post .status-post-alert").fadeOut("slow")', 750);
     } else {
         $.post(
-	    "/status/post/",
-            { status: status },
-	    function(data) {
-	       handleTwitResponse(data);
-	    }
-	       );
+	       "/status/post/",
+           { status: status },
+    	   function(data) {
+    	       handleTwitResponse(data);
+    	   }
+	    );
     }
 }
 
@@ -23,9 +25,9 @@ function handleTwitResponse(data) {
 }
 
 function setPostCount() {
-	var charCount = $('#postinput').val().length;
+	var charCount = $.trim($('.status-post .postinput').val()).length;
 	var charsRemaining = 140 - charCount;
-	$('.status-post .status-post-char-count').replaceWith('<span class="status-post-char-count">' + charsRemaining.toString() + '</div>');
+	$('.status-post .status-post-char-count').html(charsRemaining);
 }
 
 
@@ -35,12 +37,12 @@ function setPostCount() {
 function startPostHandler(myarray) {
     $('.status-post .status-post-button').unbind('click').click(
           function() {
-             $input_text = $('#postinput').val();
+             $input_text = $('.status-post .postinput').val();
              twitpost($input_text);
              return false;
           });
-    $is_post_form_focused = false;
-	$('#postinput').unbind('autocomplete').autocomplete({ 
+
+	$('.status-post .postinput').unbind('autocomplete').autocomplete({ 
 	source: function(request, response) {
 		var last_at_index = request.term.lastIndexOf("@");
 		var cur_at_mention = "";
@@ -62,6 +64,9 @@ function startPostHandler(myarray) {
 		return false;
 	},
 	select: function( event, ui ) {
+		if(event.keyCode == 9) { // tab key
+		    event.preventDefault();
+		}
 		var last_at_index = this.value.lastIndexOf("@");
 		this.value = this.value.substr(0, last_at_index) + "@" + ui.item.screen_name;
 		return false;
@@ -77,7 +82,23 @@ function startPostHandler(myarray) {
 						"</div> </a>" )
 				.appendTo( ul );
 	};
-    $('#postinput').unbind('focus').focus(function() { $is_post_form_focused = true; });
-    $('#postinput').unbind('blur').blur(function() { $is_post_form_focused = false; });
-    $('#postinput').unbind('keyup').keyup(setPostCount);
+	
+    $('.status-post .postinput').unbind('focus').focus(function() { 
+    	$('.status-post .postinput').css('color','#444');
+    	if($.trim($('.status-post .postinput').val()) == "What's happening?") {
+    		$('.status-post .postinput').val("");
+    	}
+    }).unbind('blur').blur(function() { 
+        if($.trim($('.status-post .postinput').val()) == "") {
+            $('.status-post .postinput').val("What's happening?");
+            $('.status-post .postinput').height("42px").css('color','#AAA');
+        }
+    });
+    
+    $('.status-post .postinput').unbind('keyup').keyup(setPostCount);
+    //$('.status-post .postinput').unbind('change').change(setPostCount);
+    $('.status-post .postinput').autoResize({
+        animateDuration : 300
+    });
 }
+

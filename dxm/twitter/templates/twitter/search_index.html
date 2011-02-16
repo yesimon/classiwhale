@@ -6,17 +6,12 @@ Recent Tweets
 
 {% block middle %} 
 
-    <div class="status-prompt">
-        <div>{{ friend.name }}</div>
-        <img class="photo" width="48" height="48" src="{{ friend.profile_image_url }}" alt="{{ friend.name }} " /> 
-    </div>
-    
     <script type="text/javascript">
     $(function() {
         $(window).infinitescroll({
-            url: "/status/ajax_user_timeline/",
+            url: "/search/ajax/",
             appendTo: ".statuses",
-            getParams: 'screenname={{ friend.screen_name|urlencode }}&max_id={{ max_id }}'
+            getParams: 'q={{ term|urlencode }}'
         });
         
         $(window).bind('infinitescroll.finish', function() {
@@ -24,7 +19,11 @@ Recent Tweets
         });
     });
     </script>
-    
+
+    <div class="status-prompt">
+        <div>Results for "{{ term }}"</div>
+    </div>
+
     <div class="statuses">
        {% include 'twitter/status_list.html' %}
     </div>
