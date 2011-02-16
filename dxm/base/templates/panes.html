@@ -13,6 +13,7 @@
                             {% block title %}
                             {% endblock %}
                         </div>
+                        {% if request.path == "/" or request.path == "/algorithm/predict/" %}
 					    <ul class="links">
                             <li class="{% ifequal request.path "/" %}active{% endifequal %}">
                                 <a href="/">Unfiltered</a>
@@ -21,6 +22,7 @@
                                 <a href="{% url prediction.views.predicted_friends_timeline %}">Filtered</a>
                             </li>
                         </ul>
+                        {% endif %}
 					    <div class="right-bg"></div>
 					</div>
 				</div>

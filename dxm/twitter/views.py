@@ -229,7 +229,8 @@ def ajax_rate(request):
     results['species'] = prof.whale.species.img.url
     results['speciesName'] = prof.whale.species.name
     jsonResults = json.dumps(results)
-    return HttpResponse(jsonResults, mimetype='application/json')
+    return HttpResponse("")
+    #return HttpResponse(jsonResults, mimetype='application/json')
 
 
 def search(request):    
@@ -238,12 +239,19 @@ def search(request):
     
     term = request.GET.get('q')
     if term is not None:
-        api = get_authorized_twython(request.session['twitter_tokens'])
+        prof = request.user.get_profile()
+        twitter_tokens = request.session['twitter_tokens']
+        api = get_authorized_twython(twitter_tokens)
+        tp = TwitterUserProfile.objects.get(id=twitter_tokens['user_id'])
         statuses = Status.construct_from_search_dicts(api.searchTwitter(q=term)[u'results'])
+        friends = api.getFriendsStatus()
+        Rating.appendTo(statuses, tp)
         return render_to_response('twitter/search_index.html', {
-                    'statuses': statuses,
-                    'term': term
-                }, context_instance=RequestContext(request))
+            'whale': prof.whale,
+            'friends': friends,
+            'statuses': statuses,
+            'term': term
+        }, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect("/")
 

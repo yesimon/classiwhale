@@ -1,3 +1,5 @@
+
+
 function twitpost(status) {
     if(status.length == 0) {
     	$('.status-post .status-post-alert').replaceWith('<span class="status-post-alert"> Please enter a message </span>');
@@ -23,9 +25,9 @@ function handleTwitResponse(data) {
 }
 
 function setPostCount() {
-	var charCount = $('.status-post .postinput').val().length;
+	var charCount = $.trim($('.status-post .postinput').val()).length;
 	var charsRemaining = 140 - charCount;
-	$('.status-post .status-post-char-count').replaceWith('<span class="status-post-char-count">' + charsRemaining.toString() + '</div>');
+	$('.status-post .status-post-char-count').html(charsRemaining);
 }
 
 
@@ -94,7 +96,9 @@ function startPostHandler(myarray) {
     });
     
     $('.status-post .postinput').unbind('keyup').keyup(setPostCount);
+    //$('.status-post .postinput').unbind('change').change(setPostCount);
     $('.status-post .postinput').autoResize({
         animateDuration : 300
     });
 }
+
