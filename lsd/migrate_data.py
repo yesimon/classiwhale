@@ -48,7 +48,7 @@ def FixUserProfiles():
             twitter_id = int(u.username.split('@')[0])
             prof = UserProfile.objects.get(user=u)
         except: continue
-        print("Fixing user {0}".format(twitter_id))
+        print("Fixing user {0} {1}".format(u.first_name, u.last_name))
         tp = TwitterUserProfile.objects.get(id=twitter_id)
 
         tp.user = prof

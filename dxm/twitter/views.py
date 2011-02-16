@@ -311,7 +311,7 @@ def twitter_return(request, window_type):
     # user having logged in.
     try:
         user = User.objects.get(username=username)
-        tp = TwitterUserProfile.objects.get(id=user.id)
+        tp = TwitterUserProfile.objects.get(user=user.id)
     except:
         # Create User, UserProfile, TwitterUserProfile
         twitter_user = api.verifyCredentials()
