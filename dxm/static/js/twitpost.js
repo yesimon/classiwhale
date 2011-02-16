@@ -62,6 +62,9 @@ function startPostHandler(myarray) {
 		return false;
 	},
 	select: function( event, ui ) {
+		if(event.keyCode == 9) { // tab key
+		    event.preventDefault();
+		}
 		var last_at_index = this.value.lastIndexOf("@");
 		this.value = this.value.substr(0, last_at_index) + "@" + ui.item.screen_name;
 		return false;
@@ -77,11 +80,15 @@ function startPostHandler(myarray) {
 						"</div> </a>" )
 				.appendTo( ul );
 	};
+	$post_form_showing_hint = true;
     $('.status-post .postinput').unbind('focus').focus(function() { 
     	$is_post_form_focused = true;
     	$('.status-post .postinput').height("40px");
     	$('.status-post .postinput').css({'color' : '#444444'});
-    	$('.status-post .postinput').val("");
+    	if($post_form_showing_hint) {
+    		$('.status-post .postinput').val("");
+    		$post_form_showing_hint = false;
+    	}
     	
      });
     $('.status-post .postinput').unbind('blur').blur(function() { $is_post_form_focused = false; });
