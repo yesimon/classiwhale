@@ -24,7 +24,7 @@ from django.contrib.auth.models import User
 from twython import Twython
 
 #from twitterauth.models import UserProfile as OldTwitterUserProfile
-#from status.models import Status as OldStatus
+from status.models import Status as OldStatus
 #from twitterauth.models import Rating as OldRating
 
 from twitter.models import *
@@ -59,8 +59,8 @@ def FixUserProfiles():
 
 def MigrateStatuses():
     old_statuses = OldStatus.objects.all()
-    new_statuses_ids = set([s.id for s in Status.objects.all()])
-    old_statuses = [s for s in old_statuses if s.id not in new_statuses_ids]
+#    new_statuses_ids = set([s.id for s in Status.objects.all()])
+#    old_statuses = [s for s in old_statuses if s.id not in new_statuses_ids]
     for status in old_statuses:
         setattr(status, 'user', status.user_profile_id)
         field_dict = {}
@@ -70,10 +70,10 @@ def MigrateStatuses():
         field_dict['user_id'] = field_dict['user']
         del field_dict['user']
         s = Status(**field_dict)
-        try: Status.objects.get(id=s.id)
-        except:
-            print("Migrating status {0}".format(status.id))
-            s.save()
+#        try: Status.objects.get(id=s.id)
+#        except:
+        print("Migrating status {0}".format(status.id))
+        s.save(override=True)
 
 def MigrateRatings():
     old_ratings = OldRating.objects.all()
@@ -86,4 +86,4 @@ def MigrateRatings():
         r.save()
 
 if __name__ == "__main__":
-    FixUserProfiles()
+    MigrateStatuses()

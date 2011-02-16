@@ -112,12 +112,15 @@ class Status(models.Model):
     available_fields = ('id', 'text', 'user', 'place', 'source', 'created_at',
                         'in_reply_to_user_id', 'in_reply_to_status_id')
 
-    def save(self, *args, **kwargs):
-        field_dict = {}
-        for key, value in self.__dict__.iteritems():
-            if key in self.available_fields:
-                field_dict[str(key)] = value
-        status = Status(**field_dict)
+    def save(self, override=False, *args, **kwargs):
+        if override: 
+            status = self
+        else:
+            field_dict = {}
+            for key, value in self.__dict__.iteritems():
+                if key in self.available_fields:
+                    field_dict[str(key)] = value
+            status = Status(**field_dict)
         super(Status, status).save(*args, **kwargs)
 
     class Meta:

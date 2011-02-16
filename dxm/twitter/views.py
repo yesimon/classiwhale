@@ -206,6 +206,14 @@ def ajax_rate(request):
 
     rating = POST[u'rating']
     status = Status.construct_from_dict(json.loads(POST[u'status']))
+
+    # Show user if tweet delivered from Search API, which does not have correct userid
+    # TODO: a more elegant solution
+    if not status.user.id:
+        api = get_authorized_twython(request.session['twitter_tokens'])        
+        api_user = api.showUser(screen_name=status.user.screen_name)
+        setattr(status, 'user', TwitterUserProfile.construct_from_dict(api_user))
+
     tp = TwitterUserProfile.objects.get(id=request.session['twitter_tokens']['user_id'])
     prof = u.get_profile()
     status.save_with_user()
