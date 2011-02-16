@@ -151,7 +151,7 @@ label {
     display:block;
 }
 
-textarea {
+#feedback_popup textarea {
     min-height:70px;
     width:221px;
 }

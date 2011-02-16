@@ -1,7 +1,7 @@
 function twitpost(status) {
     if(status.length == 0) {
     	$('.status-post .status-post-alert').replaceWith('<span class="status-post-alert"> Please enter a message </span>');
-    	$('#postinput').focus();
+    	$('.status-post .postinput').focus();
     	setTimeout('$(".status-post .status-post-alert").fadeOut("slow")', 750);
     } else {
         $.post(
@@ -23,7 +23,7 @@ function handleTwitResponse(data) {
 }
 
 function setPostCount() {
-	var charCount = $('#postinput').val().length;
+	var charCount = $('.status-post .postinput').val().length;
 	var charsRemaining = 140 - charCount;
 	$('.status-post .status-post-char-count').replaceWith('<span class="status-post-char-count">' + charsRemaining.toString() + '</div>');
 }
@@ -35,12 +35,12 @@ function setPostCount() {
 function startPostHandler(myarray) {
     $('.status-post .status-post-button').unbind('click').click(
           function() {
-             $input_text = $('#postinput').val();
+             $input_text = $('.status-post .postinput').val();
              twitpost($input_text);
              return false;
           });
     $is_post_form_focused = false;
-	$('#postinput').unbind('autocomplete').autocomplete({ 
+	$('.status-post .postinput').unbind('autocomplete').autocomplete({ 
 	source: function(request, response) {
 		var last_at_index = request.term.lastIndexOf("@");
 		var cur_at_mention = "";
@@ -77,7 +77,16 @@ function startPostHandler(myarray) {
 						"</div> </a>" )
 				.appendTo( ul );
 	};
-    $('#postinput').unbind('focus').focus(function() { $is_post_form_focused = true; });
-    $('#postinput').unbind('blur').blur(function() { $is_post_form_focused = false; });
-    $('#postinput').unbind('keyup').keyup(setPostCount);
+    $('.status-post .postinput').unbind('focus').focus(function() { 
+    	$is_post_form_focused = true;
+    	$('.status-post .postinput').height("40px");
+    	$('.status-post .postinput').css({'color' : '#444444'});
+    	$('.status-post .postinput').val("");
+    	
+     });
+    $('.status-post .postinput').unbind('blur').blur(function() { $is_post_form_focused = false; });
+    $('.status-post .postinput').unbind('keyup').keyup(setPostCount);
+    $('.status-post .postinput').autoResize({
+        animateDuration : 300
+    });
 }

@@ -22,11 +22,13 @@ Recent Tweets
 	<div class="status-prompt">
 	    <div class="title">What&#39;s happening?</div>
 	    <div class="status-post">
-            <div id="post-input-text"><input type="text" id="postinput" width="200"/></div>
+            <div id="post-input-text"><textarea class="postinput" rows="1">Update your status...</textarea></div>
+            <div>
 			<span class="status-post-button"></span>
             <span class="status-post-char-count">140</span>
 			<span class="status-post-alert"></span>
             <div class="clear"></div>
+            </div>
         </div>
 	</div>
 
@@ -37,6 +39,7 @@ Recent Tweets
     {% load compress %}
     {% compress js %}
     <script type="text/javascript" src="/static/js/twitpost.js"></script>
+    <script type="text/javascript" src="/static/js/autoresize.jquery.js"></script>
     {% endcompress %}
     
     <script type="text/javascript">
