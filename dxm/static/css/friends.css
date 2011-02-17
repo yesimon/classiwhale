@@ -1,7 +1,7 @@
 .screen_name {
-    float: right;
+    float: left;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 90px;
+    width: 85px;
 }
