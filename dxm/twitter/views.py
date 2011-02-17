@@ -58,7 +58,6 @@ def timeline(request):
     if not user.is_authenticated() or 'twitter_tokens' not in request.session:
         return render_to_response('landing.html')
     twitter_tokens = request.session['twitter_tokens']
-    user_profile = UserProfile.objects.get(user=user)
     tp = TwitterUserProfile.objects.get(id=twitter_tokens['user_id'])
     api = get_authorized_twython(twitter_tokens)
     statuses = Status.construct_from_dicts(api.getFriendsTimeline())
@@ -66,7 +65,6 @@ def timeline(request):
     Rating.appendTo(statuses, tp)
     return render_to_response('twitter/timeline.html',
         {
-          'whale': user_profile.whale,
           'statuses': statuses,
           'friends': friends
         },
@@ -113,7 +111,6 @@ def public_profile(request, username):
             follow_request_sent = True
         return render_to_response('twitter/protected_profile.html',
             {
-             'whale': prof.whale,
              'friends': friends,
              'username': username,
              'friend': friend,
@@ -122,7 +119,6 @@ def public_profile(request, username):
              context_instance=RequestContext(request)) 
     return render_to_response('twitter/public_profile.html',
         {
-         'whale': prof.whale,
          'friends': friends,
          'username': username,
          'friend': friend,
