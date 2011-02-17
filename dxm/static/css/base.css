@@ -2,7 +2,6 @@
 
 body {
   font: 13px/20px "Lucida Grande", Arial, Sans-serif;
-  background: url("/static/img/main_back.jpg") no-repeat center 60px #1E2746;
 }
 
 div {
@@ -32,7 +31,8 @@ a {
 }
 
 #background {
-  background: url("/static/img/main_back.jpg") no-repeat center 60px #1E2746;
+  background: url("/static/img/main_back.jpg") no-repeat center; 
+  background-size: cover;
   position: fixed;
   top: 0px;
   width: 100%;
