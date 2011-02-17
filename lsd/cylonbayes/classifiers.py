@@ -173,7 +173,7 @@ class CylonBayesClassifier(Classifier):
         mb_model = self.get_cylon_bayes_model()
         mb = mb_model.data
         seen_statuses = mb.statuses
-        ratings_list = Rating.objects.filter(user_profile=self.prof).exclude(
+        ratings_list = Rating.objects.filter(user=self.prof).exclude(
             status__id__in=seen_statuses).order_by(
             '-rated_time').select_related('status')
         train_set = []
