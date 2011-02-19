@@ -24,10 +24,15 @@ function handleTwitResponse(data) {
     }
 }
 
-function setPostCount() {
+function updatePostCount() {
 	var charCount = $.trim($('.status-post .postinput').val()).length;
 	var charsRemaining = 140 - charCount;
 	$('.status-post .status-post-char-count').html(charsRemaining);
+}
+
+function setPostCount() {
+	// Timeout this so it updates correctly
+	setTimeout("updatePostCount()", 5);
 }
 
 
