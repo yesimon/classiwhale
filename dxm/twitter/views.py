@@ -226,7 +226,7 @@ def ajax_rate(request):
         if prof.whale.exp == prof.whale.species.evolution.minExp: prof.whale.species = prof.whale.species.evolution
         prof.whale.save()
     r.rating = rating_int
-    r.save()
+    r.saves()
     results['success'] = 'True'
     results['exp'] = prof.whale.exp
     results['min-exp'] = prof.whale.species.minExp
@@ -355,7 +355,7 @@ def twitter_return(request, window_type):
     # user having logged in.
     try:
         user = User.objects.get(username=username)
-        tp = TwitterUserProfile.objects.get(user=user.id)
+
     except:
         # Create User, UserProfile, TwitterUserProfile
         twitter_user = api.verifyCredentials()
@@ -376,7 +376,10 @@ def twitter_return(request, window_type):
         up.whale = whale
         up.save()
 
-        tp = TwitterUserProfile()
+        try:
+            tp = TwitterUserProfile.objects.get(user=user.id)
+        except TwitterUserProfile.DoesNotExist:
+            tp = TwitterUserProfile()
         tp.__dict__.update(twitter_user)
         tp.user = up
         tp.oauth_token = twitter_tokens['oauth_token']

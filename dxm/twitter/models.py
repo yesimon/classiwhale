@@ -52,6 +52,10 @@ class TwitterUserProfile(models.Model):
                         'friends_count', 'followers_count', 'statuses_count', 
                         'description', 'utc_offset')
 
+    internal_fields = ('user', 'oauth_token', 'oauth_secret',
+                       'active_classifier', 'classifier_version', 'whale')
+
+
     def __unicode__(self):
         return "%s's twitter profile" % self.screen_name
 
@@ -61,7 +65,7 @@ class TwitterUserProfile(models.Model):
         else:
             field_dict = {}
             for key, value in self.__dict__.iteritems():
-                if key in self.available_fields:
+                if key in self.available_fields or key in self.internal_fields:
                     field_dict[str(key)] = value
             user = TwitterUserProfile(**field_dict)
         super(TwitterUserProfile, user).save(*args, **kwargs)
@@ -112,13 +116,15 @@ class Status(models.Model):
     available_fields = ('id', 'text', 'user', 'place', 'source', 'created_at',
                         'in_reply_to_user_id', 'in_reply_to_status_id')
 
+    internal_fields = ()
+
     def save(self, override=False, *args, **kwargs):
         if override: 
             status = self
         else:
             field_dict = {}
             for key, value in self.__dict__.iteritems():
-                if key in self.available_fields:
+                if key in self.available_fields or key in self.internal_fields:
                     field_dict[str(key)] = value
             status = Status(**field_dict)
         super(Status, status).save(*args, **kwargs)
