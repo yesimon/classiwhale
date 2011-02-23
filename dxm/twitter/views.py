@@ -226,7 +226,7 @@ def ajax_rate(request):
         if prof.whale.exp == prof.whale.species.evolution.minExp: prof.whale.species = prof.whale.species.evolution
         prof.whale.save()
     r.rating = rating_int
-    r.saves()
+    r.save()
     results['success'] = 'True'
     results['exp'] = prof.whale.exp
     results['min-exp'] = prof.whale.species.minExp
