@@ -38,7 +38,7 @@ $(document).ready(function() {
 
 {% block extra_css %}
 <link rel="stylesheet" type="text/css" href="{% url corsair-media "css/demo_table_jui.css" %}" />
-<link rel="stylesheet" type="text/css" href="{% url corsair-media "css/jquery-ui-1.8.4.custom.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% url corsair-media "css/jquery-ui-1.8.9.custom.css" %}" />
 
 
 <style>
@@ -65,7 +65,7 @@ top: 50%;
 
 
 {% block content %}
-<div id="sidebar" style="background:#EEE;">
+<div id="sidebar">
   <h2>Training Sets</h2>
   <ul id="training_set_list">
     {% for training_set in training_sets %}
@@ -75,25 +75,27 @@ top: 50%;
 </div>
 
 <div id="content">
-  <div id="contentwrap" style="width:850px;">
+  <div id="contentwrap">
     <div class="demo_jui">
     <table class="datatable" class="display" cellpadding="0" cellspacing="0" border="0" id="benchTable" style="width:100%;">
       <thead>
 	<tr>
+	  <th class="training_set">Training Set</th>
 	  <th class="header">Classifier</th>
 	  <th class="model">Model</th>
 	  <th title="Area Under ROC Curve" class="auc">AUC</th>
 	  <th title="Matthews Correlation Coefficient" class="mcc">MCC</th>
-	  <th class="acc">Accuracy</th>
-	  <th class="ppv">Precision</th>
+	  <th class="acc">Acc</th>
+	  <th class="ppv">Prec</th>
 	  <th title="Negative Predictive Value" class="npv">NPV</th>
 	  <th class="tpr">Recall</th>
-	  <th class="tnr">Specificity</th>
+	  <th class="tnr">Spec</th>
 	</tr>
       </thead>
       <tbody>
 	{% for benchmark in benchmarks %}
 	<tr data-benchmark_id="{{ benchmark.id }}" class="{% cycle even odd %}">
+	  <td class="text" title="{{ benchmark.training_set.name }}">{{ benchmark.training_set.name }}</td>
 	  <td class="text" title="{{ benchmark.classifier }}">{{ benchmark.classifier }}</td>
 	  <td class="text" title="{{ benchmark.model }}">{{ benchmark.model }}</td>
 	  <td>{{ benchmark.auc|floatformat:3 }}</td>

@@ -183,10 +183,12 @@ class CylonBayesClassifier(Classifier):
         mb_model.save()
 
     def test_train(self, ratings=None, clicks=None):
+        print "arrived here"
         mb = CylonBayesData(extractor=BaltarExtractor)
         train_set = []
         for rating in ratings:
             train_set.append((rating.status, rating.rating))
+        print ratings
         map(mb.train, train_set)
         self.mb = mb
         return self

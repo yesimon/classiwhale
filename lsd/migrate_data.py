@@ -24,7 +24,7 @@ from django.contrib.auth.models import User
 from twython import Twython
 
 #from twitterauth.models import UserProfile as OldTwitterUserProfile
-from status.models import Status as OldStatus
+#from status.models import Status as OldStatus
 #from twitterauth.models import Rating as OldRating
 
 from twitter.models import *
@@ -85,5 +85,18 @@ def MigrateRatings():
                    rated_time=rating.rated_time)
         r.save()
 
+def DeleteDuplicateRatings():
+    ratings = Rating.objects.all()
+    user_ratings = {}
+    for r in ratings:
+        try:
+            if r.status_id in user_ratings[r.user_id]:
+                r.delete()
+            else:
+                user_ratings[r.user_id].add(r.status_id)
+        except KeyError:
+            user_ratings[r.user_id] = set([r.status_id,])
+
+
 if __name__ == "__main__":
-    FixUserProfiles()
+    DeleteDuplicateRatings()

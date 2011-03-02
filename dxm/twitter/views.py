@@ -18,6 +18,8 @@ import json
 from profile.models import UserProfile
 from twitter.models import TwitterUserProfile, Status, Rating
 from twitter.utils import get_authorized_twython, full_create_status
+from twitter.signals import cache_timeline_signal, cache_timeline_backfill_signal
+from twitter.tasks import cache_timeline_backfill
 
 from whale.models import Whale, WhaleSpecies
 
@@ -60,7 +62,8 @@ def timeline(request):
     twitter_tokens = request.session['twitter_tokens']
     tp = TwitterUserProfile.objects.get(id=twitter_tokens['user_id'])
     api = get_authorized_twython(twitter_tokens)
-    statuses = Status.construct_from_dicts(api.getFriendsTimeline())
+    statuses = Status.construct_from_dicts(api.getFriendsTimeline(include_rts=True))
+    cache_timeline_backfill.delay(tp, twitter_tokens, statuses)
     friends = api.getFriendsStatus()
     Rating.appendTo(statuses, tp)
     return render_to_response('twitter/timeline.html',
@@ -71,17 +74,23 @@ def timeline(request):
         context_instance=RequestContext(request))
 
 
-def ajax_timeline(request):
+def ajax_timeline(request, feedtype):
     if not request.user.is_authenticated() or 'twitter_tokens' not in request.session:
-        return HttpResponse("")
+        return HttpResponseBadRequest('not authenticated')
     twitter_tokens = request.session['twitter_tokens']
     api = get_authorized_twython(twitter_tokens)
     tp = TwitterUserProfile.objects.get(id=twitter_tokens['user_id'])
     if not request.GET.has_key(u'page'):
         return HttpResponseBadRequest('page number missing')
     page = request.GET[u'page']
-    
-    statuses = Status.construct_from_dicts(api.getFriendsTimeline(page=page))
+    if feedtype == 'normal':
+        statuses = normal_timeline(api, tp, page)
+    elif feedtype == 'reorder':
+        statuses = reorder_timeline(api, tp, page)
+    elif feedtype == 'filter':
+        statuses = filter_timeline(api, tp, page)
+    elif feedtype == 'predict':
+        statuses = predict_timeline(api, tp, page)
     Rating.appendTo(statuses, tp)
     return render_to_response('twitter/status_list.html',
         {
@@ -89,6 +98,17 @@ def ajax_timeline(request):
         },
         context_instance=RequestContext(request))
 
+def normal_timeline(api, tp, page):
+    return Status.construct_from_dicts(api.getFriendsTimeline(page=page))
+    
+def reorder_timeline(api, tp, page, reorder_time=12):
+    Status.construct_from_dicts(api.getFriendsTimeline(page=page))
+
+def filter_timeline(api, tp, page):
+    pass
+
+def predict_timeline(api, tp, page):
+    pass
 
 def public_profile(request, username):
     if request.user.is_authenticated() and 'twitter_tokens' in request.session:
@@ -100,6 +120,7 @@ def public_profile(request, username):
     
     friends = api.getFriendsStatus()
     prof = request.user.get_profile()
+    print prof.name
     tp = TwitterUserProfile.objects.get(user=prof)
     try:
         statuses = Status.construct_from_dicts(api.getUserTimeline(screen_name=username))
@@ -234,7 +255,6 @@ def ajax_rate(request):
     results['species'] = prof.whale.species.img.url
     results['speciesName'] = prof.whale.species.name
     jsonResults = json.dumps(results)
-    #return HttpResponse("")
     return HttpResponse(jsonResults, mimetype='application/json')
 
 

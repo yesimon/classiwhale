@@ -49,7 +49,7 @@ class TwitterTrainingSet(models.Model):
         for p in profs:
             data = {}
             data['user'] = p
-            data['ratings'] = [r for r in ratings if r.user_id == p.user_id]
+            data['ratings'] = [r for r in ratings if r.user_id == p.id]
             for r in data['ratings']:
                 r.status = statuses[r.status_id]
             training_set[p.user_id] = data
@@ -60,6 +60,7 @@ class TwitterTrainingSet(models.Model):
         probas = []
         expected = []
         for prof_id, data in training_set.iteritems():
+            print "prof id {0}, data {1}".format(prof_id, data)
             n = len(data['ratings'])
             if n_folds >= n:
                 continue
