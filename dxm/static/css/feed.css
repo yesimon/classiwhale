@@ -42,7 +42,6 @@
 }
 
 
-
 .user a:link,
 .user a:visited {
   line-height: 54px;
@@ -50,11 +49,20 @@
 }
 
 
-#follow-user {
+.follow-unfollow .follow-user {
   color: #0000AA;
 }
 
-#follow-user:hover{
+.follow-unfollow .unfollow-user {
+  color: #0000AA;
+}
+
+.follow-unfollow .follow-user:hover{
+  color: #FF0000;
+  cursor: pointer;
+}
+
+.follow-unfollow .unfollow-user:hover{
   color: #FF0000;
   cursor: pointer;
 }
