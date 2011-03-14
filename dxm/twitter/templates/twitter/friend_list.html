@@ -1,6 +1,6 @@
 <div class="friends">
 
-    {% for friend in friends %}
+    {% for friend in friends|slice:":30" %}
     
     <div class="user" id="user-{{ friend.id }}">
         <a href="/profile/{{ friend.screen_name }}">

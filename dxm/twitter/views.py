@@ -375,7 +375,7 @@ def twitter_return(request, window_type):
     # user having logged in.
     try:
         user = User.objects.get(username=username)
-        tp = TwitterUserProfile.objects.get(user=user.id)
+
     except:
         # Create User, UserProfile, TwitterUserProfile
         twitter_user = api.verifyCredentials()
@@ -396,7 +396,10 @@ def twitter_return(request, window_type):
         up.whale = whale
         up.save()
 
-        tp = TwitterUserProfile()
+        try:
+            tp = TwitterUserProfile.objects.get(user=user.id)
+        except TwitterUserProfile.DoesNotExist:
+            tp = TwitterUserProfile()
         tp.__dict__.update(twitter_user)
         tp.user = up
         tp.oauth_token = twitter_tokens['oauth_token']
