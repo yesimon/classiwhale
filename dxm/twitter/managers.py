@@ -9,6 +9,8 @@ class TwitterUserProfileManager(models.Manager):
         values_sql = []
         values_data = []
 
+        if len(statuses) == 0: return
+
         for status in statuses:
             placeholders = ['%s' for i in range(2)]
             values_sql.append("(%s)" % ','.join(placeholders))
@@ -54,6 +56,7 @@ class StatusManager(models.Manager):
         values_sql = []
         values_data = []
 
+        if len(statuses) == 0: return
 
         for status in statuses:
             placeholders = ['%s' for i in range(len(self.fields))]

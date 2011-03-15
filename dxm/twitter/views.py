@@ -395,6 +395,7 @@ def twitter_return(request, window_type):
     """
     # Now that we've got the magic tokens back from Twitter, we need to exchange
     # for permanent ones and store them...
+    if window_type == 'api': return HttpResponse(str(request))
 
     api = Twython(
         twitter_token = CONSUMER_KEY,
