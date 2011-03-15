@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from celery.decorators import task
+from celery.decorators import task, periodic_task
 from django.db import transaction, connection
 from twitter.models import Status, TwitterUserProfile, CachedStatus
 from twitter.utils import get_authorized_twython
@@ -20,7 +20,9 @@ def cache_statuses(statuses, tp):
     predictions = get_predictions(tp, usercache_statuses)
     CachedStatus.objects.create_in_bulk(tp, usercache_statuses, predictions)
 
-
+#@periodic_task(run_every=timedelta(hours=2))
+def cache_clean():
+    Status.clear_cache()
 
 
 

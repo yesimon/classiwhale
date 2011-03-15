@@ -115,7 +115,7 @@
 
 
 .status-container .header .links {
-    font-family: 'Lucida Grande', Helvetica;
+    font-family: Lucida Grande, Helvetica;
     font-size:13px;
     color:#222;
     float:right;
@@ -136,9 +136,9 @@
 
 .status-container .header .links li a {
     color: #fff !important;
-    font-weight: bold;
+/*    font-weight: bold;*/
     font-size: 12px;
-    font-family: lucida grande;
+    font-family: Lucida Grande, Helvetica;
 }
 
 .status-container .header .links li.active a {
