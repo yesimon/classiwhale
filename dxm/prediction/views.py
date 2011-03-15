@@ -54,18 +54,24 @@ def predicted_friends_timeline(request):
             s.likeClass = ' inactive'
             s.dislikeClass = ' active'            
     return {'statuses': statuses, 'friends': friends}
-    
-@login_required
-@render_to('twitter/timeline.html')
-def filtered_friends_timeline(request):
+
+# helper to get a timeline.  Also used in API.
+def get_filtered_friends_timeline(request):
     prof = request.user.get_profile()
     tp = TwitterUserProfile.objects.get(user=prof)
     twitter_tokens = request.session['twitter_tokens']
     api = get_authorized_twython(twitter_tokens)
     statuses = Status.construct_from_dicts(api.getFriendsTimeline())
-    friends = api.getFriendsStatus()
     predictions = get_predictions(tp, statuses)
     filtered_statuses = []
     for s, r in zip(statuses, predictions):
         if r >= 0: filtered_statuses.append(s)
-    return {'statuses': filtered_statuses, 'friends': friends}
+    return {'statuses': filtered_statuses}
+    
+@login_required
+@render_to('twitter/timeline.html')
+def filtered_friends_timeline(request):
+    response = get_filtered_friends_timeline(request)
+    friends = api.getFriendsStatus()
+    response['friends'] = friends
+    return response

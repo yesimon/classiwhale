@@ -5,7 +5,6 @@ from django.contrib.auth.views import login, logout
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.views.generic.simple import direct_to_template
-from tastypie.api import Api
 import mimetypes
 
 URL_LIST = {
@@ -18,8 +17,6 @@ URL_LIST = {
 admin.autodiscover()
 nexus.autodiscover()
 
-v1_api = Api(api_name='v1')
-
 
 urlpatterns = patterns('',
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
@@ -30,7 +27,7 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
     (r'^nexus/', include(nexus.site.urls)),
 #    (r'^doc/(?P<template>.*)$', login_required(direct_to_template), {'mimetype':mimetypes.guess_type(template)}),
-    (r'^api/', include(v1_api.urls)),
+    (r'^api/', include('dxm.api.urls')),
     (r'^sentry/', include('sentry.urls')),
     (r'^corsair/', include('corsair.urls')),
     (r'^landing/$', direct_to_template, {'template': 'landing.html'}),
@@ -53,9 +50,8 @@ urlpatterns = patterns('',
     (r'^status/ajax_timeline/$', 'twitter.views.ajax_timeline'),
 #    (r'^status/ajax_training_set_posts/$', 'status.views.ajax_training_set_posts'),
     (r'^status/post/$', 'twitter.views.post_status'),
-    (r'^twitter/create_friendship/$', 'twitter.views.create_friendship'),
-    (r'^twitter/destroy_friendship/$', 'twitter.views.destroy_friendship'),
-#    (r'^history/$', 'twitter.views.rating_history'),
+    (r'^status/create_friendship/$', 'twitter.views.create_friendship'),
+#    (r'^history/$', 'twitter.views.rating_history'),    
     (r'^profile/(?P<username>\w+)/$', 'twitter.views.public_profile'),
 #    (r'^login/$', 'status.views.training_login'),
 #    (r'^training/$', 'status.views.training_set_posts'),
