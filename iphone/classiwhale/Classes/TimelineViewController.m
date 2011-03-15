@@ -14,6 +14,7 @@
 
 @synthesize table;
 @synthesize segmentedControl;
+@synthesize userID;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 	// Return the number of sections.
@@ -31,7 +32,9 @@
   NSURLResponse *response = nil;
   NSError *error = nil;
 
-	timeline = [[api getFilteredTimelineWithResponse:&response andError:&error] objectForKey:@"statuses"] ;
+	timeline = ((!userID || [userID isEqualToString:@""]) ?
+							[[api getFilteredTimelineWithResponse:&response andError:&error] objectForKey:@"statuses"] :
+							[[api getFriendTimeline:userID withResponse:&response andError:&error] objectForKey:@"statuses"]);
 	[timeline retain];
   [table reloadData];  
   //[api rateTweetId:@"47581699944615936" up:NO withResponse:&response andError:&error];
@@ -114,6 +117,15 @@
 	if ([timeline count] > indexPath.row) {
 		NSDictionary *status = [timeline objectAtIndex:indexPath.row];
 		NSLog(@"%@", status);
+		
+		UILabel *myLabel = [[[UILabel alloc] initWithFrame:CGRectMake(50.0,50.0,245.0,150.0)] autorelease];
+		myLabel.numberOfLines = 0;
+		myLabel.lineBreakMode = UILineBreakModeWordWrap;
+		myLabel.text = [status valueForKey:@"text"];
+		myLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
+		CGSize labelSize = [myLabel.text sizeWithFont:myLabel.font constrainedToSize:myLabel.frame.size lineBreakMode:UILineBreakModeWordWrap];
+		cell.tweet.frame = CGRectMake(cell.tweet.frame.origin.x, cell.tweet.frame.origin.y, labelSize.width, labelSize.height);
+
 		cell.tweet.text = [status valueForKey:@"text"];
 		cell.username.text = [[status objectForKey:@"_user_cache"] valueForKey:@"screen_name"];
 		cell.date.text = [status valueForKey:@"created_at"];
@@ -136,6 +148,18 @@
 		
 	}
 	return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	
+	UILabel *myLabel = [[[UILabel alloc] initWithFrame:CGRectMake(50.0,50.0,245.0,150.0)] autorelease];
+	myLabel.numberOfLines = 0;
+	myLabel.lineBreakMode = UILineBreakModeWordWrap;
+	myLabel.text = [[timeline objectAtIndex:indexPath.row] valueForKey:@"text"];
+	myLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
+	CGSize labelSize = [myLabel.text sizeWithFont:myLabel.font constrainedToSize:myLabel.frame.size lineBreakMode:UILineBreakModeWordWrap];
+	return labelSize.height+61;
+	
 }
 
 

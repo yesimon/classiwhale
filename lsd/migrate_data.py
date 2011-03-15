@@ -27,6 +27,7 @@ from twython import Twython
 #from status.models import Status as OldStatus
 #from twitterauth.models import Rating as OldRating
 
+from cylonbayes.tasks import train_all
 from twitter.models import *
 
 def MigrateUserProfiles():
@@ -104,6 +105,8 @@ def DeleteDuplicateRatings():
 def ClearCachedStatuses():
     Status.clear_cache(td=timedelta(minutes=1))
 
+def TrainAll():
+    train_all.delay()
 
 if __name__ == "__main__":
-    FixTwitterUserProfiles()
+    ClearCachedStatuses()

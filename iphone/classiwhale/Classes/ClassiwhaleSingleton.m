@@ -142,7 +142,7 @@ static ClassiwhaleSingleton *sharedInstance = nil;
   return arr;
 }
 
-- (NSArray *) getFriendTimeline:(NSString *)friend_id withResponse:(NSURLResponse **)response andError:(NSError **)error
+- (NSDictionary *) getFriendTimeline:(NSString *)friend_id withResponse:(NSURLResponse **)response andError:(NSError **)error
 {
   
   NSString *base_string = @"http://classiwhale.com/api/twitter/friend/timeline/?id=";
@@ -163,7 +163,7 @@ static ClassiwhaleSingleton *sharedInstance = nil;
   NSLog(@"Error = %@", *error);
   if(*error != nil) return nil;
   NSString *json_string = [[NSString alloc] initWithData:dat encoding:NSUTF8StringEncoding];
-  NSArray *arr = [json_string JSONValue];
+  NSDictionary *arr = [json_string JSONValue];
   return arr;
 }
 

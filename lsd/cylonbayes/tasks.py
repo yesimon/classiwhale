@@ -1,5 +1,4 @@
 from celery.decorators import task, periodic_task
-from celery.task.schedules import crontab
 from datetime import datetime, timedelta
 from django.db.models import Max
 from cylonbayes.classifiers import CylonBayesClassifier
@@ -26,5 +25,6 @@ def train_all():
         if p.rated_time is not None and \
         (p.trained_time is None or p.rated_time > p.trained_time):
             train_profs.append(p)
+    print train_profs
     for p in train_profs:
         CylonBayesClassifier(p).force_train()

@@ -187,7 +187,10 @@ class Status(models.Model):
             now = datetime.utcnow()
             statuses = Status.objects.filter(is_cached=True).filter(
                                       created_at__lt=now-td)
+        details = CachedStatus.objects.filter(status__is_cached=False).filter(
+                                      status__created_at__lt=now-td)
         statuses.delete()
+        details.delete()
 
 
 

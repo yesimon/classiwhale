@@ -9,6 +9,7 @@
 #import "FollowingViewController.h"
 #import "TwitterUserCell.h"
 #import "ClassiwhaleSingleton.h"
+#import "TimelineViewController.h"
 
 
 @implementation FollowingViewController
@@ -75,6 +76,15 @@
 		
 	}
 	return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	TimelineViewController* userTimelineVC = [[[TimelineViewController alloc] 
+																						 initWithNibName:@"UserTimelineViewController" bundle:[NSBundle mainBundle]] autorelease];
+	NSDictionary* user = [users objectAtIndex:indexPath.row];
+	userTimelineVC.title = [user valueForKey:@"screen_name"];
+	userTimelineVC.userID = [[user valueForKey:@"id"] stringValue];
+	[self.navigationController pushViewController:userTimelineVC animated:YES];
 }
 
 
