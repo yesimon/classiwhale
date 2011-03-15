@@ -16,7 +16,7 @@ RATER_PASSWORD = 'testtest'
 
 import pickle
 import itertools
-from datetime import datetime
+from datetime import datetime, timedelta
 from email.utils import parsedate
 from time import mktime
 from django.db import transaction
@@ -97,6 +97,9 @@ def DeleteDuplicateRatings():
         except KeyError:
             user_ratings[r.user_id] = set([r.status_id,])
 
+def ClearCachedStatuses():
+    Status.clear_cache(td=timedelta(minutes=1))
+
 
 if __name__ == "__main__":
-    DeleteDuplicateRatings()
+    ClearCachedStatuses()

@@ -1,12 +1,16 @@
 from __future__ import division
 from django.db import models
 from django.core import serializers
-from django.db import transaction
-from profile.models import UserProfile
+from django.db import transaction, connection
+from picklefield.fields import PickledObjectField
 from datetime import datetime, timedelta
 from email.utils import parsedate, formatdate
 from time import mktime
 import json
+
+from profile.models import UserProfile
+from twitter.managers import TwitterUserProfileManager, StatusManager
+
 
 JSON_COMPACT = (',',':')
 
@@ -43,6 +47,8 @@ class TwitterUserProfile(models.Model):
     whale = models.OneToOneField('whale.Whale', blank=True, null=True)
     cached_statuses = models.ManyToManyField('Status', blank=True, null=True, related_name='cached_statuses')
     cached_time = models.DateTimeField(blank=True, null=True)
+    cached_maxid = models.BigIntegerField(blank=True, null=True)
+    cached_minid = models.BigIntegerField(blank=True, null=True)
     available_fields = ('id', 'name', 'screen_name', 'profile_image_url', 
                         'profile_use_background_image', 
                         'profile_sidebar_border_color', 
@@ -57,30 +63,20 @@ class TwitterUserProfile(models.Model):
                        'active_classifier', 'classifier_version', 'whale', 
                        'cached_time')
 
+    objects = TwitterUserProfileManager()
 
     def __unicode__(self):
         return "%s's twitter profile" % self.screen_name
 
-    def save(self, override=False, *args, **kwargs):
-        if override:
-            user = self
-        else:
-            field_dict = {}
-            for key, value in self.__dict__.iteritems():
-                if key in self.available_fields or key in self.internal_fields:
-                    field_dict[str(key)] = value
-            user = TwitterUserProfile(**field_dict)
-        super(TwitterUserProfile, user).save(*args, **kwargs)
-
     @staticmethod
-    def savemany(tps, override=False, *args, **kwargs):
+    def savemany(tps, *args, **kwargs):
         found_tps = set(TwitterUserProfile.objects.in_bulk([tp.id for tp in tps]).keys())
-        to_save = [tp for tp in tps if tp.id not in found_tps]
-        tps_added = set()
-        for tp in to_save:
-            if tp in tps_added: continue
-            tps_added.add(tp)
-            tp.save(override=override, force_insert=True, *args, **kwargs)
+        for tp in tps:
+            if tp.id in found_tps: continue
+            found_tps.add(tp.id)
+            tp.save(force_insert=True, *args, **kwargs)
+
+
 
 
     def as_json_string(self):
@@ -109,11 +105,14 @@ class TwitterUserProfile(models.Model):
             data[field] = getattr(self, field) 
         return data
 
+    
+
+
 class Status(models.Model):
     id = models.BigIntegerField(primary_key=True)
     text = models.CharField(max_length=200, blank=True, null=True)
     user = models.ForeignKey('TwitterUserProfile', blank=True, null=True)
-    place = models.CharField(max_length=255, blank=True, null=True)
+#    place = PickledObjectField(blank=True, null=True)
     source = models.CharField(max_length=255, blank=True, null=True)
     content_length = models.IntegerField(blank=True, null=True)
     punctuation = models.IntegerField(blank=True, null=True)
@@ -126,16 +125,18 @@ class Status(models.Model):
     in_reply_to_status_id = models.BigIntegerField(blank=True, null=True)
     is_cached = models.BooleanField(default=False) # False for permanent store
 
-    available_fields = ('id', 'text', 'user', 'place', 'source', 'created_at',
+    objects = StatusManager()
+
+    available_fields = ('id', 'text', 'user',  'source', 'created_at',
                         'in_reply_to_user_id', 'in_reply_to_status_id')
 
     internal_fields = ('is_cached', 'user_id' )
 
+    """
     # Override=True uses normal save
     def save(self, override=False, *args, **kwargs):
         if override: 
             status = self
-
         else:
             field_dict = {}
             for key, value in self.__dict__.iteritems():
@@ -143,6 +144,7 @@ class Status(models.Model):
                     field_dict[str(key)] = value
             status = Status(**field_dict)
         super(Status, status).save(*args, **kwargs)
+    """
 
     class Meta:
         ordering = ["-id"]
@@ -163,36 +165,35 @@ class Status(models.Model):
         self.save()
 
     @staticmethod
-    @transaction.commit_on_success()
     def savemany(statuses, is_cached=False):
         tps = [s.user for s in statuses]
         TwitterUserProfile.savemany(tps)
         s_found = set(Status.objects.in_bulk([s.id for s in statuses]).keys())
-        to_save = [s for s in statuses if s.id not in s_found]
-        for status in to_save:
-            status.is_cached = is_cached
-            status.save(force_insert=True)
+        to_save = []
+        for s in statuses:
+            if s.id in s_found: continue
+            s_found.add(s.id)
+            s.is_cached = is_cached
+            to_save.append(s)
+        Status.objects.create_in_bulk(to_save)
 
-
+    # Consider delete by ids if filtering is_cached takes a long time
     @staticmethod
     def clear_cache(max_id=None, td=timedelta(hours=72)):
         if max_id:
             statuses = Status.objects.filter(is_cached=True).filter(id__lt=max_id)
         else:
-            now = datetime.now()
+            now = datetime.utcnow()
             statuses = Status.objects.filter(is_cached=True).filter(
-                                             created_at__lt=now-td)
-            # May be faster if filtering is_cached takes a long time
-            # delete_status_ids = [s.id for s in filter(lambda x: x.is_cached, statuses)]
-            # Status.objects.filter(id__in=delete_status_ids).delete()
+                                      created_at__lt=now-td)
         statuses.delete()
+
 
 
     @classmethod
     def construct_from_dict(cls, data):
         if 'user' not in data:
             raise KeyError
-        json_string = json.dumps(data, separators=JSON_COMPACT)
         data['user'] = TwitterUserProfile.construct_from_dict(data['user'])
         data['created_at'] = datetime.fromtimestamp(mktime(parsedate(data['created_at'])))
         field_dict = {}
@@ -200,7 +201,6 @@ class Status(models.Model):
             if key in cls.available_fields:
                 field_dict[str(key)] = value
         status = Status(**field_dict)
-        setattr(status, 'json', json_string)
         return status
 
     @classmethod
@@ -219,8 +219,6 @@ class Status(models.Model):
         return status
 
     def deconstruct_to_dict(self):
-        try: return json.loads(self.json)
-        except AttributeError: pass
         data = {}
         for field in self.available_fields:
             data[field] = getattr(self, field) 
@@ -230,8 +228,6 @@ class Status(models.Model):
         return data
 
     def as_json_string(self):
-        try: return self.json
-        except AttributeError: pass
         json_dict = self.deconstruct_to_dict()
         json_string = json.dumps(json_dict, separators=JSON_COMPACT)
         return json_string

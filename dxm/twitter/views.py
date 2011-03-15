@@ -63,7 +63,7 @@ def timeline(request):
     tp = TwitterUserProfile.objects.get(id=twitter_tokens['user_id'])
     api = get_authorized_twython(twitter_tokens)
     statuses = Status.construct_from_dicts(api.getFriendsTimeline(include_rts=True))
-    cache_timeline_backfill.delay(tp, twitter_tokens, statuses)
+#    cache_timeline_backfill.delay(tp, twitter_tokens, statuses)
     friends = api.getFriendsStatus()
     Rating.appendTo(statuses, tp)
     return render_to_response('twitter/timeline.html',
@@ -247,7 +247,7 @@ def ajax_rate(request):
         if prof.whale.exp == prof.whale.species.evolution.minExp: prof.whale.species = prof.whale.species.evolution
         prof.whale.save()
     r.rating = rating_int
-    r.saves()
+    r.save()
     results['success'] = 'True'
     results['exp'] = prof.whale.exp
     results['min-exp'] = prof.whale.species.minExp
@@ -317,6 +317,9 @@ def rating_history(request):
         {'ratings': ratings},
         context_instance=RequestContext(request)) 
 """
+
+def linktrack(request):
+    return ''
 
 
 def twitter_logout(request, next_page):
