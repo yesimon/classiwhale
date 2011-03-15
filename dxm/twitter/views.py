@@ -180,6 +180,13 @@ def ajax_user_timeline(request):
     return HttpResponse(html)
 
 
+def get_user_timeline_object(request, identifier, pageNum=0):
+    twitter_tokens = request.session['twitter_tokens']
+    api = get_authorized_twython(twitter_tokens)
+    return api.getUserTimeline(id=identifier, page=pageNum)
+    
+
+
 def post_status(request):
     results = {'success':'False'}
     if not request.user.is_authenticated() or 'twitter_tokens' not in request.session:
