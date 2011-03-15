@@ -10,7 +10,7 @@ classifier_library.register(MultinomialBayesClassifier)
 def get_predictions(prof, statuses, session=None):
     """Statuses could be list of ids, or list of django status models, 
     inspect to decide next steps"""
-    if statuses is None: return None
+    if statuses is None or len(statuses) == 0: return None
     if statuses[0] in (int, long):
         statuses = Status.objects.filter(id__in=statuses)
         # TODO: Do some integrity checks to make sure they are good?

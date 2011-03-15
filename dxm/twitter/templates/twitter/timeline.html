@@ -13,7 +13,7 @@ $(document).ready(function() {
 
     opts = { 
         offset: function() {
-            return $.waypoints('viewportHeight') - $(this).outerHeight();
+            return $.waypoints('viewportHeight') - $(this).outerHeight() + 200;
         },
     }
     $("#statuses_end").waypoint(function(event, direction) {
