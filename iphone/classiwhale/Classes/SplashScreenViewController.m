@@ -27,7 +27,6 @@
 - (IBAction) loginToClassiwhale
 {
 	[[ClassiwhaleSingleton sharedInstance] loginToTwitter:self];
-	//[(classiwhaleAppDelegate*)[UIApplication sharedApplication].delegate successfullyLoggedIn];
 }
 
 /*

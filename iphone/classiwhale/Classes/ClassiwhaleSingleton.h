@@ -15,10 +15,16 @@
 @interface ClassiwhaleSingleton : NSObject <SA_OAuthTwitterControllerDelegate> {
 	SA_OAuthTwitterEngine *twitterEngine;
 
-
+  NSArray *cookies;
+  BOOL authenticated;
 }
 
 + (ClassiwhaleSingleton*)sharedInstance;
 - (void) loginToTwitter:(UIViewController*)vc;
+- (NSArray *) getFilteredTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error;
+- (NSArray *) getTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error;
+
+@property (nonatomic, retain) NSArray *cookies;
+@property BOOL authenticated;
 
 @end

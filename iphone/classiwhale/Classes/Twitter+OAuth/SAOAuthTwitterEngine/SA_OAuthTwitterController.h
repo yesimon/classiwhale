@@ -32,7 +32,8 @@
 	UIView										*_blockerView;
 
 	UIInterfaceOrientation                      _orientation;
-	BOOL										_loading, _firstLoad;
+	BOOL										_loading;
+  int                     _loadCount;
 	UIToolbar									*_pinCopyPromptBar;
 }
 
