@@ -7,6 +7,12 @@
 //
 
 #import "ClassiwhaleSingleton.h"
+#import "SA_OAuthTwitterEngine.h"
+#import "classiwhaleAppDelegate.h"
+
+
+#define kOAuthConsumerKey				@"H3jdfPuU3srfX2uo7LFQ1w"
+#define kOAuthConsumerSecret			@"Fe0iHcfi8nubMBzjbcUuf6zRW8Nn9VgMJkiHcCdKwSw"
 
 @implementation ClassiwhaleSingleton
 
@@ -20,6 +26,58 @@ static ClassiwhaleSingleton *sharedInstance = nil;
 	
 	return sharedInstance;
 }
+
+- (void) loginToTwitter:(UIViewController*)vc
+{
+	twitterEngine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate: self];
+	twitterEngine.consumerKey = kOAuthConsumerKey;
+	twitterEngine.consumerSecret = kOAuthConsumerSecret;
+	UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine: twitterEngine delegate: self];
+	
+	if (controller) 
+		[vc presentModalViewController: controller animated: YES];
+	else 
+		[twitterEngine sendUpdate: [NSString stringWithFormat: @"Already Updated. %@", [NSDate date]]];	
+}
+	
+//=============================================================================================================================
+#pragma mark SA_OAuthTwitterEngineDelegate
+- (void) storeCachedTwitterOAuthData: (NSString *) data forUsername: (NSString *) username {
+	NSUserDefaults			*defaults = [NSUserDefaults standardUserDefaults];
+	
+	[defaults setObject: data forKey: @"authData"];
+	[defaults synchronize];
+}
+
+- (NSString *) cachedTwitterOAuthDataForUsername: (NSString *) username {
+	return [[NSUserDefaults standardUserDefaults] objectForKey: @"authData"];
+}
+
+//=============================================================================================================================
+#pragma mark SA_OAuthTwitterControllerDelegate
+- (void) OAuthTwitterController: (SA_OAuthTwitterController *) controller authenticatedWithUsername: (NSString *) username {
+	NSLog(@"Authenicated for %@", username);
+	[(classiwhaleAppDelegate*)[UIApplication sharedApplication].delegate successfullyLoggedIn];
+}
+
+- (void) OAuthTwitterControllerFailed: (SA_OAuthTwitterController *) controller {
+	NSLog(@"Authentication Failed!");
+}
+
+- (void) OAuthTwitterControllerCanceled: (SA_OAuthTwitterController *) controller {
+	NSLog(@"Authentication Canceled.");
+}
+
+//=============================================================================================================================
+#pragma mark TwitterEngineDelegate
+- (void) requestSucceeded: (NSString *) requestIdentifier {
+	NSLog(@"Request %@ succeeded", requestIdentifier);
+}
+
+- (void) requestFailed: (NSString *) requestIdentifier withError: (NSError *) error {
+	NSLog(@"Request %@ failed with error: %@", requestIdentifier, error);
+}
+
 
 
 // We don't want to allocate a new instance, so return the current one.

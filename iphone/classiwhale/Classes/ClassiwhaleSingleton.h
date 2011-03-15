@@ -7,12 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SA_OAuthTwitterEngine.h" 
+#import "SA_OAuthTwitterController.h"
 
 
-@interface ClassiwhaleSingleton : NSObject {
+
+@interface ClassiwhaleSingleton : NSObject <SA_OAuthTwitterControllerDelegate> {
+	SA_OAuthTwitterEngine *twitterEngine;
+
 
 }
 
 + (ClassiwhaleSingleton*)sharedInstance;
+- (void) loginToTwitter:(UIViewController*)vc;
 
 @end
