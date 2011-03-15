@@ -102,10 +102,12 @@
 								<reference key="IBUIHighlightedColor" ref="535413282"/>
 								<int key="IBUIBaselineAdjustment">1</int>
 								<float key="IBUIMinimumFontSize">10</float>
+								<int key="IBUINumberOfLines">0</int>
+								<int key="IBUILineBreakMode">0</int>
 							</object>
 							<object class="IBUIButton" id="963312018">
 								<reference key="NSNextResponder" ref="988341677"/>
-								<int key="NSvFlags">292</int>
+								<int key="NSvFlags">268</int>
 								<string key="NSFrame">{{61, 52}, {72, 22}}</string>
 								<reference key="NSSuperview" ref="988341677"/>
 								<bool key="IBUIOpaque">NO</bool>
@@ -133,7 +135,7 @@
 							</object>
 							<object class="IBUIButton" id="830913296">
 								<reference key="NSNextResponder" ref="988341677"/>
-								<int key="NSvFlags">292</int>
+								<int key="NSvFlags">268</int>
 								<string key="NSFrame">{{156, 52}, {72, 22}}</string>
 								<reference key="NSSuperview" ref="988341677"/>
 								<bool key="IBUIOpaque">NO</bool>
@@ -173,10 +175,10 @@
 								<int key="IBUIBaselineAdjustment">1</int>
 								<float key="IBUIMinimumFontSize">10</float>
 							</object>
-							<object class="IBUIActivityIndicatorView" id="490810464">
+							<object class="IBUIActivityIndicatorView" id="159540806">
 								<reference key="NSNextResponder" ref="988341677"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{11, 10}, {37, 37}}</string>
+								<string key="NSFrame">{{10, 10}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="988341677"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -241,7 +243,7 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">act</string>
 						<reference key="source" ref="657579788"/>
-						<reference key="destination" ref="490810464"/>
+						<reference key="destination" ref="159540806"/>
 					</object>
 					<int key="connectionID">13</int>
 				</object>
@@ -318,7 +320,7 @@
 							<reference ref="963312018"/>
 							<reference ref="830913296"/>
 							<reference ref="40323314"/>
-							<reference ref="490810464"/>
+							<reference ref="159540806"/>
 							<reference ref="321121081"/>
 						</object>
 						<reference key="parent" ref="0"/>
@@ -355,7 +357,7 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">12</int>
-						<reference key="object" ref="490810464"/>
+						<reference key="object" ref="159540806"/>
 						<reference key="parent" ref="657579788"/>
 					</object>
 				</object>
@@ -385,7 +387,7 @@
 					<string>UIResponder</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>TimelineCell</string>
-					<string>{{338, 607}, {326, 82}}</string>
+					<string>{{163, 674}, {326, 82}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
