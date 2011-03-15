@@ -117,35 +117,37 @@ def public_profile(request, username):
     else: # Require login
         return HttpResponseRedirect("/")
     friend = api.showUser(screen_name=username)
-    
     friends = api.getFriendsStatus()
     prof = request.user.get_profile()
     print prof.name
     tp = TwitterUserProfile.objects.get(user=prof)
-    try:
-        statuses = Status.construct_from_dicts(api.getUserTimeline(screen_name=username))
-        Rating.appendTo(statuses, tp)
-    except TwythonError:
+    follow_request_sent = True
+    is_true_friend = friend['following']
+    if not is_true_friend:
+        is_true_friend = False
         outgoing = api.friendshipsOutgoing()
         follow_request_sent = False
-        if request.user.id in outgoing:
+        if friend['id'] in outgoing['ids']: # if we have already requested to follow this person
             follow_request_sent = True
-        return render_to_response('twitter/protected_profile.html',
-            {
-             'friends': friends,
-             'username': username,
-             'friend': friend,
-             'follow_request_sent': follow_request_sent
-             },
-             context_instance=RequestContext(request)) 
+    if friend['protected'] and not is_true_friend:
+        statuses = None
+    else:
+        try:
+            statuses = Status.construct_from_dicts(api.getUserTimeline(screen_name=username))
+            Rating.appendTo(statuses, tp)
+        except TwythonError:
+            statuses = None
     return render_to_response('twitter/public_profile.html',
         {
-         'friends': friends,
-         'username': username,
-         'friend': friend,
-         'statuses': statuses,
+        'friends': friends,
+        'username': username,
+        'friend': friend,
+        'is_true_friend' : is_true_friend,
+        'profile_protected' : friend['protected'],
+        'follow_request_sent': follow_request_sent,
+        'statuses' : statuses,
         },
-        context_instance=RequestContext(request)) 
+        context_instance=RequestContext(request))
 
 
 def ajax_user_timeline(request):
@@ -201,8 +203,26 @@ def create_friendship(request):
     twitter_tokens = request.session['twitter_tokens']
     API = get_authorized_twython(twitter_tokens)
     username = request.POST[u'friend_username']
+    print username
     try:
-        API.createFriendship(screen_name=username)
+        API.createFriendship(user_id=username)
+        results['success'] = 'True'
+    except TwythonError:
+        pass
+    jsonResults = json.dumps(results)
+    return HttpResponse(jsonResults, mimetype='application/json')
+
+
+def destroy_friendship(request):
+    results = {'success':'False'}
+    if not request.user.is_authenticated() or 'twitter_tokens' not in request.session:
+        return HttpResponse("")
+    twitter_tokens = request.session['twitter_tokens']
+    API = get_authorized_twython(twitter_tokens)
+    username = request.POST[u'friend_username']
+    print username
+    try:
+        API.destroyFriendship(user_id=username)
         results['success'] = 'True'
     except TwythonError:
         pass

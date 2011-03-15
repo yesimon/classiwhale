@@ -6,11 +6,11 @@ Recent Tweets
 
 {% block middle %} 
 
-    <div class="status-prompt">
-        <div>{{ friend.name }}</div>
-        <img class="photo" width="48" height="48" src="{{ friend.profile_image_url }}" alt="{{ friend.name }} " /> 
-    </div>
-    
+	{% include 'twitter/user_profile_bar.html' %}
+
+	{% if profile_protected and not is_true_friend %}
+	You need to follow {{ friend.name }} to see their tweets.
+	{% else %}
     <script type="text/javascript">
     $(function() {
         $(window).infinitescroll({
@@ -28,7 +28,6 @@ Recent Tweets
     <div class="statuses">
        {% include 'twitter/status_list.html' %}
     </div>
+	{% endif %}
     
 {% endblock %}
-
-

@@ -220,6 +220,7 @@ INSTALLED_APPS = (
     'confidence_bayes',
     'cylonbayes',
     'whale',
+    'api',
 )
 
 if DEBUG == True:
