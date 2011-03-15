@@ -7,6 +7,7 @@ Recent Tweets
 
 
 {% block extra_js %}
+/*
 var pageIndex = 1;
 $(document).ready(function() {
     $(window).infinitescroll({
@@ -18,7 +19,32 @@ $(document).ready(function() {
     $(window).bind('infinitescroll.finish', function() {
         addRateLinkHandlers();
     });
+}
 });
+*/
+$(document).ready(function() {
+    var $loading = $("<div class='loading'><p>Loading more items&hellip;</p></div>");
+    var pageIndex = 1;
+
+    opts = { 
+        offset: function() {
+            return $.waypoints('viewportHeight') - $(this).outerHeight();
+        },
+    }
+    $(".statuses:last").waypoint(function(event, direction) {
+        $(".statuses:last").waypoint('remove');
+        $(".statuses:last").append($loading);
+        $.get("/status/ajax_training_set_posts/normal/", function(data) {
+            if (data!= '') {
+                $loading.detach();
+                pageIndex++;
+                $(".statuses").append(data);
+                $(".statuses:last").waypoint(opts);
+            }
+        }
+    }, opts);
+});
+
 {% endblock %}
 
 

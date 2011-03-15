@@ -4,20 +4,39 @@
 Recent Tweets
 {% endblock %}
 
-{% block middle %} 
+{% block extra_js %}
+<script type="text/javascript">
+$(document).ready(function() {
+    pageType = '{{ feedtype }}'
+    var $loading = $("<div class='loading'><p>Loading more items&hellip;</p></div>");
+    var pageIndex = 2;
 
-    <script type="text/javascript">
-    $(function() {
-        $(window).infinitescroll({
-            url: "/status/ajax_timeline/",
-            appendTo: ".statuses"
+    opts = { 
+        offset: function() {
+            return $.waypoints('viewportHeight') - $(this).outerHeight();
+        },
+    }
+    $("#statuses_end").waypoint(function(event, direction) {
+        var status = JSON.parse($(".status:last").attr("data-status"));
+
+        var maxid = status.id;
+        $("#statuses_end").waypoint('remove');
+        $(".statuses").append($loading);
+        $.get("/status/ajax_timeline/", {page: pageIndex, id: maxid, timeline: pageType}, function(data) {
+            if (data!= '') {
+                $loading.detach();
+                pageIndex++;
+                $(".statuses").append(data);
+                addRateLinkHandlers();
+                $("#statuses_end").waypoint(opts);
+            }
         });
-        
-        $(window).bind('infinitescroll.finish', function() {
-            addRateLinkHandlers();
-        });
-    });
-    </script>
+    }, opts);
+});
+</script>
+{% endblock %}
+
+{% block middle %} 
 
 	<div class="status-prompt">
 	    <div class="status-post">
@@ -35,6 +54,8 @@ Recent Tweets
 
     <div class="statuses">
 	   {% include 'twitter/status_list.html' %}
+    </div>
+    <div id="statuses_end">
     </div>
     
     {% load compress %}

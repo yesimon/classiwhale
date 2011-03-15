@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta
 from celery.decorators import task
 from django.db import transaction, connection
-from twitter.models import Status, TwitterUserProfile
+from twitter.models import Status, TwitterUserProfile, CachedStatus
 from twitter.utils import get_authorized_twython
 
-
+from algorithmio.interface import get_predictions
 
 
 def cache_statuses(statuses, tp):
@@ -17,7 +17,8 @@ def cache_statuses(statuses, tp):
         if s.id in s_cached: continue
         s_cached.add(s.id)
         usercache_statuses.append(s)
-    TwitterUserProfile.objects.bulk_cached_statuses(tp, usercache_statuses)
+    predictions = get_predictions(tp, usercache_statuses)
+    CachedStatus.objects.create_in_bulk(tp, usercache_statuses, predictions)
 
 
 
@@ -51,8 +52,8 @@ def cache_timeline_backfill(tp, twitter_tokens, statuses):
     finished = False
     total_num_statuses = len(statuses)
     while not finished:
-#        print "backfill minid: " + str(maxid)
-#        print "backfill maxid: " + str(backfill_maxid)
+        print "backfill minid: " + str(maxid)
+        print "backfill maxid: " + str(backfill_maxid)
 
 
         recieved_statuses = Status.construct_from_dicts(

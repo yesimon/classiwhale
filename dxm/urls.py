@@ -47,7 +47,7 @@ urlpatterns = patterns('',
     (r'^status/ajax_rate/$', 'twitter.views.ajax_rate'),
 #    (r'^status/ajax_public_timeline/$', 'twitter.views.ajax_public_timeline'),
     (r'^status/ajax_user_timeline/$', 'twitter.views.ajax_user_timeline'),
-    (r'^status/ajax_timeline/(?P<feedtype>\w+)/$', 'twitter.views.ajax_timeline'),
+    (r'^status/ajax_timeline/$', 'twitter.views.ajax_timeline'),
 #    (r'^status/ajax_training_set_posts/$', 'status.views.ajax_training_set_posts'),
     (r'^status/post/$', 'twitter.views.post_status'),
     (r'^status/create_friendship/$', 'twitter.views.create_friendship'),
@@ -62,8 +62,10 @@ urlpatterns = patterns('',
     
     (r'^feedback/ajax/(.*?)$', 'feedback.views.handle_ajax'),
     
-    (r'^algorithm/train/$', 'prediction.views.train_classifier'),
-    (r'^algorithm/predict/$', 'prediction.views.predicted_friends_timeline')
+    (r'^twitter/train/$', 'prediction.views.train_classifier'),
+    (r'^twitter/predict/$', 'prediction.views.predicted_friends_timeline'),
+    (r'^twitter/filter/$', 'prediction.views.filtered_friends_timeline'),
+    (r'^twitter/reorder/$', 'prediction.views.reordered_friends_timeline'),
 )
 
 urlpatterns += patterns('contact.views',

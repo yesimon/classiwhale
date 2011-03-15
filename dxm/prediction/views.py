@@ -6,6 +6,7 @@ from annoying.decorators import render_to
 from django.core.cache import cache
 from twitter.models import *
 from twitter.utils import get_authorized_twython
+from twitter.views import reorder_timeline
 from twython import Twython, TwythonError
 
 
@@ -53,7 +54,20 @@ def predicted_friends_timeline(request):
         if r < 0:
             s.likeClass = ' inactive'
             s.dislikeClass = ' active'            
-    return {'statuses': statuses, 'friends': friends}
+    return {'statuses': statuses, 'friends': friends, 'feedtype': 'predict'}
+
+@login_required
+@render_to('twitter/timeline.html')
+def reordered_friends_timeline(request):
+    prof = request.user.get_profile()
+    tp = TwitterUserProfile.objects.get(user=prof)
+    twitter_tokens = request.session['twitter_tokens']
+    api = get_authorized_twython(twitter_tokens)
+    statuses = reorder_timeline(api, tp, 1)
+    friends = api.getFriendsStatus()
+    Rating.appendTo(statuses, tp)
+    return {'statuses': statuses, 'friends': friends, 'feedtype': 'reorder'}
+
 
 # helper to get a timeline.  Also used in API.
 def get_filtered_friends_timeline(request):
@@ -66,7 +80,8 @@ def get_filtered_friends_timeline(request):
     filtered_statuses = []
     for s, r in zip(statuses, predictions):
         if r >= 0: filtered_statuses.append(s)
-    return {'statuses': filtered_statuses}
+    Rating.appendTo(statuses, tp)
+    return {'statuses': filtered_statuses, 'feedtype': 'filter'}
     
 @login_required
 @render_to('twitter/timeline.html')
@@ -74,4 +89,4 @@ def filtered_friends_timeline(request):
     response = get_filtered_friends_timeline(request)
     friends = api.getFriendsStatus()
     response['friends'] = friends
-    return response
+    return response.update({'feedtype': 'filter'})
