@@ -8,6 +8,7 @@
 
 #import "SplashScreenViewController.h"
 #import "classiwhaleAppDelegate.h"
+#import "ClassiwhaleSingleton.h"
 
 
 @implementation SplashScreenViewController
@@ -25,7 +26,7 @@
 
 - (IBAction) loginToClassiwhale
 {
-	[(classiwhaleAppDelegate*)[UIApplication sharedApplication].delegate successfullyLoggedIn];
+	[[ClassiwhaleSingleton sharedInstance] loginToTwitter:self];
 }
 
 /*

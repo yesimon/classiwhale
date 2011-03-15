@@ -9,17 +9,18 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadReque
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator
 from django.contrib.auth import login, logout, authenticate
-from datetime import datetime
+from datetime import datetime, timedelta
 from email.utils import parsedate
 from time import mktime
 from twython import Twython, TwythonError
 import json
 
 from profile.models import UserProfile
-from twitter.models import TwitterUserProfile, Status, Rating
+from twitter.models import TwitterUserProfile, Status, Rating, CachedStatus
 from twitter.utils import get_authorized_twython, full_create_status
 from twitter.signals import cache_timeline_signal, cache_timeline_backfill_signal
 from twitter.tasks import cache_timeline_backfill
+from algorithmio.interface import get_predictions, get_predictions_filter
 
 from whale.models import Whale, WhaleSpecies
 
@@ -63,34 +64,39 @@ def timeline(request):
     tp = TwitterUserProfile.objects.get(id=twitter_tokens['user_id'])
     api = get_authorized_twython(twitter_tokens)
     statuses = Status.construct_from_dicts(api.getFriendsTimeline(include_rts=True))
-#    cache_timeline_backfill.delay(tp, twitter_tokens, statuses)
+    cache_timeline_backfill.delay(tp, twitter_tokens, statuses)
     friends = api.getFriendsStatus()
     Rating.appendTo(statuses, tp)
     return render_to_response('twitter/timeline.html',
         {
           'statuses': statuses,
-          'friends': friends
+          'friends': friends,
+          'feedtype': 'normal'
         },
         context_instance=RequestContext(request))
 
 
-def ajax_timeline(request, feedtype):
+def ajax_timeline(request):
+    g = request.GET
     if not request.user.is_authenticated() or 'twitter_tokens' not in request.session:
         return HttpResponseBadRequest('not authenticated')
     twitter_tokens = request.session['twitter_tokens']
     api = get_authorized_twython(twitter_tokens)
     tp = TwitterUserProfile.objects.get(id=twitter_tokens['user_id'])
-    if not request.GET.has_key(u'page'):
+    if not g.has_key(u'page'):
         return HttpResponseBadRequest('page number missing')
-    page = request.GET[u'page']
+    page, feedtype  = int(g[u'page']), g[u'timeline']
+    # Get maxid for certain types of timelines
+    try: maxid = int(g[u'id'])
+    except KeyError: maxid = None
     if feedtype == 'normal':
-        statuses = normal_timeline(api, tp, page)
+        statuses = normal_timeline(api, tp, page, maxid)
     elif feedtype == 'reorder':
         statuses = reorder_timeline(api, tp, page)
     elif feedtype == 'filter':
         statuses = filter_timeline(api, tp, page)
     elif feedtype == 'predict':
-        statuses = predict_timeline(api, tp, page)
+        statuses = predict_timeline(api, tp, page, maxid)
     Rating.appendTo(statuses, tp)
     return render_to_response('twitter/status_list.html',
         {
@@ -98,17 +104,46 @@ def ajax_timeline(request, feedtype):
         },
         context_instance=RequestContext(request))
 
-def normal_timeline(api, tp, page):
-    return Status.construct_from_dicts(api.getFriendsTimeline(page=page))
+def normal_timeline(api, tp, page, maxid):
+    if tp.cached_maxid >= maxid >= tp.cached_minid:
+        return tp.cached_statuses.filter(id__lte=maxid)[:20]
+    else:
+        return Status.construct_from_dicts(api.getFriendsTimeline(page=page))
     
 def reorder_timeline(api, tp, page, reorder_time=12):
-    Status.construct_from_dicts(api.getFriendsTimeline(page=page))
+    cutoff_time = datetime.utcnow()-timedelta(hours=reorder_time)
+    details = CachedStatus.objects.filter(user=tp,
+                                          status__created_at__gt=cutoff_time)
+    statuses = tp.cached_statuses.filter(id__in=[d.status_id for d in details])
+    all_statuses = zip(statuses, details)
+    ranked_statuses = sorted(all_statuses, key=lambda x: x[1].prediction, reverse=True)
+    return [s[0] for s in ranked_statuses[(page-1)*20:page*20]]
 
-def filter_timeline(api, tp, page):
-    pass
 
-def predict_timeline(api, tp, page):
-    pass
+def filter_timeline(api, tp, page, maxid):
+    statuses = tp.cached_statuses.filter(id__lte=maxid)[:20]
+    details = CachedStatus.objects.filter(user=tp, 
+                                          status__in=[s.id for s in statuses])
+    filtered_statuses = []
+    for s, detail in zip(statuses, details):
+        r = detail.prediction
+        if r >= 0: filtered_statuses.append(s)
+    return filtered_statuses
+
+
+def predict_timeline(api, tp, page, maxid):
+    statuses = tp.cached_statuses.filter(id__lte=maxid)[:20]
+    details = CachedStatus.objects.filter(user=tp,
+                                          status__in=[s.id for s in statuses])
+    for s, detail in zip(statuses, details):
+        r = detail.prediction
+        if r >= 0:
+            s.likeClass = ' active'
+            s.dislikeClass = ' inactive'
+        if r < 0:
+            s.likeClass = ' inactive'
+            s.dislikeClass = ' active'            
+    return statuses
 
 def public_profile(request, username):
     if request.user.is_authenticated() and 'twitter_tokens' in request.session:
@@ -403,6 +438,7 @@ def twitter_return(request, window_type):
     # Now that we've got the magic tokens back from Twitter, we need to exchange
     # for permanent ones and store them...
 
+
     api = Twython(
         twitter_token = CONSUMER_KEY,
         twitter_secret = CONSUMER_SECRET,
@@ -466,6 +502,8 @@ def twitter_return(request, window_type):
     if window_type == 'popup':
         return render_to_response("twitter/twitter_return.html", {},
                                   context_instance=RequestContext(request))
+    elif window_type == 'api': 
+        return HttpResponse()
     else:
         return HttpResponseRedirect("/")
 

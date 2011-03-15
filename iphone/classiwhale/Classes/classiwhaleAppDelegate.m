@@ -12,6 +12,7 @@
 #import "WhaleViewController.h"
 #import "SearchViewController.h"
 #import "FollowingViewController.h"
+#import "ClassiwhaleSingleton.h"
 
 @implementation classiwhaleAppDelegate
 
@@ -22,7 +23,19 @@
 #pragma mark Application lifecycle
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
-    
+  /*
+  // hack to short-circuit
+  NSHTTPCookieStorage *sharedStore = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+  NSURL *classiURL = [NSURL URLWithString:@"http://classiwhale.com/"];
+  NSArray *classiCookies = [sharedStore cookiesForURL:classiURL];
+  if([classiCookies count] > 0) {
+    [[ClassiwhaleSingleton sharedInstance] preapprovedWithCookies:classiCookies];
+    [self successfullyLoggedIn];
+    return YES;
+  }
+   */
+  
+  
 	SplashScreenViewController *splash = [[SplashScreenViewController alloc] init];
 	UINavigationController *nav = [[[UINavigationController alloc] init] autorelease];
 	[nav pushViewController:splash animated:NO];
@@ -63,12 +76,12 @@
 	[whaleNav pushViewController:whaleVC animated:NO];
 	
 	UITabBarController* tabBarController = [[UITabBarController alloc] init]; 
-	tabBarController.viewControllers = [NSArray arrayWithObjects: timelineNav, followingNav, searchNav, whaleNav, nil]; 
-	
+	//NOTE: For now, not including whaleNav, until we know what we want to do with it.
+	tabBarController.viewControllers = [NSArray arrayWithObjects: timelineNav, followingNav, searchNav, nil];
 	
 	// Add the tab bar controller's view to the window and display.
 	[self.window addSubview:tabBarController.view];
-	[self.window makeKeyAndVisible];	
+	[self.window makeKeyAndVisible];
 }
 
 

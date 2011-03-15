@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta
 from celery.decorators import task
 from django.db import transaction, connection
-from twitter.models import Status, TwitterUserProfile
+from twitter.models import Status, TwitterUserProfile, CachedStatus
 from twitter.utils import get_authorized_twython
 
-
+from algorithmio.interface import get_predictions
 
 
 def cache_statuses(statuses, tp):
@@ -17,7 +17,8 @@ def cache_statuses(statuses, tp):
         if s.id in s_cached: continue
         s_cached.add(s.id)
         usercache_statuses.append(s)
-    TwitterUserProfile.objects.bulk_cached_statuses(tp, usercache_statuses)
+    predictions = get_predictions(tp, usercache_statuses)
+    CachedStatus.objects.create_in_bulk(tp, usercache_statuses, predictions)
 
 
 
@@ -33,12 +34,10 @@ def cache_timeline_backfill(tp, twitter_tokens, statuses):
 
     backfill_maxid = min(statuses, key=lambda x: x.id).id
     backfill_newestid = max(statuses, key=lambda x: x.id).id
-    # Maxid and minid are indicate contiguous cached status ids
+
+    # Maxid and minid indicate contiguous cached status ids
     minid = getattr(tp, 'cached_minid', 0)
     maxid = getattr(tp, 'cached_maxid', 0)
-
-    print "backfill minid: " + str(maxid)
-    print "backfill maxid: " + str(backfill_maxid)
 
     # No new tweets at all
     if backfill_newestid == maxid: return
@@ -66,10 +65,17 @@ def cache_timeline_backfill(tp, twitter_tokens, statuses):
         statuses.extend(recieved_statuses)
 
         oldest_status = min(recieved_statuses, key=lambda x: x.id)
-        if oldest_status.created_at < cutoff_time: finished = True
-        elif backfill_minid and oldest_status.id < backfill_minid: finished = True
-        elif num_apicalls >= 5: finished = True
+        if (oldest_status.created_at < cutoff_time or
+            oldest_status.id <= maxid or
+            num_apicalls >= 5): finished = True
         else: backfill_maxid = oldest_status.id
 
-    print "num apicalls: " + str(num_apicalls)
+    # Set new minid, maxid for contiguous cached statuses
+    if oldest_status.id <= maxid:
+        tp.cached_minid = minid
+    else:
+        tp.cached_minid = oldest_status.id
+    tp.cached_maxid = backfill_newestid
+    tp.save()
+#    print "num apicalls: " + str(num_apicalls)
     cache_statuses(statuses, tp)

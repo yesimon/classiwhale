@@ -54,8 +54,12 @@ def FixUserProfiles():
         tp.user = prof
         tp.active_classifier = 'CylonBayesClassifier'
         tp.classifier_version = '0.1'
-        tp.save(override=True)
+        tp.save()
 
+def FixTwitterUserProfiles():
+    tps = TwitterUserProfile.objects.filter(profile_image_url=None) 
+#          TwitterUserProfile.objects.filter(screen_name=None)
+    tps.delete()
 
 def MigrateStatuses():
     old_statuses = OldStatus.objects.all()
@@ -73,7 +77,7 @@ def MigrateStatuses():
 #        try: Status.objects.get(id=s.id)
 #        except:
         print("Migrating status {0}".format(status.id))
-        s.save(override=True)
+        s.save()
 
 def MigrateRatings():
     old_ratings = OldRating.objects.all()
@@ -102,4 +106,4 @@ def ClearCachedStatuses():
 
 
 if __name__ == "__main__":
-    ClearCachedStatuses()
+    FixTwitterUserProfiles()

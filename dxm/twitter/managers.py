@@ -2,23 +2,6 @@ from django.db import models, connection, transaction
 
 class TwitterUserProfileManager(models.Manager):
 
-    def bulk_cached_statuses(self, tp, statuses):
-        base_sql = "INSERT INTO twitter_twitteruserprofile_cached_statuses \
-                    (twitteruserprofile_id, status_id) VALUES "
-
-        values_sql = []
-        values_data = []
-
-        for status in statuses:
-            placeholders = ['%s' for i in range(2)]
-            values_sql.append("(%s)" % ','.join(placeholders))
-            values_data.extend((tp.id, status.id))
-
-        sql = '%s%s' % (base_sql, ', '.join(values_sql))
-
-        curs = connection.cursor()
-        curs.execute(sql, values_data)
-        transaction.commit_unless_managed()
 
     # Todo: customize create_in_bulk
     def create_in_bulk(self, values):
@@ -37,6 +20,29 @@ class TwitterUserProfileManager(models.Manager):
         curs.execute(sql, values_data)
         transaction.commit_unless_managed()
 
+class CachedStatusManager(models.Manager):
+
+    def create_in_bulk(self, tp, statuses, predictions):
+        base_sql = "INSERT INTO twitter_cachedstatus \
+                    (user_id, status_id, prediction) VALUES "
+
+        values_sql = []
+        values_data = []
+
+        if len(statuses) == 0: return
+
+        for status, prediction in zip(statuses, predictions):
+            placeholders = ['%s' for i in range(3)]
+            values_sql.append("(%s)" % ','.join(placeholders))
+            values_data.extend((tp.id, status.id, prediction))
+
+        sql = '%s%s' % (base_sql, ', '.join(values_sql))
+
+        curs = connection.cursor()
+        curs.execute(sql, values_data)
+        transaction.commit_unless_managed()
+
+
 
 class StatusManager(models.Manager):
 
@@ -54,6 +60,7 @@ class StatusManager(models.Manager):
         values_sql = []
         values_data = []
 
+        if len(statuses) == 0: return
 
         for status in statuses:
             placeholders = ['%s' for i in range(len(self.fields))]
