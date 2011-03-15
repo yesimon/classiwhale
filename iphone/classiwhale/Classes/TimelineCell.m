@@ -11,6 +11,14 @@
 
 @implementation TimelineCell
 
+@synthesize username;
+@synthesize tweet;
+@synthesize date;
+@synthesize profileImage;
+@synthesize act;
+@synthesize likeButton;
+@synthesize dislikeButton;
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];

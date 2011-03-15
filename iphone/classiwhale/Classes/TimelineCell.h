@@ -10,7 +10,23 @@
 
 
 @interface TimelineCell : UITableViewCell {
-
+	IBOutlet UILabel* username;
+	IBOutlet UILabel* tweet;
+	IBOutlet UILabel* date;
+	IBOutlet UIImageView* profileImage;
+	IBOutlet UIActivityIndicatorView* act;
+	IBOutlet UIButton* likeButton;
+	IBOutlet UIButton* dislikeButton;
 }
+
+@property (assign) IBOutlet UILabel* username;
+@property (assign) IBOutlet UILabel* tweet;
+@property (assign) IBOutlet UILabel* date;
+@property (assign) IBOutlet UIImageView* profileImage;
+@property (assign) IBOutlet UIActivityIndicatorView* act;
+@property (assign) IBOutlet UIButton* likeButton;
+@property (assign) IBOutlet UIButton* dislikeButton;
+
+
 
 @end

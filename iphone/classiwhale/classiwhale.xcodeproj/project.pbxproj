@@ -19,6 +19,8 @@
 		B37046A9132F48DA006A3A7F /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = B37046A1132F48DA006A3A7F /* SBJsonBase.m */; };
 		B37046AA132F48DA006A3A7F /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = B37046A3132F48DA006A3A7F /* SBJsonParser.m */; };
 		B37046AB132F48DA006A3A7F /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = B37046A5132F48DA006A3A7F /* SBJsonWriter.m */; };
+		B37047E0132FA69D006A3A7F /* dislike_btn_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = B37047DE132FA69D006A3A7F /* dislike_btn_selected.png */; };
+		B37047E1132FA69D006A3A7F /* like_btn_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = B37047DF132FA69D006A3A7F /* like_btn_selected.png */; };
 		B3A386AC132EB62D0090181E /* SplashScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3A386AA132EB62D0090181E /* SplashScreenViewController.m */; };
 		B3A386AD132EB62D0090181E /* SplashScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3A386AB132EB62D0090181E /* SplashScreenViewController.xib */; };
 		B3A386B2132EBBE60090181E /* classiwhale_splash.png in Resources */ = {isa = PBXBuildFile; fileRef = B3A386B1132EBBE60090181E /* classiwhale_splash.png */; };
@@ -87,6 +89,8 @@
 		B37046A3132F48DA006A3A7F /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
 		B37046A4132F48DA006A3A7F /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		B37046A5132F48DA006A3A7F /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		B37047DE132FA69D006A3A7F /* dislike_btn_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dislike_btn_selected.png; path = ../../../classiwhale/iphone/classiwhale/dislike_btn_selected.png; sourceTree = SOURCE_ROOT; };
+		B37047DF132FA69D006A3A7F /* like_btn_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = like_btn_selected.png; path = ../../../classiwhale/iphone/classiwhale/like_btn_selected.png; sourceTree = SOURCE_ROOT; };
 		B3A386A9132EB62D0090181E /* SplashScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashScreenViewController.h; sourceTree = "<group>"; };
 		B3A386AA132EB62D0090181E /* SplashScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashScreenViewController.m; sourceTree = "<group>"; };
 		B3A386AB132EB62D0090181E /* SplashScreenViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SplashScreenViewController.xib; sourceTree = "<group>"; };
@@ -236,6 +240,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B37047DE132FA69D006A3A7F /* dislike_btn_selected.png */,
+				B37047DF132FA69D006A3A7F /* like_btn_selected.png */,
 				B3704698132F48DA006A3A7F /* JSON */,
 				B3A3893A132F3EE40090181E /* dislike_btn.png */,
 				B3A38934132F3EA60090181E /* like_btn.png */,
@@ -530,6 +536,8 @@
 				B3A38853132F25EF0090181E /* twitter_load.png in Resources */,
 				B3A38935132F3EA60090181E /* like_btn.png in Resources */,
 				B3A3893B132F3EE40090181E /* dislike_btn.png in Resources */,
+				B37047E0132FA69D006A3A7F /* dislike_btn_selected.png in Resources */,
+				B37047E1132FA69D006A3A7F /* like_btn_selected.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

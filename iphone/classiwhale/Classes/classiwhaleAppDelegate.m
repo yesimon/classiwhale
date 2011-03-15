@@ -63,7 +63,8 @@
 	[whaleNav pushViewController:whaleVC animated:NO];
 	
 	UITabBarController* tabBarController = [[UITabBarController alloc] init]; 
-	tabBarController.viewControllers = [NSArray arrayWithObjects: timelineNav, followingNav, searchNav, whaleNav, nil]; 
+	//NOTE: For now, not including whaleNav, until we know what we want to do with it.
+	tabBarController.viewControllers = [NSArray arrayWithObjects: timelineNav, followingNav, searchNav, nil]; 
 	
 	
 	// Add the tab bar controller's view to the window and display.

@@ -33,6 +33,8 @@ static ClassiwhaleSingleton *sharedInstance = nil;
 
 - (void) loginToTwitter:(UIViewController*)vc
 {
+	connections = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
+																					&kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	twitterEngine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate: self];
 	twitterEngine.consumerKey = kOAuthConsumerKey;
 	twitterEngine.consumerSecret = kOAuthConsumerSecret;
@@ -44,7 +46,7 @@ static ClassiwhaleSingleton *sharedInstance = nil;
 		[twitterEngine sendUpdate: [NSString stringWithFormat: @"Already Updated. %@", [NSDate date]]];	
 }
 
-- (NSArray *) getTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error
+- (NSDictionary *) getTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error
 {
   if(!authenticated) return nil;
   NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://classiwhale.com/api/twitter/timeline"]];
@@ -63,11 +65,11 @@ static ClassiwhaleSingleton *sharedInstance = nil;
   NSLog(@"Error = %@", *error);
   if(*error != nil) return nil;
   NSString *json_string = [[NSString alloc] initWithData:dat encoding:NSUTF8StringEncoding];
-  NSArray *arr = [json_string JSONValue];
+  NSDictionary *arr = [json_string JSONValue];
   return arr;
 }
 
-- (NSArray *) getFilteredTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error
+- (NSDictionary *) getFilteredTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error
 {
   if(!authenticated) return nil;
   NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://classiwhale.com/api/twitter/filtered"]];
@@ -86,7 +88,7 @@ static ClassiwhaleSingleton *sharedInstance = nil;
   NSLog(@"Error = %@", *error);
   if(*error != nil) return nil;
   NSString *json_string = [[NSString alloc] initWithData:dat encoding:NSUTF8StringEncoding];
-  NSArray *arr = [json_string JSONValue];
+  NSDictionary *arr = [json_string JSONValue];
   return arr;
 }
 
@@ -116,8 +118,11 @@ static ClassiwhaleSingleton *sharedInstance = nil;
 - (NSArray *) rateTweetId:(NSString *)tweet_id up:(BOOL)rate_up withResponse:(NSURLResponse **)response andError:(NSError **)error
 {
   if(!authenticated) return nil;
+	NSLog(@"Tweet ID: %@", tweet_id); 
+
   NSString *base_string = @"http://classiwhale.com/api/twitter/rate/?id=";
   NSString *id_string = [base_string stringByAppendingString:tweet_id];
+	NSLog(@"2");
   NSString *complete_string = [id_string stringByAppendingString:(rate_up ? @"&rating=up" : @"&rating=down")];
   NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:complete_string]];
   [request setHTTPMethod: @"GET"];
@@ -138,6 +143,50 @@ static ClassiwhaleSingleton *sharedInstance = nil;
   NSArray *arr = [json_string JSONValue];
   return arr;
 }
+
+- (void) fetchProfilePic:(NSString*) urlString
+{
+	NSURL* url = [[[NSURL alloc] initWithString:urlString] autorelease];
+	[self createConnection:url postBody:nil method:@"GET" cid:urlString];
+}
+
+- (void) createConnection:(NSURL*)url postBody:(NSData*)postBody method:(NSString*)method cid:(NSString*)cid
+{
+	NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+	if (postBody) [request setHTTPBody:postBody];
+	[request setHTTPMethod:method];
+	[request setTimeoutInterval:30.0];
+	NSURLConnection *connection=[[NSURLConnection alloc] initWithRequest:request delegate:self];
+	if (connection) {		
+		CFDictionaryAddValue(connections, connection,
+												 [NSMutableDictionary dictionaryWithObjectsAndKeys: @"expires", [NSDate date], cid, @"id", [NSMutableData data], @"receivedData", nil]);
+	} else {
+    NSLog(@"Connection Failed");
+	}
+	[request release];
+}
+
+//======================================================================================================
+//HTTP Request stuff
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+	const NSMutableDictionary *connectionInfo = CFDictionaryGetValue(connections, connection);
+	[[connectionInfo objectForKey:@"receivedData"] appendData:data];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{	
+	const NSMutableDictionary *connectionInfo = CFDictionaryGetValue(connections, connection);
+	NSData* data = [connectionInfo objectForKey:@"receivedData"];
+	NSString *connectionID = [connectionInfo objectForKey:@"id"];
+	
+	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+	//NSLog(@"%@", data);
+	[notificationCenter postNotificationName:@"Got Twitter Pic" object:self 
+																	userInfo:[NSDictionary dictionaryWithObjectsAndKeys:data, @"data", connectionID, @"id", nil]];
+}
+	
 
 
 //=============================================================================================================================

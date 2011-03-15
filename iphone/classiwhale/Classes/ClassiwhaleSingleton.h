@@ -17,13 +17,16 @@
 
   NSArray *cookies;
   BOOL authenticated;
+	CFMutableDictionaryRef connections;
 }
 
 + (ClassiwhaleSingleton*)sharedInstance;
 - (void) loginToTwitter:(UIViewController*)vc;
-- (NSArray *) getFilteredTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error;
-- (NSArray *) getTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error;
+- (NSDictionary *) getFilteredTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error;
+- (NSDictionary *) getTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error;
 - (NSArray *) rateTweetId:(NSString *)tweet_id up:(BOOL)rate_up withResponse:(NSURLResponse **)response andError:(NSError **)error;
+- (void) fetchProfilePic:(NSString*) urlString;
+- (void) createConnection:(NSURL*)url postBody:(NSData*)postBody method:(NSString*)method cid:(NSString*)cid;
 
 @property (nonatomic, retain) NSArray *cookies;
 @property BOOL authenticated;
