@@ -79,17 +79,25 @@ def ajax_api(request, action=None):
         return HttpResponse(status=400)
 
 def benchmark_test(training_set, classifier):
-   t = TwitterTrainingSet.objects.get(name=training_set)
-   stats = t.benchmark(classifier, save=True)
-   return stats
+    t = TwitterTrainingSet.objects.get(name=training_set)
+    stats = t.benchmark(classifier, save=True)
+    return stats
    
     
 
 
 @login_required
 def benchmarks(request):
-    benchmarks = PredictionStatistics.objects.all()
+    benchmarks = PredictionStatistics.objects.all().select_related()
     training_sets = TwitterTrainingSet.objects.all()
+    """
+    latest_benchmarks = []
+    for training_set in training_sets:
+        for b in benchmarks:
+            if b.training_set == training_set:
+                latest_benchmarks.append(b)
+                break
+    """
     return render_to_response('corsair/benchmarks.html', {
         'benchmarks': benchmarks,
         'request': request,

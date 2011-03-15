@@ -1,0 +1,43 @@
+@import url("/css/app/facebook/base.css");
+
+a.fb_button {
+  float:right;
+}
+
+#facebookContainer.loggedOut {
+  border:1px solid #ccc;
+}
+
+#facebookContainer.loggedIn {
+  min-height:181px;
+}
+
+#facebookContainer.loggedIn #fbInfo {
+  float:right;
+  margin-top:-2.7em;
+}
+
+
+#facebookContainer .inset .column {
+  width:152px;
+  margin-right: 14px;
+}
+
+#facebookContainer .column {
+  width:161px;
+  margin-right: 14px;
+}
+
+#facebookContainer .last {
+  margin-right:0 !important;
+}
+
+.wideAd #facebookContainer .column {
+  width:217px;
+}
+
+#facebookContainer .userImage {
+	margin-bottom:6px;
+}
+
+

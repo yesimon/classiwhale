@@ -1,0 +1,14 @@
+{% block content %} 
+
+    <div class="user-profile-bar">
+        <span class="profile-image"><img class="photo" width="48" height="48" src="{{ friend.profile_image_url }}" alt="{{ friend.name }} " /></span>
+		<span class="profile-description"><div>{{ friend.screen_name}}</div><div>{{ friend.name}}</div></span>
+    </div>
+	
+	{% if user.is_authenticated %}
+    {% include "twitter/follow_unfollow.html" %}
+    {% endif %}
+	
+{% endblock %}
+
+
