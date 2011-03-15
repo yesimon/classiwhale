@@ -13,10 +13,12 @@
 	IBOutlet UITableView *table;
 	NSArray* timeline;
 	IBOutlet UISegmentedControl* segmentedControl;
+	NSString* userID;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *table;
 @property (nonatomic, retain) IBOutlet UISegmentedControl* segmentedControl;
+@property (nonatomic, retain) NSString* userID;
 
 
 - (void) gotTwitterPic:(NSNotification *)info;
