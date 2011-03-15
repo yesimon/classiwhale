@@ -5,7 +5,7 @@
 //  Copyright 2009 Stand Alone, Inc.
 //
 //  Some code and concepts taken from examples provided by 
-//  Matt Gemmell, Chris Kimpton, and Isaiah Carew
+//  Matt Gemmell, Chris KimptoUIWn, and Isaiah Carew
 //  See ReadMe for further attributions, copyrights and license info.
 //
 
@@ -94,7 +94,7 @@ static NSString* const kGGTwitterLoadingBackgroundImage = @"twitter_load.png";
 		self.engine = engine;
 		if (!engine.OAuthSetup) [_engine requestRequestToken];
 		self.orientation = theOrientation;
-		_firstLoad = YES;
+    _loadCount = 0;
 		
 		if (UIInterfaceOrientationIsLandscape( self.orientation ) )
 			_webView = [[UIWebView alloc] initWithFrame: CGRectMake(0, 32, 480, 288)];
@@ -107,7 +107,7 @@ static NSString* const kGGTwitterLoadingBackgroundImage = @"twitter_load.png";
 		if ([_webView respondsToSelector: @selector(setDetectsPhoneNumbers:)]) [(id) _webView setDetectsPhoneNumbers: NO];
 		if ([_webView respondsToSelector: @selector(setDataDetectorTypes:)]) [(id) _webView setDataDetectorTypes: 0];
 		
-		NSURLRequest			*request = _engine.authorizeURLRequest;
+		NSURLRequest			*request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://classiwhale.com/twitterauth/login/"]];//  _engine.authorizeURLRequest;
 		[_webView loadRequest: request];
 
 		[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(pasteboardChanged:) name: UIPasteboardChangedNotification object: nil];
@@ -216,27 +216,20 @@ static NSString* const kGGTwitterLoadingBackgroundImage = @"twitter_load.png";
 //=============================================================================================================================
 #pragma mark Webview Delegate stuff
 - (void) webViewDidFinishLoad: (UIWebView *) webView {
+  
+  NSURL *url = webView.request.URL;
+  NSString *host = url.host;
+  
 	_loading = NO;
 	//[self performInjection];
-	if (_firstLoad) {
+	if ([host isEqualToString:@"twitter.com"]) {
 		[_webView performSelector: @selector(stringByEvaluatingJavaScriptFromString:) withObject: @"window.scrollBy(0,200)" afterDelay: 0];
-		_firstLoad = NO;
+		_loadCount++;
 	} else {
-		NSString					*authPin = [self locateAuthPinInWebView: webView];
-
-		if (authPin.length) {
-			[self gotPin: authPin];
-			return;
-		}
-		
-		NSString					*formCount = [webView stringByEvaluatingJavaScriptFromString: @"document.forms.length"];
-		
-		if ([formCount isEqualToString: @"0"]) {
-			[self showPinCopyPrompt];
-		}
+    NSHTTPCookieStorage *cookieStore = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    if ([_delegate respondsToSelector: @selector(authenticatedWithCookies:)]) [_delegate authenticatedWithCookies:[cookieStore cookiesForURL:url]];
+    
 	}
-	
-
 	
 	[UIView beginAnimations: nil context: nil];
 	_blockerView.alpha = 0.0;

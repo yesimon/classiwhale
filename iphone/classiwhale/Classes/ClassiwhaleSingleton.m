@@ -9,12 +9,16 @@
 #import "ClassiwhaleSingleton.h"
 #import "SA_OAuthTwitterEngine.h"
 #import "classiwhaleAppDelegate.h"
+#import "JSON.h"
 
 
 #define kOAuthConsumerKey				@"H3jdfPuU3srfX2uo7LFQ1w"
 #define kOAuthConsumerSecret			@"Fe0iHcfi8nubMBzjbcUuf6zRW8Nn9VgMJkiHcCdKwSw"
 
 @implementation ClassiwhaleSingleton
+
+@synthesize authenticated;
+@synthesize cookies;
 
 static ClassiwhaleSingleton *sharedInstance = nil;
 
@@ -39,7 +43,103 @@ static ClassiwhaleSingleton *sharedInstance = nil;
 	else 
 		[twitterEngine sendUpdate: [NSString stringWithFormat: @"Already Updated. %@", [NSDate date]]];	
 }
-	
+
+- (NSArray *) getTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error
+{
+  if(!authenticated) return nil;
+  NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://classiwhale.com/api/twitter/timeline"]];
+  [request setHTTPMethod: @"POST"];
+  [request setHTTPShouldHandleCookies:NO];
+  
+  if(cookies != nil) {
+    [request setAllHTTPHeaderFields:[NSHTTPCookie requestHeaderFieldsWithCookies:self.cookies]];
+  }
+  
+  *response = nil;
+  *error = nil;
+  
+  NSData *dat = [NSURLConnection sendSynchronousRequest:request returningResponse:response error:error];
+  NSLog(@"Response = %@", *response);
+  NSLog(@"Error = %@", *error);
+  if(*error != nil) return nil;
+  NSString *json_string = [[NSString alloc] initWithData:dat encoding:NSUTF8StringEncoding];
+  NSArray *arr = [json_string JSONValue];
+  return arr;
+}
+
+- (NSArray *) getFilteredTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error
+{
+  if(!authenticated) return nil;
+  NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://classiwhale.com/api/twitter/filtered"]];
+  [request setHTTPMethod: @"POST"];
+  [request setHTTPShouldHandleCookies:NO];
+  
+  if(cookies != nil) {
+    [request setAllHTTPHeaderFields:[NSHTTPCookie requestHeaderFieldsWithCookies:self.cookies]];
+  }
+  
+  *response = nil;
+  *error = nil;
+  
+  NSData *dat = [NSURLConnection sendSynchronousRequest:request returningResponse:response error:error];
+  NSLog(@"Response = %@", *response);
+  NSLog(@"Error = %@", *error);
+  if(*error != nil) return nil;
+  NSString *json_string = [[NSString alloc] initWithData:dat encoding:NSUTF8StringEncoding];
+  NSArray *arr = [json_string JSONValue];
+  return arr;
+}
+
+- (NSArray *) getFriendsWithResponse:(NSURLResponse **)response andError:(NSError **)error
+{
+  if(!authenticated) return nil;
+  NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://classiwhale.com/api/twitter/friends"]];
+  [request setHTTPMethod: @"POST"];
+  [request setHTTPShouldHandleCookies:NO];
+  
+  if(cookies != nil) {
+    [request setAllHTTPHeaderFields:[NSHTTPCookie requestHeaderFieldsWithCookies:self.cookies]];
+  }
+  
+  *response = nil;
+  *error = nil;
+  
+  NSData *dat = [NSURLConnection sendSynchronousRequest:request returningResponse:response error:error];
+  NSLog(@"Response = %@", *response);
+  NSLog(@"Error = %@", *error);
+  if(*error != nil) return nil;
+  NSString *json_string = [[NSString alloc] initWithData:dat encoding:NSUTF8StringEncoding];
+  NSArray *arr = [json_string JSONValue];
+  return arr;
+}
+
+- (NSArray *) rateTweetId:(NSString *)tweet_id up:(BOOL)rate_up withResponse:(NSURLResponse **)response andError:(NSError **)error
+{
+  if(!authenticated) return nil;
+  NSString *base_string = @"http://classiwhale.com/api/twitter/rate/?id=";
+  NSString *id_string = [base_string stringByAppendingString:tweet_id];
+  NSString *complete_string = [id_string stringByAppendingString:(rate_up ? @"&rating=up" : @"&rating=down")];
+  NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:complete_string]];
+  [request setHTTPMethod: @"GET"];
+  [request setHTTPShouldHandleCookies:NO];
+  
+  if(cookies != nil) {
+    [request setAllHTTPHeaderFields:[NSHTTPCookie requestHeaderFieldsWithCookies:self.cookies]];
+  }
+  
+  *response = nil;
+  *error = nil;
+  
+  NSData *dat = [NSURLConnection sendSynchronousRequest:request returningResponse:response error:error];
+  NSLog(@"Response = %@", *response);
+  NSLog(@"Error = %@", *error);
+  if(*error != nil) return nil;
+  NSString *json_string = [[NSString alloc] initWithData:dat encoding:NSUTF8StringEncoding];
+  NSArray *arr = [json_string JSONValue];
+  return arr;
+}
+
+
 //=============================================================================================================================
 #pragma mark SA_OAuthTwitterEngineDelegate
 - (void) storeCachedTwitterOAuthData: (NSString *) data forUsername: (NSString *) username {
@@ -57,7 +157,6 @@ static ClassiwhaleSingleton *sharedInstance = nil;
 #pragma mark SA_OAuthTwitterControllerDelegate
 - (void) OAuthTwitterController: (SA_OAuthTwitterController *) controller authenticatedWithUsername: (NSString *) username {
 	NSLog(@"Authenicated for %@", username);
-	[(classiwhaleAppDelegate*)[UIApplication sharedApplication].delegate successfullyLoggedIn];
 }
 
 - (void) OAuthTwitterControllerFailed: (SA_OAuthTwitterController *) controller {
@@ -66,6 +165,13 @@ static ClassiwhaleSingleton *sharedInstance = nil;
 
 - (void) OAuthTwitterControllerCanceled: (SA_OAuthTwitterController *) controller {
 	NSLog(@"Authentication Canceled.");
+}
+
+- (void) authenticatedWithCookies: (NSArray *) cooks {
+  NSLog(@"Authentication Success!");
+  self.cookies = cooks;
+  authenticated = YES;
+	[(classiwhaleAppDelegate*)[UIApplication sharedApplication].delegate successfullyLoggedIn];
 }
 
 //=============================================================================================================================

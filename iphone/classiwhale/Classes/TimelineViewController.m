@@ -7,6 +7,7 @@
 //
 
 #import "TimelineViewController.h"
+#import "ClassiwhaleSingleton.h"
 
 
 @implementation TimelineViewController
@@ -22,12 +23,22 @@
 }
 */
 
-/*
+
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+  ClassiwhaleSingleton *api = [ClassiwhaleSingleton sharedInstance];
+  
+  NSURLResponse *response = nil;
+  NSError *error = nil;
+  
+  NSArray *timeline = [api getTimelineWithResponse:&response andError:&error];
+  
+  NSLog(@"%@", timeline);
+  
+  [api rateTweetId:@"47581699944615936" up:NO withResponse:&response andError:&error];
 }
-*/
+
 
 /*
 // Override to allow orientations other than the default portrait orientation.
