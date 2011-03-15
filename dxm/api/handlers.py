@@ -7,6 +7,7 @@ import prediction.views
 from twitter.utils import get_authorized_twython, full_create_status
 from prediction.views import get_filtered_friends_timeline
 from piston.utils import rc
+from twitter.views import get_rate_results
 
 class TimelineHandler(BaseHandler):
     def read(self, request):
@@ -42,5 +43,13 @@ class FriendsHandler(BaseHandler):
     
 class RateHandler(BaseHandler):
     def read(self, request):
-        return None
+        lex = request.GET
+        if (not lex.has_key(u'rating')) or (not (lex.has_key(u'status') or lex.has_key(u'id'))):
+            return HttpResponseBadRequest("rating and/or status parameters missing")
+        u = request.user
+        if not u.is_authenticated():
+            return rc.FORBIDDEN
+        results = get_rate_results(request, lex)
+        return results
+        
         

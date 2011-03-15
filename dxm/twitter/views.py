@@ -230,19 +230,20 @@ def destroy_friendship(request):
     return HttpResponse(jsonResults, mimetype='application/json')
 
 
-def ajax_rate(request):
+def get_rate_results(request, lex):
     results = {'success':'False'}
-    if request.method != u'POST':
-        return HttpResponseBadRequest("Only allows POST requests")
-    POST = request.POST
-    if (not POST.has_key(u'rating')) or (not POST.has_key(u'status')):
-        return HttpResponseBadRequest("rating and/or status parameters missing")
     u = request.user
-    if not u.is_authenticated():
-        return HttpResponseBadRequest("Must be logged in")
-
-    rating = POST[u'rating']
-    status = Status.construct_from_dict(json.loads(POST[u'status']))
+    
+    rating = lex[u'rating']
+    
+    if(lex.has_key(u'status')):
+       status_json = json.loads(lex[u'status'])
+    else:
+        api = get_authorized_twython(request.session['twitter_tokens'])
+        status_json = api.showStatus(id=lex[u'id'])
+    
+    status = Status.construct_from_dict(status_json)
+    #status = Status.construct_from_dict(json.loads(POST[u'status']))
 
     # Show user if tweet delivered from Search API, which does not have correct userid
     # TODO: a more elegant solution
@@ -255,10 +256,12 @@ def ajax_rate(request):
     prof = u.get_profile()
     status.save_with_user()
 
-    if rating == u"up":
+    if rating == u"up" or rating == "up":
         rating_int = 1
-    elif rating == u"down":
+    elif rating == u"down" or rating == "down":
         rating_int = -1
+    else:
+        print "ERROR: Rating doesn't match UP or DOWN: rating = " + str(rating)
     try:
         r = Rating.objects.get(status=status, user=tp)
     except:
@@ -274,6 +277,23 @@ def ajax_rate(request):
     results['max-exp'] = prof.whale.species.evolution.minExp
     results['species'] = prof.whale.species.img.url
     results['speciesName'] = prof.whale.species.name
+    
+    return results
+
+
+def ajax_rate(request):
+    if request.method != u'POST':
+        return HttpResponseBadRequest("Only allows POST requests")
+    POST = request.POST
+    if (not POST.has_key(u'rating')) or (not (POST.has_key(u'status') or POST.has_key(u'id'))):
+        return HttpResponseBadRequest("rating and/or status parameters missing")
+    u = request.user
+    if not u.is_authenticated():
+        return HttpResponseBadRequest("Must be logged in")
+    
+    print POST[u'status']
+
+    results = get_rate_results(request, POST)
     jsonResults = json.dumps(results)
     return HttpResponse(jsonResults, mimetype='application/json')
 
