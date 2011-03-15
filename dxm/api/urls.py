@@ -18,8 +18,8 @@ friends_resource = CsrfExemptResource(FriendsHandler)
 rate_resource = CsrfExemptResource(RateHandler)
     
 urlpatterns = patterns('',
-                          (r'^twitter/timeline$', timeline_resource),
-                          (r'^twitter/filtered$', filter_resource),
-                          (r'^twitter/friends', friends_resource),
-                          (r'^twitter/rate', rate_resource),
+                          (r'^twitter/timeline/$', timeline_resource),
+                          (r'^twitter/filtered/$', filter_resource),
+                          (r'^twitter/friends/', friends_resource),
+                          (r'^twitter/rate/', rate_resource),
                        )
