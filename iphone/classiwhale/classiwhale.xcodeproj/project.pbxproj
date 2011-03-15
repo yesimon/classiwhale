@@ -1,0 +1,402 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1D3623260D0F684500981E51 /* classiwhaleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* classiwhaleAppDelegate.m */; };
+		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
+		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
+		B3A386AC132EB62D0090181E /* SplashScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3A386AA132EB62D0090181E /* SplashScreenViewController.m */; };
+		B3A386AD132EB62D0090181E /* SplashScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3A386AB132EB62D0090181E /* SplashScreenViewController.xib */; };
+		B3A386B2132EBBE60090181E /* classiwhale_splash.png in Resources */ = {isa = PBXBuildFile; fileRef = B3A386B1132EBBE60090181E /* classiwhale_splash.png */; };
+		B3A386B8132EBC1A0090181E /* loginButton.png in Resources */ = {isa = PBXBuildFile; fileRef = B3A386B7132EBC1A0090181E /* loginButton.png */; };
+		B3A386E4132EC10A0090181E /* WhaleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3A386E2132EC10A0090181E /* WhaleViewController.m */; };
+		B3A386E5132EC10A0090181E /* WhaleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3A386E3132EC10A0090181E /* WhaleViewController.xib */; };
+		B3A386EB132EC73B0090181E /* magnify.png in Resources */ = {isa = PBXBuildFile; fileRef = B3A386E8132EC73B0090181E /* magnify.png */; };
+		B3A386EC132EC73B0090181E /* group.png in Resources */ = {isa = PBXBuildFile; fileRef = B3A386E9132EC73B0090181E /* group.png */; };
+		B3A386ED132EC73B0090181E /* newspaper.png in Resources */ = {isa = PBXBuildFile; fileRef = B3A386EA132EC73B0090181E /* newspaper.png */; };
+		B3A386F1132EC7C90090181E /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3A386EF132EC7C90090181E /* SearchViewController.m */; };
+		B3A386F2132EC7C90090181E /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3A386F0132EC7C90090181E /* SearchViewController.xib */; };
+		B3A386F6132EC7DD0090181E /* FollowingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3A386F4132EC7DD0090181E /* FollowingViewController.m */; };
+		B3A386F7132EC7DD0090181E /* FollowingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3A386F5132EC7DD0090181E /* FollowingViewController.xib */; };
+		B3A38725132ECC760090181E /* tabbar_whale.png in Resources */ = {isa = PBXBuildFile; fileRef = B3A38724132ECC760090181E /* tabbar_whale.png */; };
+		B3A38741132EDD660090181E /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3A3873F132EDD660090181E /* TimelineViewController.m */; };
+		B3A38742132EDD660090181E /* TimelineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3A38740132EDD660090181E /* TimelineViewController.xib */; };
+		B3A38745132EDD710090181E /* TimelineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3A38744132EDD710090181E /* TimelineCell.m */; };
+		B3A38747132EDD810090181E /* TimelineCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3A38746132EDD810090181E /* TimelineCell.xib */; };
+		B3A38757132EE21C0090181E /* ClassiwhaleSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = B3A38756132EE21C0090181E /* ClassiwhaleSingleton.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1D3623240D0F684500981E51 /* classiwhaleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = classiwhaleAppDelegate.h; sourceTree = "<group>"; };
+		1D3623250D0F684500981E51 /* classiwhaleAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = classiwhaleAppDelegate.m; sourceTree = "<group>"; };
+		1D6058910D05DD3D006BFB54 /* classiwhale.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = classiwhale.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		32CA4F630368D1EE00C91783 /* classiwhale_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = classiwhale_Prefix.pch; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* classiwhale-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "classiwhale-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		B3A386A9132EB62D0090181E /* SplashScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashScreenViewController.h; sourceTree = "<group>"; };
+		B3A386AA132EB62D0090181E /* SplashScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashScreenViewController.m; sourceTree = "<group>"; };
+		B3A386AB132EB62D0090181E /* SplashScreenViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SplashScreenViewController.xib; sourceTree = "<group>"; };
+		B3A386B1132EBBE60090181E /* classiwhale_splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = classiwhale_splash.png; sourceTree = "<group>"; };
+		B3A386B7132EBC1A0090181E /* loginButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginButton.png; sourceTree = "<group>"; };
+		B3A386E1132EC10A0090181E /* WhaleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhaleViewController.h; sourceTree = "<group>"; };
+		B3A386E2132EC10A0090181E /* WhaleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhaleViewController.m; sourceTree = "<group>"; };
+		B3A386E3132EC10A0090181E /* WhaleViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WhaleViewController.xib; sourceTree = "<group>"; };
+		B3A386E8132EC73B0090181E /* magnify.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = magnify.png; sourceTree = "<group>"; };
+		B3A386E9132EC73B0090181E /* group.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = group.png; sourceTree = "<group>"; };
+		B3A386EA132EC73B0090181E /* newspaper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newspaper.png; sourceTree = "<group>"; };
+		B3A386EE132EC7C90090181E /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		B3A386EF132EC7C90090181E /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
+		B3A386F0132EC7C90090181E /* SearchViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchViewController.xib; sourceTree = "<group>"; };
+		B3A386F3132EC7DD0090181E /* FollowingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FollowingViewController.h; sourceTree = "<group>"; };
+		B3A386F4132EC7DD0090181E /* FollowingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FollowingViewController.m; sourceTree = "<group>"; };
+		B3A386F5132EC7DD0090181E /* FollowingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FollowingViewController.xib; sourceTree = "<group>"; };
+		B3A38724132ECC760090181E /* tabbar_whale.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabbar_whale.png; sourceTree = "<group>"; };
+		B3A3873E132EDD660090181E /* TimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineViewController.h; sourceTree = "<group>"; };
+		B3A3873F132EDD660090181E /* TimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineViewController.m; sourceTree = "<group>"; };
+		B3A38740132EDD660090181E /* TimelineViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TimelineViewController.xib; sourceTree = "<group>"; };
+		B3A38743132EDD710090181E /* TimelineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineCell.h; sourceTree = "<group>"; };
+		B3A38744132EDD710090181E /* TimelineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineCell.m; sourceTree = "<group>"; };
+		B3A38746132EDD810090181E /* TimelineCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TimelineCell.xib; sourceTree = "<group>"; };
+		B3A38755132EE21C0090181E /* ClassiwhaleSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassiwhaleSingleton.h; sourceTree = "<group>"; };
+		B3A38756132EE21C0090181E /* ClassiwhaleSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassiwhaleSingleton.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D60588F0D05DD3D006BFB54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				B3A38754132EE2100090181E /* ClassiwhaleSingleton */,
+				B3A386E6132EC6B90090181E /* Search */,
+				B3A386DB132EC0C50090181E /* Whale */,
+				B3A386DA132EC0AC0090181E /* Following */,
+				B3A386D9132EC0980090181E /* Timeline */,
+				B3A386A8132EB5EC0090181E /* SplashScreen */,
+				B3A386BD132EBCB00090181E /* AppDelegate */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D6058910D05DD3D006BFB54 /* classiwhale.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32CA4F630368D1EE00C91783 /* classiwhale_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B3A386E7132EC6CD0090181E /* Tab Bar Icons */,
+				B3A386B7132EBC1A0090181E /* loginButton.png */,
+				B3A386B1132EBBE60090181E /* classiwhale_splash.png */,
+				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
+				8D1107310486CEB800E47090 /* classiwhale-Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B3A386A8132EB5EC0090181E /* SplashScreen */ = {
+			isa = PBXGroup;
+			children = (
+				B3A386A9132EB62D0090181E /* SplashScreenViewController.h */,
+				B3A386AA132EB62D0090181E /* SplashScreenViewController.m */,
+				B3A386AB132EB62D0090181E /* SplashScreenViewController.xib */,
+			);
+			name = SplashScreen;
+			sourceTree = "<group>";
+		};
+		B3A386BD132EBCB00090181E /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				1D3623240D0F684500981E51 /* classiwhaleAppDelegate.h */,
+				1D3623250D0F684500981E51 /* classiwhaleAppDelegate.m */,
+			);
+			name = AppDelegate;
+			sourceTree = "<group>";
+		};
+		B3A386D9132EC0980090181E /* Timeline */ = {
+			isa = PBXGroup;
+			children = (
+				B3A3873E132EDD660090181E /* TimelineViewController.h */,
+				B3A3873F132EDD660090181E /* TimelineViewController.m */,
+				B3A38740132EDD660090181E /* TimelineViewController.xib */,
+				B3A38743132EDD710090181E /* TimelineCell.h */,
+				B3A38744132EDD710090181E /* TimelineCell.m */,
+				B3A38746132EDD810090181E /* TimelineCell.xib */,
+			);
+			name = Timeline;
+			sourceTree = "<group>";
+		};
+		B3A386DA132EC0AC0090181E /* Following */ = {
+			isa = PBXGroup;
+			children = (
+				B3A386F3132EC7DD0090181E /* FollowingViewController.h */,
+				B3A386F4132EC7DD0090181E /* FollowingViewController.m */,
+				B3A386F5132EC7DD0090181E /* FollowingViewController.xib */,
+			);
+			name = Following;
+			sourceTree = "<group>";
+		};
+		B3A386DB132EC0C50090181E /* Whale */ = {
+			isa = PBXGroup;
+			children = (
+				B3A386E1132EC10A0090181E /* WhaleViewController.h */,
+				B3A386E2132EC10A0090181E /* WhaleViewController.m */,
+				B3A386E3132EC10A0090181E /* WhaleViewController.xib */,
+			);
+			name = Whale;
+			sourceTree = "<group>";
+		};
+		B3A386E6132EC6B90090181E /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				B3A386EE132EC7C90090181E /* SearchViewController.h */,
+				B3A386EF132EC7C90090181E /* SearchViewController.m */,
+				B3A386F0132EC7C90090181E /* SearchViewController.xib */,
+			);
+			name = Search;
+			sourceTree = "<group>";
+		};
+		B3A386E7132EC6CD0090181E /* Tab Bar Icons */ = {
+			isa = PBXGroup;
+			children = (
+				B3A38724132ECC760090181E /* tabbar_whale.png */,
+				B3A386E8132EC73B0090181E /* magnify.png */,
+				B3A386E9132EC73B0090181E /* group.png */,
+				B3A386EA132EC73B0090181E /* newspaper.png */,
+			);
+			name = "Tab Bar Icons";
+			sourceTree = "<group>";
+		};
+		B3A38754132EE2100090181E /* ClassiwhaleSingleton */ = {
+			isa = PBXGroup;
+			children = (
+				B3A38755132EE21C0090181E /* ClassiwhaleSingleton.h */,
+				B3A38756132EE21C0090181E /* ClassiwhaleSingleton.m */,
+			);
+			name = ClassiwhaleSingleton;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D6058900D05DD3D006BFB54 /* classiwhale */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "classiwhale" */;
+			buildPhases = (
+				1D60588D0D05DD3D006BFB54 /* Resources */,
+				1D60588E0D05DD3D006BFB54 /* Sources */,
+				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = classiwhale;
+			productName = classiwhale;
+			productReference = 1D6058910D05DD3D006BFB54 /* classiwhale.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "classiwhale" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D6058900D05DD3D006BFB54 /* classiwhale */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1D60588D0D05DD3D006BFB54 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
+				B3A386AD132EB62D0090181E /* SplashScreenViewController.xib in Resources */,
+				B3A386B2132EBBE60090181E /* classiwhale_splash.png in Resources */,
+				B3A386B8132EBC1A0090181E /* loginButton.png in Resources */,
+				B3A386E5132EC10A0090181E /* WhaleViewController.xib in Resources */,
+				B3A386EB132EC73B0090181E /* magnify.png in Resources */,
+				B3A386EC132EC73B0090181E /* group.png in Resources */,
+				B3A386ED132EC73B0090181E /* newspaper.png in Resources */,
+				B3A386F2132EC7C90090181E /* SearchViewController.xib in Resources */,
+				B3A386F7132EC7DD0090181E /* FollowingViewController.xib in Resources */,
+				B3A38725132ECC760090181E /* tabbar_whale.png in Resources */,
+				B3A38742132EDD660090181E /* TimelineViewController.xib in Resources */,
+				B3A38747132EDD810090181E /* TimelineCell.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D60588E0D05DD3D006BFB54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
+				1D3623260D0F684500981E51 /* classiwhaleAppDelegate.m in Sources */,
+				B3A386AC132EB62D0090181E /* SplashScreenViewController.m in Sources */,
+				B3A386E4132EC10A0090181E /* WhaleViewController.m in Sources */,
+				B3A386F1132EC7C90090181E /* SearchViewController.m in Sources */,
+				B3A386F6132EC7DD0090181E /* FollowingViewController.m in Sources */,
+				B3A38741132EDD660090181E /* TimelineViewController.m in Sources */,
+				B3A38745132EDD710090181E /* TimelineCell.m in Sources */,
+				B3A38757132EE21C0090181E /* ClassiwhaleSingleton.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1D6058940D05DD3E006BFB54 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = classiwhale_Prefix.pch;
+				INFOPLIST_FILE = "classiwhale-Info.plist";
+				PRODUCT_NAME = classiwhale;
+			};
+			name = Debug;
+		};
+		1D6058950D05DD3E006BFB54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = classiwhale_Prefix.pch;
+				INFOPLIST_FILE = "classiwhale-Info.plist";
+				PRODUCT_NAME = classiwhale;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PREBINDING = NO;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "classiwhale" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D6058940D05DD3E006BFB54 /* Debug */,
+				1D6058950D05DD3E006BFB54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "classiwhale" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
