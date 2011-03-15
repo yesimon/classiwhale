@@ -24,9 +24,12 @@
 - (void) loginToTwitter:(UIViewController*)vc;
 - (NSDictionary *) getFilteredTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error;
 - (NSDictionary *) getTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error;
+- (NSArray *) getFriendsWithResponse:(NSURLResponse **)response andError:(NSError **)error;
 - (NSArray *) rateTweetId:(NSString *)tweet_id up:(BOOL)rate_up withResponse:(NSURLResponse **)response andError:(NSError **)error;
 - (void) fetchProfilePic:(NSString*) urlString;
 - (void) createConnection:(NSURL*)url postBody:(NSData*)postBody method:(NSString*)method cid:(NSString*)cid;
+- (void) authenticatedWithCookies: (NSArray *) cooks;
+- (void) preapprovedWithCookies: (NSArray *) cooks;
 
 @property (nonatomic, retain) NSArray *cookies;
 @property BOOL authenticated;

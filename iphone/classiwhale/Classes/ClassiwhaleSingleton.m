@@ -118,7 +118,7 @@ static ClassiwhaleSingleton *sharedInstance = nil;
 - (NSArray *) rateTweetId:(NSString *)tweet_id up:(BOOL)rate_up withResponse:(NSURLResponse **)response andError:(NSError **)error
 {
   if(!authenticated) return nil;
-	NSLog(@"Tweet ID: %@", tweet_id); 
+	NSLog(@"Tweet ID: %@", tweet_id);
 
   NSString *base_string = @"http://classiwhale.com/api/twitter/rate/?id=";
   NSString *id_string = [base_string stringByAppendingString:tweet_id];
@@ -222,6 +222,13 @@ static ClassiwhaleSingleton *sharedInstance = nil;
   authenticated = YES;
 	[(classiwhaleAppDelegate*)[UIApplication sharedApplication].delegate successfullyLoggedIn];
 }
+
+- (void) preapprovedWithCookies: (NSArray *) cooks {
+  NSLog(@"Cookies Preapproved!");
+  self.cookies = cooks;
+  authenticated = YES;
+}
+
 
 //=============================================================================================================================
 #pragma mark TwitterEngineDelegate

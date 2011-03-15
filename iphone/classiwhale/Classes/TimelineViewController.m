@@ -57,7 +57,8 @@
 	NSIndexPath *indexPath = [table indexPathForCell:cell];
 	[cell.dislikeButton setImage:[UIImage imageNamed:@"dislike_btn.png"] forState:UIControlStateNormal];
 	[cell.likeButton setImage:[UIImage imageNamed:@"like_btn_selected.png"] forState:UIControlStateNormal];
-	[self submitRating:YES tweetID:[[timeline objectAtIndex:indexPath.row] valueForKey:@"id"]];
+  NSString *tweetID = [[[timeline objectAtIndex:indexPath.row] valueForKey:@"id"] stringValue];
+	[self submitRating:YES tweetID:tweetID];
 }
 
 
@@ -67,7 +68,7 @@
 	NSIndexPath *indexPath = [table indexPathForCell:cell];
 	[cell.likeButton setImage:[UIImage imageNamed:@"like_btn.png"] forState:UIControlStateNormal];
 	[cell.dislikeButton setImage:[UIImage imageNamed:@"dislike_btn_selected.png"] forState:UIControlStateNormal];
-	NSString *tweetID = [NSString stringWithFormat:@"%i", [[timeline objectAtIndex:indexPath.row] valueForKey:@"id"]];
+  NSString *tweetID = [[[timeline objectAtIndex:indexPath.row] valueForKey:@"id"] stringValue];
 	[self submitRating:NO tweetID:tweetID];
 }
 

@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 
 
-@interface FollowingViewController : UIViewController {
-
+@interface FollowingViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
+	IBOutlet UITableView *table;
+	NSArray* users;
 }
+
+@property (nonatomic, retain) IBOutlet UITableView *table;
 
 @end

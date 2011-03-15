@@ -63,6 +63,8 @@
 		B3A388C4132F2B740090181E /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B3A388C3132F2B740090181E /* libxml2.dylib */; };
 		B3A38935132F3EA60090181E /* like_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = B3A38934132F3EA60090181E /* like_btn.png */; };
 		B3A3893B132F3EE40090181E /* dislike_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = B3A3893A132F3EE40090181E /* dislike_btn.png */; };
+		FA133CCA132FBEA300E1BCB2 /* TwitterUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA133CC9132FBEA300E1BCB2 /* TwitterUserCell.m */; };
+		FA133CCC132FBF7600E1BCB2 /* TwitterUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA133CCB132FBF7600E1BCB2 /* TwitterUserCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -175,6 +177,9 @@
 		B3A388C3132F2B740090181E /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		B3A38934132F3EA60090181E /* like_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = like_btn.png; sourceTree = "<group>"; };
 		B3A3893A132F3EE40090181E /* dislike_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dislike_btn.png; sourceTree = "<group>"; };
+		FA133CC8132FBEA300E1BCB2 /* TwitterUserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterUserCell.h; sourceTree = "<group>"; };
+		FA133CC9132FBEA300E1BCB2 /* TwitterUserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterUserCell.m; sourceTree = "<group>"; };
+		FA133CCB132FBF7600E1BCB2 /* TwitterUserCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TwitterUserCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -323,6 +328,9 @@
 				B3A386F3132EC7DD0090181E /* FollowingViewController.h */,
 				B3A386F4132EC7DD0090181E /* FollowingViewController.m */,
 				B3A386F5132EC7DD0090181E /* FollowingViewController.xib */,
+				FA133CC8132FBEA300E1BCB2 /* TwitterUserCell.h */,
+				FA133CC9132FBEA300E1BCB2 /* TwitterUserCell.m */,
+				FA133CCB132FBF7600E1BCB2 /* TwitterUserCell.xib */,
 			);
 			name = Following;
 			sourceTree = "<group>";
@@ -538,6 +546,7 @@
 				B3A3893B132F3EE40090181E /* dislike_btn.png in Resources */,
 				B37047E0132FA69D006A3A7F /* dislike_btn_selected.png in Resources */,
 				B37047E1132FA69D006A3A7F /* like_btn_selected.png in Resources */,
+				FA133CCC132FBF7600E1BCB2 /* TwitterUserCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -579,6 +588,7 @@
 				B37046A9132F48DA006A3A7F /* SBJsonBase.m in Sources */,
 				B37046AA132F48DA006A3A7F /* SBJsonParser.m in Sources */,
 				B37046AB132F48DA006A3A7F /* SBJsonWriter.m in Sources */,
+				FA133CCA132FBEA300E1BCB2 /* TwitterUserCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -630,7 +640,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$SDKROOT/usr/include/libxml2/**";
 				PREBINDING = NO;
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos4.1;
 			};
 			name = Debug;
 		};
@@ -645,7 +655,7 @@
 				HEADER_SEARCH_PATHS = "$SDKROOT/usr/include/libxml2/**";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PREBINDING = NO;
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos4.1;
 			};
 			name = Release;
 		};

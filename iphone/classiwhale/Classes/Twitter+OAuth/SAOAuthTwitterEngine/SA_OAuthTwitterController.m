@@ -18,6 +18,8 @@
 
 // Constants
 static NSString* const kGGTwitterLoadingBackgroundImage = @"twitter_load.png";
+static NSString* const kLoginURL = @"http://classiwhale.com/twitterauth/login/api/";
+static NSString* const kReturnURL = @"http://classiwhale.com/twitterauth/return/api/";
 
 @interface SA_OAuthTwitterController ()
 @property (nonatomic, readonly) UIToolbar *pinCopyPromptBar;
@@ -107,7 +109,7 @@ static NSString* const kGGTwitterLoadingBackgroundImage = @"twitter_load.png";
 		if ([_webView respondsToSelector: @selector(setDetectsPhoneNumbers:)]) [(id) _webView setDetectsPhoneNumbers: NO];
 		if ([_webView respondsToSelector: @selector(setDataDetectorTypes:)]) [(id) _webView setDataDetectorTypes: 0];
 		
-		NSURLRequest			*request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://classiwhale.com/twitterauth/login/"]];//  _engine.authorizeURLRequest;
+		NSURLRequest			*request = [NSURLRequest requestWithURL:[NSURL URLWithString:kLoginURL]];//  _engine.authorizeURLRequest;
 		[_webView loadRequest: request];
 
 		[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(pasteboardChanged:) name: UIPasteboardChangedNotification object: nil];
@@ -217,18 +219,27 @@ static NSString* const kGGTwitterLoadingBackgroundImage = @"twitter_load.png";
 #pragma mark Webview Delegate stuff
 - (void) webViewDidFinishLoad: (UIWebView *) webView {
   
-  NSURL *url = webView.request.URL;
-  NSString *host = url.host;
+  NSHTTPCookieStorage *cookieStore = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+  NSArray *cooks = [cookieStore cookiesForURL:[NSURL URLWithString:@"http://classiwhale.com/"]];
+  BOOL haveSessionID = NO;
+  for (NSHTTPCookie *cook in cooks) {
+    if ([[cook name] isEqualToString:@"sessionid"]) {
+      NSLog(@"%@", cook);
+      haveSessionID = YES;
+    } else {
+      [cookieStore deleteCookie: cook];
+    }
+  }
+  NSString *url = [webView.request.URL absoluteString];
+  if(![url hasPrefix:kReturnURL]) haveSessionID = NO;
   
 	_loading = NO;
 	//[self performInjection];
-	if ([host isEqualToString:@"twitter.com"]) {
+	if (!haveSessionID) {
 		[_webView performSelector: @selector(stringByEvaluatingJavaScriptFromString:) withObject: @"window.scrollBy(0,200)" afterDelay: 0];
 		_loadCount++;
 	} else {
-    NSHTTPCookieStorage *cookieStore = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-    if ([_delegate respondsToSelector: @selector(authenticatedWithCookies:)]) [_delegate authenticatedWithCookies:[cookieStore cookiesForURL:url]];
-    
+    if ([_delegate respondsToSelector: @selector(authenticatedWithCookies:)]) [_delegate authenticatedWithCookies:[cookieStore cookiesForURL:[NSURL URLWithString:@"http://classiwhale.com/"]]];
 	}
 	
 	[UIView beginAnimations: nil context: nil];
@@ -338,6 +349,7 @@ Ugly. I apologize for its inelegance. Bleah.
 	_loading = YES;
 	[UIView beginAnimations: nil context: nil];
 	_blockerView.alpha = 1.0;
+  _webView.alpha = 0.0;
 	[UIView commitAnimations];
 }
 
