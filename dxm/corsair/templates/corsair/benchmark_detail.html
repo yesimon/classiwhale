@@ -3,26 +3,17 @@
 {% block extra_js %}
 <script>
 $(document).ready(function(){
- 
-    l2 = [11, 9, 5, 12, 14];
-    l3 = [4, 8, 5, 3, 6];
-    l4 = [12, 6, 13, 11, 2];
-    l5 = [4, -3, 3, 6, 2, -2];    
- 
     roc_coordinates = {{ roc_coordinates }};
     $.jqplot.config.enablePlugins = true;    
     $.jqplot('chartdiv',  [roc_coordinates], 
         { title: 'ROC Curve',
           axes: {yaxis:{min:0, max:1},
                  xaxis:{min:0, max:1} },
-
           series:[
               {color:'#5FAB78',}
 //               fill: true,}
           ]
     });
-  
-
 });
  
 </script>
@@ -30,6 +21,13 @@ $(document).ready(function(){
 
 
 {% block content %}
-<div id="chartdiv" style="height:500px;width:500px; "></div>
-<p>AUC: {{ roc_auc }}</p>
+<div id="sidebar">
+</div>
+<div id="content">
+  <div id="contentwrap">
+    <div id="chartdiv" style="height:500px;width:500px; "></div>
+    <br></br>
+    <p>AUC: {{ roc_auc }}</p>
+  </div>
+</div>
 {% endblock %}

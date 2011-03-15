@@ -58,6 +58,7 @@ pre {
     padding: 1em 2em;
     max-width: 1550px;
 }
+
 #header .sparkline {
     padding: 5px;
     position: absolute;
@@ -199,11 +200,13 @@ ul#training_set_list li {
 }
 
 #contentwrap {
-    margin: 10px auto 0px auto;
+    margin: 40px auto 0px auto;
     width: 850px;
-
 }
 
+#contentwrap p {
+    margin: 10px 0px 10px 170px;
+}
 
 .container {
     max-width: 1600px;
@@ -227,7 +230,7 @@ ul#training_set_list li {
 #sidebar h2 {
     padding: 10px 10px;
     margin: 0em;
-    border-bottom: 1px solid #052F6D;
+    border-bottom: 1px solid #000;
 }
 
 #sidebar ul {
@@ -238,14 +241,14 @@ ul#training_set_list li {
 #sidebar li {
     list-style: circle;
     overflow: hidden;
-    padding: 0em 1em;
+    padding: 0.2em 1em;
     position: relative;
-    border-bottom: 1px solid #052F6D;
+    border-bottom: 1px solid #000;
 }
 
 
 #sidebar li:hover {
-    background-color: #9dadc6;
+    background-color: #147eeb;
     cursor: pointer;
 }
 
