@@ -118,12 +118,35 @@ static ClassiwhaleSingleton *sharedInstance = nil;
 - (NSArray *) rateTweetId:(NSString *)tweet_id up:(BOOL)rate_up withResponse:(NSURLResponse **)response andError:(NSError **)error
 {
   if(!authenticated) return nil;
-	NSLog(@"Tweet ID: %@", tweet_id);
 
   NSString *base_string = @"http://classiwhale.com/api/twitter/rate/?id=";
   NSString *id_string = [base_string stringByAppendingString:tweet_id];
-	NSLog(@"2");
   NSString *complete_string = [id_string stringByAppendingString:(rate_up ? @"&rating=up" : @"&rating=down")];
+  NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:complete_string]];
+  [request setHTTPMethod: @"GET"];
+  [request setHTTPShouldHandleCookies:NO];
+  
+  if(cookies != nil) {
+    [request setAllHTTPHeaderFields:[NSHTTPCookie requestHeaderFieldsWithCookies:self.cookies]];
+  }
+  
+  *response = nil;
+  *error = nil;
+  
+  NSData *dat = [NSURLConnection sendSynchronousRequest:request returningResponse:response error:error];
+  NSLog(@"Response = %@", *response);
+  NSLog(@"Error = %@", *error);
+  if(*error != nil) return nil;
+  NSString *json_string = [[NSString alloc] initWithData:dat encoding:NSUTF8StringEncoding];
+  NSArray *arr = [json_string JSONValue];
+  return arr;
+}
+
+- (NSArray *) getFriendTimeline:(NSString *)friend_id withResponse:(NSURLResponse **)response andError:(NSError **)error
+{
+  
+  NSString *base_string = @"http://classiwhale.com/api/twitter/friend/timeline/?id=";
+  NSString *complete_string = [base_string stringByAppendingString:friend_id];
   NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:complete_string]];
   [request setHTTPMethod: @"GET"];
   [request setHTTPShouldHandleCookies:NO];

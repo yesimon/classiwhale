@@ -26,6 +26,7 @@
 - (NSDictionary *) getTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error;
 - (NSArray *) getFriendsWithResponse:(NSURLResponse **)response andError:(NSError **)error;
 - (NSArray *) rateTweetId:(NSString *)tweet_id up:(BOOL)rate_up withResponse:(NSURLResponse **)response andError:(NSError **)error;
+- (NSArray *) getFriendTimeline:(NSString *)friend_id withResponse:(NSURLResponse **)response andError:(NSError **)error;
 - (void) fetchProfilePic:(NSString*) urlString;
 - (void) createConnection:(NSURL*)url postBody:(NSData*)postBody method:(NSString*)method cid:(NSString*)cid;
 - (void) authenticatedWithCookies: (NSArray *) cooks;
