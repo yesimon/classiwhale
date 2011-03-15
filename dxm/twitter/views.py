@@ -496,7 +496,7 @@ def twitter_return(request, window_type):
         return render_to_response("twitter/twitter_return.html", {},
                                   context_instance=RequestContext(request))
     elif window_type == 'api': 
-        return HttpResponse(str(request))
+        return HttpResponse()
     else:
         return HttpResponseRedirect("/")
 
