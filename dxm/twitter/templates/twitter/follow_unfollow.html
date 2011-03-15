@@ -3,9 +3,18 @@
     // Attaches the click handler for follow/unfollow.
     // Sends message to create_friendship
     function startPostHandler() {
-        $('#follow-user').unbind('click').click(
+        $('.follow-unfollow .follow-user').unbind('click').click(
               			function() {
-                      		$.post("/status/create_friendship/",
+                      		$.post("/twitter/create_friendship/",
+            					   { friend_username: "{{friend.id}}" },
+	    							function(data) {
+	       								handleTwitResponse(data);
+	    							}
+            				      );
+            			});
+        $('.follow-unfollow .unfollow-user').unbind('click').click(
+              			function() {
+                      		$.post("/twitter/destroy_friendship/",
             					   { friend_username: "{{friend.id}}" },
 	    							function(data) {
 	       								handleTwitResponse(data);
@@ -25,11 +34,23 @@
     $(document).ready(startPostHandler);	
     </script>
     
-    {% if follow_request_sent %}
-    <div>You've already requested to follow {{friend.name}}</div>
+    <div class="follow-unfollow">
+    {% if is_true_friend %}
+	    <div class="unfollow-user">
+	      <div class="already-following">Unfollow {{ friend.name }} on Twitter</div>
+	    </div>
     {% else %}
-	<div id="follow-user">
-	    <div>Follow {{ friend.name }} on Twitter</div>
-	</div>
+      {% if follow_request_sent %}
+        <span>Your follow request has been sent. <span>
+	    <span class="unfollow-user">
+	      <span>Cancel</span>
+	    </span>
+        <div>You've already requested to follow {{friend.name}}</div>
+      {% else %}
+	    <div class="follow-user">
+	      <div>Follow {{ friend.name }} on Twitter</div>
+	    </div>
+	  {% endif %}
 	{% endif %}
+	</div>
 	
