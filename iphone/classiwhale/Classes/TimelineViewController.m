@@ -35,6 +35,8 @@
   NSArray *timeline = [api getTimelineWithResponse:&response andError:&error];
   
   NSLog(@"%@", timeline);
+  
+  [api rateTweetId:@"47581699944615936" up:NO withResponse:&response andError:&error];
 }
 
 
