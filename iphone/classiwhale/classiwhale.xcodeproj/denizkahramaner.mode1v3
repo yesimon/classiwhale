@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>B3A3878F132EE4220090181E</string>
+						<string>B3A388F9132F2DC00090181E</string>
 						<key>history</key>
 						<array>
 							<string>B3A38784132EE40D0090181E</string>
@@ -271,8 +271,6 @@
 			<key>Layout</key>
 			<array>
 				<dict>
-					<key>BecomeActive</key>
-					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -309,12 +307,18 @@
 							<array>
 								<string>29B97314FDCFA39411CA2CEA</string>
 								<string>080E96DDFE201D6D7F000001</string>
+								<string>B3A38754132EE2100090181E</string>
+								<string>B3A386A8132EB5EC0090181E</string>
 								<string>29B97317FDCFA39411CA2CEA</string>
+								<string>29B97323FDCFA39411CA2CEA</string>
 								<string>1C37FABC05509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
+									<integer>5</integer>
+									<integer>3</integer>
+									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -349,6 +353,8 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -366,10 +372,15 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>B3A3878A132EE4220090181E</string>
+										<string>B3A388F8132F2DC00090181E</string>
 										<key>history</key>
 										<array>
-											<string>B3A38789132EE4220090181E</string>
+											<string>B3A38898132F2A170090181E</string>
+											<string>B3A38899132F2A170090181E</string>
+											<string>B3A388D5132F2C430090181E</string>
+											<string>B3A388E2132F2C5C0090181E</string>
+											<string>B3A388F6132F2DC00090181E</string>
+											<string>B3A388F7132F2DC00090181E</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -568,9 +579,9 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>1CD10A99069EF8BA00B06720</string>
-		<string>/Users/denizkahramaner/Documents/Classiwhale/classiwhale/iphone/classiwhale/classiwhale.xcodeproj</string>
-		<string>B3A386A3132EB5DF0090181E</string>
 		<string>B3A3878D132EE4220090181E</string>
+		<string>B3A386A3132EB5DF0090181E</string>
+		<string>/Users/denizkahramaner/Documents/Classiwhale/classiwhale/iphone/classiwhale/classiwhale.xcodeproj</string>
 		<string>1C78EAAD065D492600B07095</string>
 	</array>
 	<key>WindowString</key>
@@ -595,7 +606,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>ClassiwhaleSingleton.m</string>
+								<string>MGTwitterMessagesParser.m</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -666,7 +677,7 @@
 			<key>WindowToolGUID</key>
 			<string>B3A386A3132EB5DF0090181E</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
@@ -920,18 +931,18 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {650, 209}}</string>
+								<string>{{0, 0}, {671, 356}}</string>
 								<key>RubberWindowFrame</key>
-								<string>36 500 650 250 0 0 1280 778 </string>
+								<string>552 196 671 397 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXDebugCLIModule</string>
 							<key>Proportion</key>
-							<string>209pt</string>
+							<string>356pt</string>
 						</dict>
 					</array>
 					<key>Proportion</key>
-					<string>209pt</string>
+					<string>356pt</string>
 				</dict>
 			</array>
 			<key>Name</key>
@@ -951,7 +962,7 @@
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.consoleV3</string>
 			<key>WindowString</key>
-			<string>36 500 650 250 0 0 1280 778 </string>
+			<string>552 196 671 397 0 0 1280 778 </string>
 			<key>WindowToolGUID</key>
 			<string>1C78EAAD065D492600B07095</string>
 			<key>WindowToolIsVisible</key>
