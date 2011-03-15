@@ -9,7 +9,8 @@ from time import mktime
 import json
 
 from profile.models import UserProfile
-from twitter.managers import TwitterUserProfileManager, StatusManager
+from twitter.managers import (TwitterUserProfileManager, StatusManager, 
+                              CachedStatusManager )
 
 
 JSON_COMPACT = (',',':')
@@ -45,7 +46,7 @@ class TwitterUserProfile(models.Model):
     active_classifier = models.CharField(max_length=50, blank=True, null=True)
     classifier_version = models.CharField(max_length=30, blank=True, null=True)
     whale = models.OneToOneField('whale.Whale', blank=True, null=True)
-    cached_statuses = models.ManyToManyField('Status', blank=True, null=True, related_name='cached_statuses')
+    cached_statuses = models.ManyToManyField('Status', blank=True, null=True, through='CachedStatus', related_name='cached_statuses')
     cached_time = models.DateTimeField(blank=True, null=True)
     cached_maxid = models.BigIntegerField(blank=True, null=True)
     cached_minid = models.BigIntegerField(blank=True, null=True)
@@ -301,9 +302,14 @@ class Status(models.Model):
 
 
 
-
-
-
+class CachedStatus(models.Model):
+    user = models.ForeignKey('TwitterUserProfile')
+    status = models.ForeignKey('Status')
+    prediction = models.FloatField(blank=True, null=True)
+    class Meta:
+        unique_together = ('user', 'status')
+        ordering = ['status']
+    objects = CachedStatusManager()
 
 
 class Rating(models.Model):
