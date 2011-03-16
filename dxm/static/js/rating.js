@@ -42,7 +42,7 @@ function hotkeyRateLike() {
     nextEntry = activeEntry.next();
 
     entry = activeEntry.closest(".status");
-    rate("up", entry.attr("data-status")); 	
+    rate("up", entry.attr("data-id")); 	
     likeButton = entry.find(".like");
     likeButton.next().removeClass('active');
     likeButton.next().addClass('inactive');
@@ -70,7 +70,7 @@ function hotkeyRateDislike() {
     nextEntry = activeEntry.next();
         
     entry = activeEntry.closest(".status");
-    rate("down", entry.attr("data-status")); 
+    rate("down", entry.attr("data-id")); 
     dislikeButton = entry.find(".dislike");
     dislikeButton.prev().removeClass('active');
     dislikeButton.prev().addClass('inactive');
@@ -103,7 +103,7 @@ function rate(kind, status){
 
 function rateLike() {
     entry = $(this).closest(".status");
-    rate("up", entry.attr("data-status"));
+    rate("up", entry.attr("data-id"));
 
     if ($(this).hasClass('inactive') && $(this).next().hasClass('inactive'))
     {
@@ -121,7 +121,7 @@ function rateLike() {
 
 function rateDislike() {
     entry = $(this).closest(".status");
-    rate("down", entry.attr("data-status"));
+    rate("down", entry.attr("data-id"));
     
     if ($(this).hasClass('inactive') && $(this).next().hasClass('inactive'))
     {

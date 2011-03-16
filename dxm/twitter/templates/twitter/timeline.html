@@ -17,9 +17,9 @@ $(document).ready(function() {
         },
     }
     $("#statuses_end").waypoint(function(event, direction) {
-        var status = JSON.parse($(".status:last").attr("data-status"));
-
-        var maxid = status.id;
+//        var status = JSON.parse($(".status:last").attr("data-status"));
+//        var maxid = status.id;
+        var maxid = $(".status:last").attr("data-id");
         $("#statuses_end").waypoint('remove');
         $(".statuses").append($loading);
         $.get("/status/ajax_timeline/", {page: pageIndex, id: maxid, timeline: pageType}, function(data) {
