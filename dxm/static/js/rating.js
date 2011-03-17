@@ -88,9 +88,11 @@ function hotkeyRateDislike() {
     dislikeButton.prev().removeClass('active');
     dislikeButton.prev().addClass('inactive');
     dislikeButton.addClass('active');
-    dislikeButton.removeClass('inactive');
-
-    computeScroll(nextEntry, activeEntry, true);
+    dislikeButton.removeClass('inactive');	
+	activeEntry.fadeOut('medium', function(){
+		    computeScroll(nextEntry, activeEntry, true);		
+			activeEntry.remove();
+	});
 }
 
 function addRateLinkHandlers() {
