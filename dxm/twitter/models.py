@@ -159,11 +159,12 @@ class Status(models.Model):
         except TwitterUserProfile.DoesNotExist:
             self.user.save()
         try: 
-            Status.objects.get(id=self.id)
-            return
-        except Status.DoesNotExist: pass
-        self.is_cached = is_cached
-        self.save()
+            s = Status.objects.get(id=self.id)
+            s.is_cached = is_cached
+            s.save()
+        except Status.DoesNotExist:
+            self.is_cached = is_cached
+            self.save()
 
     @staticmethod
     def savemany(statuses, is_cached=False):
@@ -187,8 +188,7 @@ class Status(models.Model):
             now = datetime.utcnow()
             statuses = Status.objects.filter(is_cached=True).filter(
                                       created_at__lt=now-td)
-        details = CachedStatus.objects.filter(status__is_cached=False).filter(
-                                      status__created_at__lt=now-td)
+        details = CachedStatus.objects.filter(status__created_at__lt=now-td)
         statuses.delete()
         details.delete()
 

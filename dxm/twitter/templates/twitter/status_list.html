@@ -4,7 +4,7 @@
 
 {% for status in statuses %}
 
-<div class="status" data-status="{{ status.as_json_string }}">
+<div class="status" data-id="{{ status.id }}">
 
 	
 	<div class="tweet-usr-profile">
@@ -32,6 +32,7 @@
 	</div>
 
 </div>
+
 
 {% empty %} 
 There are no posts to display. 

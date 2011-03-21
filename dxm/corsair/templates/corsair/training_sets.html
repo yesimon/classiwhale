@@ -75,6 +75,9 @@ function addSubmitBenchmarkHandler() {
 {% endblock %}
 
 {% block content %}
+<div id="sidebar">
+</div>
+<div id="content">
     <ul class="training_sets" id="training_set_list">
     {% for training_set in training_sets %}
         <li>
@@ -83,6 +86,7 @@ function addSubmitBenchmarkHandler() {
 	</li>
     {% endfor %}
     </ul>
+</div>
 {% endblock %}
 
 

@@ -19,6 +19,7 @@
 .entry-active {
   border-left: 3px solid #697EF5;
   border-right: 3px solid #697EF5;
+  background-color: #E4EBEF;
 }
 
 .user {
@@ -48,9 +49,52 @@
   color:#000000;
 }
 
+.user-profile-bar{
+	background-color: #35597f;
+	border-color: #A0A0A0;
+    border-style: solid;
+	border-bottom:none;
+    border-width: 0 1px 1px;
+	height: 80px;
+}
+
+
+
+.profile-image{
+	padding-top: 15px;
+	padding-left: 10px;
+	width:50px;
+	float: left;
+}
+
+.profile-description{
+	float:left;
+	padding:10px;
+	margin-left:10px;
+	font-weight:bold;
+	color:white;
+}
+
+
+.prof-name{
+	font-size: 30px;
+}
+
+.screen-name{
+	padding-top:10px;
+	font-size: 20px;	
+}
+
+.follow-unfollow{
+	float:left;
+	margin-left:10px;
+	margin-top:10px;
+	color: white;
+	width: 100px;
+}
 
 .follow-unfollow .follow-user {
-  color: #0000AA;
+  color: #0000AA;s
 }
 
 .follow-unfollow .unfollow-user {
@@ -193,13 +237,6 @@
 	border-width: 0 1px 1px;
 	background-color: #fff;
 }
-
-
-
-
-
-
-
 
 
 .rating-container {

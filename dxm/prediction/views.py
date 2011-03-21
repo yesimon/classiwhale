@@ -86,7 +86,10 @@ def get_filtered_friends_timeline(request):
 @login_required
 @render_to('twitter/timeline.html')
 def filtered_friends_timeline(request):
+    twitter_tokens = request.session['twitter_tokens']
+    api = get_authorized_twython(twitter_tokens)
     response = get_filtered_friends_timeline(request)
     friends = api.getFriendsStatus()
     response['friends'] = friends
-    return response.update({'feedtype': 'filter'})
+    results = dict(response, **{'feedtype': 'filter'})
+    return results

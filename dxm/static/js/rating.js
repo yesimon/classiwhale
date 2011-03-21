@@ -2,8 +2,7 @@ $(document).ready(function() {
     addRateLinkHandlers();
 });
 
-
-/* Hotkeys disabled for now
+/* Hotkeys disabled for now*/
 $(document).keydown(function(event) {
     if(shouldUseHotkeys()) {
         if (event.keyCode == 74) { // 'j'
@@ -17,20 +16,31 @@ $(document).keydown(function(event) {
         }
     }
 });
-*/
 
 function shouldUseHotkeys() {
 	if(window.$is_post_form_focused == undefined) return true;
     return !$is_post_form_focused;
 }
 
+jQuery.fn.center = function () {
+    this.css("position","absolute");
+    this.css("top", ( $(window).height() - this.height() ) / 2+$(window).scrollTop() + "px");
+    this.css("left", ( $(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px");
+    return this;
+}
+
+
 function hotkeyPrevEntry() {
     activeEntry = $(".entry-active");
+	var statusHeight = activeEntry.height();
     prevEntry = activeEntry.prev();
     if (prevEntry.length == 0) return;
     activeEntry.removeClass("entry-active");
     prevEntry.addClass("entry-active");
-    $.scrollTo(prevEntry);
+    
+  	$("html, body").animate({"scrollTop":-200 + prevEntry.offset().top + "px"});
+    
+
 }
 
 function hotkeyRateLike() {
@@ -42,22 +52,25 @@ function hotkeyRateLike() {
     nextEntry = activeEntry.next();
 
     entry = activeEntry.closest(".status");
-    rate("up", entry.attr("data-status")); 	
+    rate("up", entry.attr("data-id")); 	
     likeButton = entry.find(".like");
     likeButton.next().removeClass('active');
     likeButton.next().addClass('inactive');
     likeButton.addClass('active');
     likeButton.removeClass('inactive');
 
-    computeScroll(nextEntry, activeEntry);
+    computeScroll(nextEntry, activeEntry, true);
 }
 
-function computeScroll(next, active) {
+function computeScroll(next, active, down) {
     console.log(next);
     if (next.length != 0) {
+        var statusHeight = active.height();
         active.removeClass("entry-active");
         next.addClass("entry-active");
-        $.scrollTo(next);
+		if (down) {
+  			$("html, body").animate({"scrollTop":-200 + next.offset().top + "px"});
+		}
     }
 }
 
@@ -70,24 +83,25 @@ function hotkeyRateDislike() {
     nextEntry = activeEntry.next();
         
     entry = activeEntry.closest(".status");
-    rate("down", entry.attr("data-status")); 
+    rate("down", entry.attr("data-id")); 
     dislikeButton = entry.find(".dislike");
     dislikeButton.prev().removeClass('active');
     dislikeButton.prev().addClass('inactive');
     dislikeButton.addClass('active');
-    dislikeButton.removeClass('inactive');
-
-    computeScroll(nextEntry, activeEntry);
+    dislikeButton.removeClass('inactive');	
+	activeEntry.fadeOut('medium', function(){
+		    computeScroll(nextEntry, activeEntry, true);		
+			activeEntry.remove();
+	});
 }
-
 
 function addRateLinkHandlers() {
 	$(".status-container .like").unbind('click').click(rateLike);
 	$(".status-container .dislike").unbind('click').click(rateDislike);
 }
 
-
 function rate(kind, status){
+	
     $.post(
         "/status/ajax_rate/", 
         { rating: kind, status: status }, 
@@ -103,7 +117,7 @@ function rate(kind, status){
 
 function rateLike() {
     entry = $(this).closest(".status");
-    rate("up", entry.attr("data-status"));
+    rate("up", entry.attr("data-id"));
 
     if ($(this).hasClass('inactive') && $(this).next().hasClass('inactive'))
     {
@@ -118,10 +132,9 @@ function rateLike() {
     return false;
 }
 
-
 function rateDislike() {
     entry = $(this).closest(".status");
-    rate("down", entry.attr("data-status"));
+    rate("down", entry.attr("data-id"));
     
     if ($(this).hasClass('inactive') && $(this).next().hasClass('inactive'))
     {

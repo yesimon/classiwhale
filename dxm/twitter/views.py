@@ -94,7 +94,7 @@ def ajax_timeline(request):
     elif feedtype == 'reorder':
         statuses = reorder_timeline(api, tp, page)
     elif feedtype == 'filter':
-        statuses = filter_timeline(api, tp, page)
+        statuses = filter_timeline(api, tp, page, maxid)
     elif feedtype == 'predict':
         statuses = predict_timeline(api, tp, page, maxid)
     Rating.appendTo(statuses, tp)
@@ -106,7 +106,7 @@ def ajax_timeline(request):
 
 def normal_timeline(api, tp, page, maxid):
     if tp.cached_maxid >= maxid >= tp.cached_minid:
-        return tp.cached_statuses.filter(id__lte=maxid)[:20]
+        return tp.cached_statuses.filter(id__lt=maxid)[:20]
     else:
         return Status.construct_from_dicts(api.getFriendsTimeline(page=page))
     
@@ -121,7 +121,7 @@ def reorder_timeline(api, tp, page, reorder_time=12):
 
 
 def filter_timeline(api, tp, page, maxid):
-    statuses = tp.cached_statuses.filter(id__lte=maxid)[:20]
+    statuses = tp.cached_statuses.filter(id__lt=maxid)[:20]
     details = CachedStatus.objects.filter(user=tp, 
                                           status__in=[s.id for s in statuses])
     filtered_statuses = []
@@ -132,7 +132,7 @@ def filter_timeline(api, tp, page, maxid):
 
 
 def predict_timeline(api, tp, page, maxid):
-    statuses = tp.cached_statuses.filter(id__lte=maxid)[:20]
+    statuses = tp.cached_statuses.filter(id__lt=maxid)[:20]
     details = CachedStatus.objects.filter(user=tp,
                                           status__in=[s.id for s in statuses])
     for s, detail in zip(statuses, details):
@@ -279,13 +279,16 @@ def get_rate_results(request, lex):
     rating = lex[u'rating']
     
     if(lex.has_key(u'status')):
-       status_json = json.loads(lex[u'status'])
+        sid = int(lex[u'status'])
+        try: status = Status.objects.get(id=sid)
+        except Status.DoesNotExist:
+            api = get_authorized_twython(request.session['twitter_tokens'])
+            status_json = api.showStatus(id=lex[u'status'])
+            status = Status.construct_from_dict(status_json)            
     else:
         api = get_authorized_twython(request.session['twitter_tokens'])
         status_json = api.showStatus(id=lex[u'id'])
-    
-    status = Status.construct_from_dict(status_json)
-    #status = Status.construct_from_dict(json.loads(POST[u'status']))
+        status = Status.construct_from_dict(status_json)
 
     # Show user if tweet delivered from Search API, which does not have correct userid
     # TODO: a more elegant solution
@@ -296,8 +299,12 @@ def get_rate_results(request, lex):
 
     tp = TwitterUserProfile.objects.get(id=request.session['twitter_tokens']['user_id'])
     prof = u.get_profile()
-    status.save_with_user()
-
+    status.save_with_user(is_cached=False)
+    try: 
+        details = CachedStatus.objects.get(user=tp.id, status=status.id)
+        details.prediction -= 2.0
+        details.save()
+    except CachedStatus.DoesNotExist: pass
     if rating == u"up" or rating == "up":
         rating_int = 1
     elif rating == u"down" or rating == "down":
