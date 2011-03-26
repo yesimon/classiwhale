@@ -8,6 +8,10 @@ Here, we also make the decision to show errors if there are any.  Otherwise, we
 proceed loading the standard navigation stuff.
 {% endcomment %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="/v1/static/css/navigation.css"/>
+{% endblock %}
+
 {% block title %}
 Base navigation
 {% endblock %}
