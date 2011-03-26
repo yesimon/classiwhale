@@ -1,0 +1,34 @@
+{% comment %}
+Welcome to v1/base/base.html.  Please do not edit it.  If you want to modify it, please make a child template.
+{% endcomment %}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <link rel="shortcut icon" href="/static/img/favicon.png"/>
+
+    {% block extra_css %}
+    {% endblock %}
+
+    {% include "v1/base/base_includes/base_include_js.html" %}
+
+    {% block extra_js %}
+    {% endblock %}
+    
+    
+    <title>
+        {% block title %}
+        Subclass this!
+        {% endblock %}
+    </title>
+    
+</head>
+
+<body>
+{% block body %}
+{% endblock %}
+</body>
+
+</html>

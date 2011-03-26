@@ -41,6 +41,21 @@ DATABASES = {
     },
 }
 
+CONSTANTS = {
+            }
+
+# These should be constant values that will always be
+# passed to templates (making this stuff more hot-swappable).
+# Since this gets passed as context each time this might make
+# things a bit slower, so we should metrics this before we
+# actually go live.
+TEMPLATES = {
+                 'base': 'v1/base/base.html',
+                 'basenav': 'v1/base/basenav.html',
+                 'basenavcontent': 'v1/base/basenavcontent.html',
+                 'navigation': 'v1/base/navigation.html',
+            }
+
 try:
     import socket
     INTERNAL_IPS = (
@@ -133,6 +148,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     "analytics.context_processors.google_analytics",
     "twitter.context_processors.twitter_user",
+    "v1.constant_context_processor.constants",
 )
 
 
@@ -151,6 +167,7 @@ ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     os.path.join(ROOT_PROJECT_PATH, 'templates').replace('\\','/'),
+    os.path.join(ROOT_PROJECT_PATH, 'v1/templates').replace('\\','/'),
     os.path.join(ROOT_PROJECT_PATH, '..', 'doc', '_build', 'html').replace('\\', '/'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
@@ -221,6 +238,7 @@ INSTALLED_APPS = (
     'cylonbayes',
     'whale',
     'api',
+    'v1',
 )
 
 if DEBUG == True:

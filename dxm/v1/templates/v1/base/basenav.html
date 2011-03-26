@@ -1,0 +1,27 @@
+{% extends TEMPLATES.base %}
+
+{% comment %}
+This template provides the ClassiWhale base and includes the navigation.  It also sets up a section
+for content to be overriden by children.
+
+Here, we also make the decision to show errors if there are any.  Otherwise, we
+proceed loading the standard navigation stuff.
+{% endcomment %}
+
+{% block title %}
+Base navigation
+{% endblock %}
+
+{% block body %}
+
+{% if errors %}
+    <ul>
+        {% for error in errors %}
+        <li> {{ error }} </li>
+        {% endfor %}
+    </ul>
+{% else %}
+{% include TEMPLATES.basenavcontent %}
+{% endif %}
+
+{% endblock %}

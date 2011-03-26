@@ -1,0 +1,31 @@
+{% comment %}
+Here, we need to dynamically load various google apis based on our domain, since we get API keys based on domain.
+
+Alex: In the future, these shouldn't use API keys that are specific to my google account -- they should be keys
+associated with admin@classiwhale.com.
+{% endcomment %}
+
+{% if request.META.HTTP_HOST == "127.0.0.1:8000" %}
+<script src="https://www.google.com/jsapi?key=ABQIAAAAKnCcBgcntQQqPcnuZ3aEyhTpH3CbXHjuCVmaTc5MkkU4wO1RRhRAk3bHiU7dUjOiO27yMNElUGQ63Q" type="text/javascript"></script>
+{% endif %}
+
+{% if request.META.HTTP_HOST == "classiwhale.com" %}
+<script src="https://www.google.com/jsapi?key=ABQIAAAAKnCcBgcntQQqPcnuZ3aEyhSm9RbUYGYu2uNVz4pD_xF0olORmxTFQuBkZU29H1E3sAaA5_3MQhQUdg" type="text/javascript"></script>
+{% endif %}
+
+
+{% if request.META.HTTP_HOST != "127.0.0.1:8000" and request.META.HTTP_HOST != "classiwhale.com"%}
+
+You seem to be trying to load the Google APIs from a site that isn't either a local test server (127.0.0.1:8000) or from classiwhale.com.
+Why don't you contact Alex and see what's going on?
+
+{% else %}
+
+<script type="text/javascript">
+<!--
+google.load("jquery", "1.5.1");
+google.load("jqueryui", "1.8.11");
+// -->
+</script>
+
+{% endif %}
