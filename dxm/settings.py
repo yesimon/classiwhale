@@ -53,7 +53,7 @@ TEMPLATES = {
                  'base': 'v1/base/base.html',
                  'basenav': 'v1/base/basenav.html',
                  'basenavcontent': 'v1/base/basenavcontent.html',
-                 'navigation': 'v1/base/navigation.html',
+                 'navigation': 'v1/navigation.html',
             }
 
 try:
