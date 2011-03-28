@@ -1,3 +1,9 @@
+<script type="text/javascript">
+    $(function() {
+        $("#nav .nav-bound .nav-list .dropdown").accordion({collapsible: true, active: false, animated: false});
+    });
+</script>
+
 <div id="nav">
     <div class="nav-bound">
 	   <ul class="nav-list">
@@ -7,7 +13,11 @@
            <li>@me</li>
            <li>
                <div class="dropdown">
+                   {% if user.first_name and user.last_name %}
 	               <h>{{ user.first_name }} {{ user.last_name }}</h>
+	               {% else %}
+	               <h>Unknown User</h>
+	               {% endif %}
 	               <ul>
 	                   <li>About ClassiWhale</li>
 	                   <li>Sign Out</li>
@@ -17,10 +27,3 @@
 	   </ul>
     </div>
 </div>
-
-
-<script type='text/javascript'>
-jQuery(document).ready(function(){
-    $('#nav .nav-bound .nav-list .dropdown').accordion({collapsible: true, active: false, animated: false});
-});
-</script>

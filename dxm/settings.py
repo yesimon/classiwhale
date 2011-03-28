@@ -42,6 +42,7 @@ DATABASES = {
 }
 
 CONSTANTS = {
+                'local_js': False
             }
 
 # These should be constant values that will always be
