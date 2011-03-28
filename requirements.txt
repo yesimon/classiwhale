@@ -19,6 +19,7 @@ django-paging==0.2.2
 django-picklefield==0.1.9
 django-piston==0.2.2
 django-sentry==1.4.1
+django-static==1.5.4
 django-templatetag-sugar==0.1
 flup==1.0.2
 gargoyle==0.1.0

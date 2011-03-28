@@ -164,6 +164,11 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'urls'
 
+DJANGO_STATIC = False
+DJANGO_STATIC_SAVE_PREFIX = '/tmp/cache-forever'
+DJANGO_STATIC_NAME_PREFIX = '/cache-forever'
+DJANGO_STATIC_CLOSURE_COMPILER = os.path.join(ROOT_PROJECT_PATH, '..', 'lib', 'googleclosure', 'compiler,jar')
+DJANGO_STATIC_YUI_COMPRESSOR = os.path.join(ROOT_PROJECT_PATH, '..', 'lib', 'yuicompressor', 'yuicompressor-2.4.2.jar')
 
 TEMPLATE_DIRS = (
     os.path.join(ROOT_PROJECT_PATH, 'templates').replace('\\','/'),
@@ -213,8 +218,8 @@ INSTALLED_APPS = (
     'django.contrib.comments',
     'django.contrib.markup',
     'annoying',
-    'compressor',
     'south',
+    'django_static',
     'djcelery',
     'indexer',
     'paging',
