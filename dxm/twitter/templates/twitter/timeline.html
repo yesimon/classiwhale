@@ -58,11 +58,11 @@ $(document).ready(function() {
     <div id="statuses_end">
     </div>
     
-    {% load compress %}
-    {% compress js %}
+    {% load django_static %}
+    {% slimall %}
     <script type="text/javascript" src="/static/js/twitpost.js"></script>
     <script type="text/javascript" src="/static/js/autoresize.jquery.js"></script>
-    {% endcompress %}
+    {% endslimall %}
     
     <script type="text/javascript">
     
