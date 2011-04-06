@@ -10,6 +10,7 @@ distribute==0.6.14
 django-ajaxerrors==1.1.0
 django-annoying==0.7.5
 django-celery==2.1.4
+django-compressor==0.5.3
 django-css==2.3.1
 django-debug-toolbar==0.8.4
 django-devserver==0.1.4
@@ -19,7 +20,6 @@ django-paging==0.2.2
 django-picklefield==0.1.9
 django-piston==0.2.2
 django-sentry==1.4.1
-django-static==1.5.4
 django-templatetag-sugar==0.1
 flup==1.0.2
 gargoyle==0.1.0

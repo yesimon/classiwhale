@@ -160,16 +160,15 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.transaction.TransactionMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.csrf.middleware.CsrfMiddleware',
+#    'django.contrib.csrf.middleware.CsrfMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
 
-DJANGO_STATIC = False
-DJANGO_STATIC_SAVE_PREFIX = '/tmp/cache-forever'
-DJANGO_STATIC_NAME_PREFIX = '/cache-forever'
-DJANGO_STATIC_CLOSURE_COMPILER = os.path.join(ROOT_PROJECT_PATH, '..', 'lib', 'googleclosure', 'compiler,jar')
-DJANGO_STATIC_YUI_COMPRESSOR = os.path.join(ROOT_PROJECT_PATH, '..', 'lib', 'yuicompressor', 'yuicompressor-2.4.2.jar')
+COMPRESS_CSS_FILTERS = ['compressor.filters.yui.YUICSSFilter',]
+COMPRESS_JS_FILTERS = ['compressor.filters.yui.YUIJSFilter',]
+COMPRESS_YUI_BINARY = 'java -jar ' + os.path.join(ROOT_PROJECT_PATH, '..', 'lib', 'yuicompressor',  'yuicompressor-2.4.2.jar')
+COMPRESS_CLOSURE_COMPILER_BINARY = 'java -jar ' + os.path.join(ROOT_PROJECT_PATH, '..', 'lib', 'googleclosure', 'compiler.jar')
 
 TEMPLATE_DIRS = (
     os.path.join(ROOT_PROJECT_PATH, 'templates').replace('\\','/'),
@@ -220,7 +219,7 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'annoying',
     'south',
-    'django_static',
+    'compressor',
     'djcelery',
     'indexer',
     'paging',

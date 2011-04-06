@@ -3,8 +3,6 @@
 
 <head>
     <link rel="shortcut icon" href="/static/img/favicon.png"/>
-    {% load django_static %}
-    {% slimall %}
 
     <link rel="stylesheet" href="/static/css/base.css" />
     <link rel="stylesheet" href="/static/css/navigation.css" />
@@ -15,12 +13,7 @@
     <link rel="stylesheet" href="/static/css/training_profile.css" />
     <link rel="stylesheet" href="/static/css/jquery-ui-1.8.9.custom.css" />
     <link rel="stylesheet" href="/static/css/landingPage.css" />
-    {% endslimall %}
 
-    {% block extra_css %}
-    {% endblock %}
-
-    {% slimall %}
     <script type="text/javascript" src="/static/js/jquery-1.4.4.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery.scrollTo.js"></script>
     <script type="text/javascript" src="/static/js/jquery.infinitescroll.js"></script>
@@ -34,7 +27,6 @@
     <script type="text/javascript" src="/static/js/training_profile.js"></script>
     <script type="text/javascript" src="/static/js/landing_slideshow.js"></script>
     <script type="text/javascript" src="/static/js/uservoice.js"></script>
-    {% endslimall %}
 
     {% if GOOGLE_ANALYTICS_KEY %}
     <script type="text/javascript">

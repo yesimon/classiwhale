@@ -1,4 +1,5 @@
 {% extends "panes.html" %}
+{% load compress %}
 
 {% block title %}
 Recent Tweets
@@ -58,11 +59,10 @@ $(document).ready(function() {
     <div id="statuses_end">
     </div>
     
-    {% load django_static %}
-    {% slimall %}
+    {% compress js %}
     <script type="text/javascript" src="/static/js/twitpost.js"></script>
     <script type="text/javascript" src="/static/js/autoresize.jquery.js"></script>
-    {% endslimall %}
+    {% endcompress %}
     
     <script type="text/javascript">
     
