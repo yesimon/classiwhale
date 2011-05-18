@@ -5,3 +5,37 @@
     white-space: nowrap;
     width: 85px;
 }
+
+.friends .header {
+    background: #BBCDF7 url('/static/img/recent_title_bg.png') repeat 0 0;
+    position:relative;
+    height:38px;
+    padding-left:13px;  
+    margin-left:2px;
+} 
+
+.friends .header .left-bg {
+    background: url('/static/img/title_corners.png') no-repeat 0 0; 
+    position:absolute;
+    top: 0px;
+    left: -2px; 
+    width:7px; 
+    height:38px;
+}
+
+.friends .right-bg {
+    background: url('/static/img/title_corners.png') no-repeat scroll -8px 0;
+    position:absolute;
+    top: 0px;
+    right: -2px;
+    width:7px;
+    height:38px;
+} 
+
+.friends .header .title {  
+    font-family: Helvetica, Arial;
+    font-size: 16px;
+    color:#FFF;
+    float:left;
+    margin: 11px 0 0 21px;
+}  
