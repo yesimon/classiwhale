@@ -267,7 +267,8 @@ def destroy_friendship(request):
     twitter_tokens = request.session['twitter_tokens']
     API = get_authorized_twython(twitter_tokens)
     username = request.POST[u'friend_username']
-    print username
+    for x in range(20):
+        print username
     try:
         API.destroyFriendship(user_id=username)
         results['success'] = 'True'
