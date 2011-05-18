@@ -87,10 +87,10 @@
 
 .follow-unfollow{
 	float:right;
-	margin-left:10px;
-	margin-top:10px;
+	margin-right:20px;
+	margin-top:25px;
 	color: white;
-	width: 150px;
+	width: 120px;
 }
 
 .follow-unfollow .follow-user {
@@ -363,12 +363,12 @@
 
 .buttons a, .buttons button{
     display:block;
-    float:left;
-    margin:0 7px 0 0;
-    background-color:#65799f;
+    float:right;
+    margin:0 0 0 0;
+    background-color:#eee;
     border:1px solid #65799f;
-    border-top:1px solid #65799f;
-    border-left:1px solid #65799f;
+    border-top:1px solid #6579af;
+    border-left:1px solid #6579af;
 
     font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
     font-size:100%;
