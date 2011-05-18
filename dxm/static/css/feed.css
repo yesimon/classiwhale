@@ -58,6 +58,12 @@
 	height: 80px;
 }
 
+.user-profile-bar .photo {
+    width: 55px;
+    height: 55px;
+    margin-top: -5px;
+}
+
 
 
 .profile-image{

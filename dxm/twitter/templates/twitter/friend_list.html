@@ -15,6 +15,15 @@
         </a>
     </div>
     
+    <script type="text/javascript">
+        {% if forloop.counter == 1 %}
+        $('#user-{{ friend.id }}').corner("bl 6px");
+        {% else %}
+        $('#user-{{ friend.id }}').corner("left 6px");
+        {% endif %}
+        
+    </script>
+    
     {% empty %}
     There are no friends to display.
     {% endfor %}
