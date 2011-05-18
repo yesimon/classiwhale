@@ -20,8 +20,8 @@
           <li class="{% ifequal request.path "/" %}active{% endifequal %}">
             <a href="{% url twitter.views.timeline %}">Unfiltered</a>
           </li>
-          <li class="{% ifequal request.path "/twitter/predict/" %}active{% endifequal %}">
-            <a href="{% url prediction.views.predicted_friends_timeline %}">Filtered</a>
+          <li class="{% ifequal request.path "/twitter/filter/" %}active{% endifequal %}">
+            <a href="{% url prediction.views.filtered_friends_timeline %}">Filtered</a>
           </li>
           <li class="{% ifequal request.path "/twitter/reorder/" %}active{% endifequal %}">
             <a href="{% url prediction.views.reordered_friends_timeline %}">Reordered</a>
