@@ -4,6 +4,7 @@ pageIndex = null;
 opts = null;
 maxid = null;
 waypointInterval = null;
+numStatuses = null;
 
 $(document).ready(function() {
     $('#loginButton').click(function(){
@@ -16,7 +17,7 @@ $(document).ready(function() {
         });
     $('a.track').click(linktrack());
 
-    ajaxTimelineHandlers();
+    if(numStatuses) ajaxTimelineHandlers();
 });
 
 

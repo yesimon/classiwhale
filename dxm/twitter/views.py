@@ -486,7 +486,14 @@ def twitter_return(request, window_type):
             del request.session['request_token']
             return HttpResponse("Unable to authenticate you!")            
         name = twitter_user['name'].split()
-        first_name, last_name = name[0], name[1]
+        if(len(name) > 0):
+            first_name = name[0]
+        else:
+            first_name = "Unknown User"
+        if(len(name) > 1):
+            last_name = name[1]
+        else:
+            last_name = ""
 
         user = User(username=username, first_name=first_name, last_name=last_name)
         user.set_unusable_password()

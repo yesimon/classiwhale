@@ -1,10 +1,9 @@
 
 
-$(function()
+$(document).ready(function()
 {
     var currentSlide = 1;
     var slideout = setTimeout(nextSlide, 7000);
-    
     $('#landingSlideshow .controls .page').click(function(){
         gotoSlide($(this).attr('slide'));
         slideout = setTimeout(nextSlide, 12000);
