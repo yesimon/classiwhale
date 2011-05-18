@@ -12,7 +12,7 @@
 
 .right-tab {
     min-height: 500px;
-    width: 200px;
+    width: 0px;
     border-width:1px 1px 1px 0;
     float: right;
     margin-left: -5px;

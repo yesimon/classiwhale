@@ -113,10 +113,10 @@
 }
 
 .status-container {
-    width: 528px;
     float: left;
-	border:0px;
+    border:0px;
     padding:0px;
+    width: 650px;
 }
 
 .status-container .status-prompt {
@@ -320,7 +320,7 @@
 .tweet-body{
   float: left;
   opacity: 1;
-  width: 335px;
+  width: 450px;
 }
 
 
