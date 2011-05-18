@@ -57,12 +57,9 @@ urlpatterns = patterns('',
     (r'^profile/(?P<username>\w+)/$', 'twitter.views.public_profile'),
 #    (r'^login/$', 'status.views.training_login'),
 #    (r'^training/$', 'status.views.training_set_posts'),
-    
     (r'^search/$', 'twitter.views.search'),
     (r'^search/ajax/$', 'twitter.views.ajax_search'),
-    
     (r'^feedback/ajax/(.*?)$', 'feedback.views.handle_ajax'),
-    
     (r'^twitter/train/$', 'prediction.views.train_classifier'),
     (r'^twitter/predict/$', 'prediction.views.predicted_friends_timeline'),
     (r'^twitter/filter/$', 'prediction.views.filtered_friends_timeline'),

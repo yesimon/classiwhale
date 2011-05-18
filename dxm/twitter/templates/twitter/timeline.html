@@ -7,33 +7,7 @@ Recent Tweets
 
 {% block extra_js %}
 <script type="text/javascript">
-$(document).ready(function() {
-    pageType = '{{ feedtype }}'
-    var $loading = $("<div class='loading'><p>Loading more items&hellip;</p></div>");
-    var pageIndex = 2;
-
-    opts = { 
-        offset: function() {
-            return $.waypoints('viewportHeight') - $(this).outerHeight() + 200;
-        },
-    }
-    $("#statuses_end").waypoint(function(event, direction) {
-//        var status = JSON.parse($(".status:last").attr("data-status"));
-//        var maxid = status.id;
-        var maxid = $(".status:last").attr("data-id");
-        $("#statuses_end").waypoint('remove');
-        $(".statuses").append($loading);
-        $.get("/status/ajax_timeline/", {page: pageIndex, id: maxid, timeline: pageType}, function(data) {
-            if (data!= '') {
-                $loading.detach();
-                pageIndex++;
-                $(".statuses").append(data);
-                addRateLinkHandlers();
-                $("#statuses_end").waypoint(opts);
-            }
-        });
-    }, opts);
-});
+pageType = '{{ feedtype }}'
 </script>
 {% endblock %}
 

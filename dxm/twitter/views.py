@@ -97,6 +97,9 @@ def ajax_timeline(request):
         statuses = filter_timeline(api, tp, page, maxid)
     elif feedtype == 'predict':
         statuses = predict_timeline(api, tp, page, maxid)
+    
+    if len(statuses) == 0:
+        return HttpResponse('Loading')
     Rating.appendTo(statuses, tp)
     return render_to_response('twitter/status_list.html',
         {
@@ -114,7 +117,7 @@ def reorder_timeline(api, tp, page, reorder_time=12):
     cutoff_time = datetime.utcnow()-timedelta(hours=reorder_time)
     details = CachedStatus.objects.filter(user=tp,
                                           status__created_at__gt=cutoff_time)
-    statuses = tp.cached_statuses.filter(id__in=[d.status_id for d in details])
+    statuses = tp.cached_statuses.filter(id__in=[d.status_id for d in details]).select_related('user')
     all_statuses = zip(statuses, details)
     ranked_statuses = sorted(all_statuses, key=lambda x: x[1].prediction, reverse=True)
     return [s[0] for s in ranked_statuses[(page-1)*20:page*20]]
