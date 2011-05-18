@@ -3,6 +3,9 @@
     // Attaches the click handler for follow/unfollow.
     // Sends message to create_friendship
     function startPostHandler() {
+        $('.follow-unfollow .negative').corner("3px");
+        $('.follow-unfollow .positive').corner("3px");
+        
         $('.follow-unfollow .follow-user').unbind('click').click(
               			function() {
                       		$.post("/twitter/create_friendship/",
@@ -41,7 +44,7 @@
 	      <div class = "buttons">
 		<a href="#" class="negative">
 		  <img src="/static/img/cross.png" alt=""/>
-		  Unfollow <br/><center>{{ friend.name}}</center>
+		  Unfollow
 		</a>
 	      </div>
 	    </div>
@@ -51,13 +54,12 @@
 	    <span class="unfollow-user">
 	      <span>Cancel</span>
 	    </span>
-        <div>You've already requested to follow {{friend.name}}</div>
       {% else %}
 	    <div class="follow-user">
 	      <div class="buttons">
-		<a href="#" class="positive">
+		  <a href="#" class="positive">
 		  <img src="/static/img/tick.png" alt=""/>
-		  Follow <br/><center>{{friend.name}}</center>
+		  Follow
 		</a>
 	      </div>     
 	    </div>

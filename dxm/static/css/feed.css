@@ -13,7 +13,6 @@
 
 .status:hover {
   background-color: #EAF3F7;
-  cursor: pointer;
 }
 
 
@@ -252,12 +251,13 @@
 
 .rate-buttons div.like,
 .rate-buttons div.dislike {
-	margin-right: 10px;
+	margin-bottom: 5px;
 	height: 22px;
 	width: 72px;
 	float: left;
 	cursor: pointer;
 }
+
 
 .rate-buttons div.like {
     background: url('/static/img/like_btns.png') no-repeat 0 0;
@@ -320,7 +320,10 @@
 .tweet-body{
   float: left;
   opacity: 1;
-  width: 450px;
+  width: 475px;
+  font-size: 15px;
+  font-family: Arial,"Helvetica Neue",sans-serif;
+  word-wrap: break-word;
 }
 
 
@@ -362,10 +365,10 @@
     display:block;
     float:left;
     margin:0 7px 0 0;
-    background-color:#f5f5f5;
-    border:1px solid #dedede;
-    border-top:1px solid #eee;
-    border-left:1px solid #eee;
+    background-color:#65799f;
+    border:1px solid #65799f;
+    border-top:1px solid #65799f;
+    border-left:1px solid #65799f;
 
     font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
     font-size:100%;
