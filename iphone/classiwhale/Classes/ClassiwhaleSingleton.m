@@ -95,7 +95,7 @@ static ClassiwhaleSingleton *sharedInstance = nil;
 - (NSDictionary *) getSearchWithResponse:(NSURLResponse **)response andError:(NSError **)error andQuery:(NSString *)q
 {
   if(!authenticated) return nil;
-	NSString* urlString = [NSString stringWithFormat:@"http://127.0.0.1/api/twitter/search?q=%@", q];
+	NSString* urlString = [NSString stringWithFormat:@"http://classiwhale.com/api/twitter/search?q=%@", q];
 
   NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
   [request setHTTPMethod: @"POST"];

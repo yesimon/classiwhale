@@ -12,8 +12,35 @@
 
 @implementation SearchViewController
 
+@synthesize grayLabel;
+
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	grayLabel.hidden = YES;
+	ClassiwhaleSingleton *api = [ClassiwhaleSingleton sharedInstance];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gotTwitterPic:) name:@"Got Twitter Pic" object:api];
+}
+
+- (void)gotTwitterPic:(NSNotification *)info {
+	NSDictionary *twitterPic = [info userInfo];
+	for (NSDictionary *status in _data) {
+		if ([[twitterPic valueForKey:@"id"] isEqual:[[status objectForKey:@"_user_cache"] valueForKey:@"profile_image_url"]]) {
+			NSUInteger cur_index = [_data indexOfObject:status];
+			[status setValue:[UIImage imageWithData:[twitterPic valueForKey:@"data"]] forKey:@"fetched_image"];
+			NSUInteger indexes [] = {0, cur_index};
+			[self.searchDisplayController.searchResultsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathWithIndexes:indexes length:2]] withRowAnimation:UITableViewRowAnimationNone];
+		}
+	}
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	UILabel *myLabel = [[[UILabel alloc] initWithFrame:CGRectMake(50.0,50.0,245.0,150.0)] autorelease];
+	myLabel.numberOfLines = 0;
+	myLabel.lineBreakMode = UILineBreakModeWordWrap;
+	myLabel.text = [[_data objectAtIndex:indexPath.row] valueForKey:@"text"];
+	myLabel.font = [UIFont fontWithName:@"Helvetica" size:13];
+	CGSize labelSize = [myLabel.text sizeWithFont:myLabel.font constrainedToSize:myLabel.frame.size lineBreakMode:UILineBreakModeWordWrap];
+	return labelSize.height+61;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
@@ -85,9 +112,24 @@
 						objectForKey:@"statuses"] retain] ;
 }
 
+- (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar
+{
+	[self searchClassiwhale:searchBar.text];
+	self.searchDisplayController.searchResultsTableView.hidden = NO;
+	grayLabel.hidden = YES;
+	[self.searchDisplayController.searchResultsTableView reloadData];
+}
+
+- (void) searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+	grayLabel.hidden = YES;
+}
+
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
-	[self searchClassiwhale:searchString];
+	[_data removeAllObjects];
+	self.searchDisplayController.searchResultsTableView.hidden = YES;
+	grayLabel.hidden = NO;
 	return YES;
 }
 

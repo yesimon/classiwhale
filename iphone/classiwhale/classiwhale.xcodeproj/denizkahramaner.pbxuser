@@ -24,7 +24,7 @@
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeBuildConfigurationName = Debug;
 		activeExecutable = B3A3868E132EB5DB0090181E /* classiwhale */;
-		activeSDKPreference = iphonesimulator4.2;
+		activeSDKPreference = iphoneos4.2;
 		activeTarget = 1D6058900D05DD3D006BFB54 /* classiwhale */;
 		addToTargets = (
 			1D6058900D05DD3D006BFB54 /* classiwhale */,
@@ -83,8 +83,8 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 327391891;
-			PBXWorkspaceStateSaveDate = 327391891;
+			PBXPerProjectTemplateStateSaveDate = 327402340;
+			PBXWorkspaceStateSaveDate = 327402340;
 		};
 		perUserProjectItems = {
 			B37046B3132F4BA6006A3A7F = B37046B3132F4BA6006A3A7F /* PBXTextBookmark */;
@@ -106,15 +106,15 @@
 			B3A89888134DECCE0060621B = B3A89888134DECCE0060621B /* PBXTextBookmark */;
 			B3A89889134DECCE0060621B = B3A89889134DECCE0060621B /* PBXTextBookmark */;
 			B3A8988A134DECCE0060621B = B3A8988A134DECCE0060621B /* PBXTextBookmark */;
-			B3ECCB141383BAE800856574 /* XCBuildMessageTextBookmark */ = B3ECCB141383BAE800856574 /* XCBuildMessageTextBookmark */;
-			B3ECCB151383BAE800856574 /* PBXTextBookmark */ = B3ECCB151383BAE800856574 /* PBXTextBookmark */;
-			B3ECCB201383BB1200856574 /* PBXTextBookmark */ = B3ECCB201383BB1200856574 /* PBXTextBookmark */;
-			B3ECCB211383BB1200856574 /* PBXTextBookmark */ = B3ECCB211383BB1200856574 /* PBXTextBookmark */;
-			B3ECCB221383BB1200856574 /* PBXTextBookmark */ = B3ECCB221383BB1200856574 /* PBXTextBookmark */;
-			B3ECCB231383BB1200856574 /* PBXTextBookmark */ = B3ECCB231383BB1200856574 /* PBXTextBookmark */;
-			B3ECCB241383BB1200856574 /* PBXTextBookmark */ = B3ECCB241383BB1200856574 /* PBXTextBookmark */;
-			B3ECCB251383BB1200856574 /* PBXTextBookmark */ = B3ECCB251383BB1200856574 /* PBXTextBookmark */;
-			B3ECCB261383BB1200856574 /* PBXTextBookmark */ = B3ECCB261383BB1200856574 /* PBXTextBookmark */;
+			B3ECCB141383BAE800856574 = B3ECCB141383BAE800856574 /* PBXTextBookmark */;
+			B3ECCB151383BAE800856574 = B3ECCB151383BAE800856574 /* PBXTextBookmark */;
+			B3ECCB201383BB1200856574 = B3ECCB201383BB1200856574 /* PBXTextBookmark */;
+			B3ECCB211383BB1200856574 = B3ECCB211383BB1200856574 /* PBXTextBookmark */;
+			B3ECCB221383BB1200856574 = B3ECCB221383BB1200856574 /* PBXTextBookmark */;
+			B3ECCB231383BB1200856574 = B3ECCB231383BB1200856574 /* PBXTextBookmark */;
+			B3ECCB241383BB1200856574 = B3ECCB241383BB1200856574 /* PBXTextBookmark */;
+			B3ECCB251383BB1200856574 = B3ECCB251383BB1200856574 /* PBXTextBookmark */;
+			B3ECCB261383BB1200856574 = B3ECCB261383BB1200856574 /* PBXTextBookmark */;
 		};
 		sourceControlManager = B3A386A5132EB5DF0090181E /* Source Control */;
 		userBuildSettings = {
@@ -265,16 +265,16 @@
 	};
 	B3A386EE132EC7C90090181E /* SearchViewController.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {894, 384}}";
-			sepNavSelRange = "{362, 0}";
-			sepNavVisRange = "{0, 369}";
+			sepNavIntBoundsRect = "{{0, 0}, {1013, 352}}";
+			sepNavSelRange = "{428, 0}";
+			sepNavVisRange = "{0, 480}";
 		};
 	};
 	B3A386EF132EC7C90090181E /* SearchViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {985, 1482}}";
-			sepNavSelRange = "{2901, 43}";
-			sepNavVisRange = "{2550, 913}";
+			sepNavIntBoundsRect = "{{0, 0}, {1454, 1924}}";
+			sepNavSelRange = "{295, 0}";
+			sepNavVisRange = "{0, 952}";
 		};
 	};
 	B3A386F3132EC7DD0090181E /* FollowingViewController.h */ = {
@@ -286,23 +286,23 @@
 	};
 	B3A386F4132EC7DD0090181E /* FollowingViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1167, 1794}}";
-			sepNavSelRange = "{2906, 0}";
-			sepNavVisRange = "{280, 1117}";
+			sepNavIntBoundsRect = "{{0, 0}, {1167, 1872}}";
+			sepNavSelRange = "{3760, 24}";
+			sepNavVisRange = "{3340, 862}";
 		};
 	};
 	B3A3873E132EDD660090181E /* TimelineViewController.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {894, 403}}";
 			sepNavSelRange = "{574, 0}";
-			sepNavVisRange = "{0, 803}";
+			sepNavVisRange = "{0, 797}";
 		};
 	};
 	B3A3873F132EDD660090181E /* TimelineViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1167, 2444}}";
-			sepNavSelRange = "{3828, 50}";
-			sepNavVisRange = "{3148, 1451}";
+			sepNavIntBoundsRect = "{{0, 0}, {908, 2535}}";
+			sepNavSelRange = "{608, 69}";
+			sepNavVisRange = "{328, 1056}";
 			sepNavWindowFrame = "{{15, 9}, {906, 764}}";
 		};
 	};
@@ -330,9 +330,9 @@
 	};
 	B3A38756132EE21C0090181E /* ClassiwhaleSingleton.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {985, 4199}}";
-			sepNavSelRange = "{3453, 0}";
-			sepNavVisRange = "{3168, 1032}";
+			sepNavIntBoundsRect = "{{0, 0}, {894, 4225}}";
+			sepNavSelRange = "{2082, 0}";
+			sepNavVisRange = "{0, 718}";
 			sepNavWindowFrame = "{{15, 9}, {906, 764}}";
 		};
 	};
@@ -474,7 +474,7 @@
 		fRef = B3A38756132EE21C0090181E /* ClassiwhaleSingleton.m */;
 		name = "ClassiwhaleSingleton.m: 164";
 		rLen = 0;
-		rLoc = 7067;
+		rLoc = 6653;
 		rType = 0;
 		vrLen = 1317;
 		vrLoc = 6559;
@@ -519,13 +519,12 @@
 		vrLen = 1177;
 		vrLoc = 501;
 	};
-	B3ECCB141383BAE800856574 /* XCBuildMessageTextBookmark */ = {
+	B3ECCB141383BAE800856574 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		comments = "'SearchViewController' may not respond to '-searchClassiwhale:'";
 		fRef = B3A386EF132EC7C90090181E /* SearchViewController.m */;
-		fallbackIsa = XCBuildMessageTextBookmark;
 		rLen = 1;
-		rLoc = 89;
+		rLoc = 131;
 		rType = 1;
 	};
 	B3ECCB151383BAE800856574 /* PBXTextBookmark */ = {
@@ -533,7 +532,7 @@
 		fRef = B3A386EF132EC7C90090181E /* SearchViewController.m */;
 		name = "SearchViewController.m: 90";
 		rLen = 0;
-		rLoc = 3373;
+		rLoc = 5226;
 		rType = 0;
 		vrLen = 442;
 		vrLoc = 3115;
@@ -573,7 +572,7 @@
 		fRef = B3A38756132EE21C0090181E /* ClassiwhaleSingleton.m */;
 		name = "ClassiwhaleSingleton.m: 98";
 		rLen = 0;
-		rLoc = 3453;
+		rLoc = 3319;
 		rType = 0;
 		vrLen = 1032;
 		vrLoc = 3168;
@@ -583,7 +582,7 @@
 		fRef = B3A386EF132EC7C90090181E /* SearchViewController.m */;
 		name = "SearchViewController.m: 77";
 		rLen = 43;
-		rLoc = 2901;
+		rLoc = 4395;
 		rType = 0;
 		vrLen = 913;
 		vrLoc = 2550;
@@ -593,7 +592,7 @@
 		fRef = B3A386EE132EC7C90090181E /* SearchViewController.h */;
 		name = "SearchViewController.h: 12";
 		rLen = 0;
-		rLoc = 289;
+		rLoc = 310;
 		rType = 0;
 		vrLen = 324;
 		vrLoc = 0;
@@ -603,7 +602,7 @@
 		fRef = B3A386EE132EC7C90090181E /* SearchViewController.h */;
 		name = "SearchViewController.h: 16";
 		rLen = 0;
-		rLoc = 362;
+		rLoc = 473;
 		rType = 0;
 		vrLen = 369;
 		vrLoc = 0;
