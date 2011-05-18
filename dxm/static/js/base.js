@@ -1,3 +1,10 @@
+pageType = null;
+$loading = null;
+pageIndex = null;
+opts = null;
+maxid = null;
+waypointInterval = null;
+
 $(document).ready(function() {
     $('#loginButton').click(function(){
         $.oauthpopup({
@@ -8,12 +15,49 @@ $(document).ready(function() {
 	    });
         });
     $('a.track').click(linktrack());
+
+    $loading = $("<div class='loading'><p>Loading more items&hellip;</p></div>");
+    pageIndex = 2;
+
+    opts = { 
+        offset: function() {
+            return $.waypoints('viewportHeight') - $(this).outerHeight() + 200;
+        },
+    }
+    $("#statuses_end").waypoint(ajaxWaypointCallback, opts);
+
 });
+
+
 
 function linktrack() {
     $.post('/status/linktrack/', {text:this.text});
     return true;    
 }
+
+function ajaxWaypointCallback(event, direction) {
+        maxid = $(".status:last").attr("data-id");
+	$("#statuses_end").waypoint('remove');
+        $(".statuses").append($loading);
+        waypointInterval = window.setInterval(ajaxGetTimeline, 1000);
+}
+
+function ajaxGetTimeline(data){
+    $.get("/status/ajax_timeline/", {page: pageIndex, id: maxid, timeline: pageType}, function(data) {
+	    if (data == 'Loading') {
+		return;
+            }
+            if (data != '') {
+		window.clearInterval(waypointInterval);
+                $loading.detach();
+                pageIndex++;
+                $(".statuses").append(data);
+                addRateLinkHandlers();
+                $("#statuses_end").waypoint(opts);
+            }
+	});
+}
+
 
 
 function getFriendTimeline(user) {
