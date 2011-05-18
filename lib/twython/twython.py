@@ -9,9 +9,8 @@
 """
 
 __author__ = "Ryan McGrath <ryan@venodesigns.net>"
-__version__ = "1.4.2"
+__version__ = "1.3.6"
 
-import cgi
 import urllib
 import urllib2
 import urlparse
@@ -49,12 +48,7 @@ except ImportError:
 			raise Exception("Twython requires the simplejson library (or Python 2.6) to work. http://www.undefined.org/python/")
 
 # Detect if oauth2 supports the callback_url argument to request
-OAUTH_CLIENT_INSPECTION = inspect.getargspec(oauth.Client.request)
-try:
-	OAUTH_LIB_SUPPORTS_CALLBACK = 'callback_url' in OAUTH_CLIENT_INSPECTION.args	
-except AttributeError:
-	# Python 2.5 doesn't return named tuples, so don't look for an args section specifically.
-	OAUTH_LIB_SUPPORTS_CALLBACK = 'callback_url' in OAUTH_CLIENT_INSPECTION
+OAUTH_LIB_SUPPORTS_CALLBACK = 'callback_url' in inspect.getargspec(oauth.Client.request).args
 
 class TwythonError(AttributeError):
 	"""
@@ -101,7 +95,7 @@ class AuthError(TwythonError):
 
 
 class Twython(object):
-	def __init__(self, twitter_token = None, twitter_secret = None, oauth_token = None, oauth_token_secret = None, headers=None, callback_url=None, client_args={}):
+	def __init__(self, twitter_token = None, twitter_secret = None, oauth_token = None, oauth_token_secret = None, headers=None, callback_url=None):
 		"""setup(self, oauth_token = None, headers = None)
 
 			Instantiates an instance of Twython. Takes optional parameters for authentication and such (see below).
@@ -113,7 +107,6 @@ class Twython(object):
 					pass it in and it'll be used for all requests going forward.
 				oauth_token_secret - see oauth_token; it's the other half.
 				headers - User agent header, dictionary style ala {'User-Agent': 'Bert'}
-				client_args - additional arguments for HTTP client (see httplib2.Http.__init__), e.g. {'timeout': 10.0}
 
 				** Note: versioning is not currently used by search.twitter functions; when Twitter moves their junk, it'll be supported.
 		"""
@@ -144,12 +137,12 @@ class Twython(object):
 
 		# Filter down through the possibilities here - if they have a token, if they're first stage, etc.
 		if consumer is not None and token is not None:
-			self.client = oauth.Client(consumer, token, **client_args)
+			self.client = oauth.Client(consumer, token)
 		elif consumer is not None:
-			self.client = oauth.Client(consumer, **client_args)
+			self.client = oauth.Client(consumer)
 		else:
 			# If they don't do authentication, but still want to request unprotected resources, we need an opener.
-			self.client = httplib2.Http(**client_args)
+			self.client = httplib2.Http()
 
 	def __getattr__(self, api_call):
 		"""
@@ -178,7 +171,7 @@ class Twython(object):
 
 			# Then open and load that shiiit, yo. TODO: check HTTP method and junk, handle errors/authentication
 			if fn['method'] == 'POST':
-				resp, content = self.client.request(base, fn['method'], urllib.urlencode(dict([k, Twython.encode(v)] for k, v in kwargs.items())), headers = self.headers)
+				resp, content = self.client.request(base, fn['method'], urllib.urlencode(dict([k, v.encode('utf-8')] for k, v in kwargs.items())), headers = self.headers)
 			else:
 				url = base + "?" + "&".join(["%s=%s" %(key, value) for (key, value) in kwargs.iteritems()])
 				resp, content = self.client.request(url, fn['method'], headers = self.headers)
@@ -207,10 +200,7 @@ class Twython(object):
 		if resp['status'] != '200':
 			raise AuthError("Seems something couldn't be verified with your OAuth junk. Error: %s, Message: %s" % (resp['status'], content))
 		
-		try:
-			request_tokens = dict(urlparse.parse_qsl(content))
-		except:
-			request_tokens = dict(cgi.parse_qsl(content))
+		request_tokens = dict(urlparse.parse_qsl(content))
 		
 		oauth_callback_confirmed = request_tokens.get('oauth_callback_confirmed')=='true'
 		
@@ -238,11 +228,8 @@ class Twython(object):
 			Returns authorized tokens after they go through the auth_url phase.
 		"""
 		resp, content = self.client.request(self.access_token_url, "GET")
-		try:
-			return dict(urlparse.parse_qsl(content))
-		except:
-			return dict(cgi.parse_qsl(content))
-	
+		return dict(urlparse.parse_qsl(content))
+
 	# ------------------------------------------------------------------------------------------------------------------------
 	# The following methods are all different in some manner or require special attention with regards to the Twitter API.
 	# Because of this, we keep them separate from all the other endpoint definitions - ideally this should be change-able,
@@ -280,11 +267,11 @@ class Twython(object):
 		if ids:
 			kwargs['user_id'] = ','.join(map(str, ids))
 		if screen_names:
-			kwargs['screen_name'] = ','.join(screen_names)
+			kwargs['screen_names'] = ','.join(screen_names)
 			
 		lookupURL = Twython.constructApiURL("http://api.twitter.com/%d/users/lookup.json" % version, kwargs)
 		try:
-			resp, content = self.client.request(lookupURL, "POST", headers = self.headers)
+			resp, content = self.client.request(lookupURL, "GET", headers = self.headers)
 			return simplejson.loads(content)
 		except HTTPError, e:
 			raise TwythonError("bulkUserLookup() failed with a %s error code." % `e.code`, e.code)
@@ -417,29 +404,20 @@ class Twython(object):
 			raise TwythonError("updateProfileImage() failed with a %d error code." % e.code, e.code)
 		
 	def getProfileImageUrl(self, username, size=None, version=1):
-		""" getProfileImageUrl(username)
-		
-		    Gets the URL for the user's profile image.
-		    
-		    Parameters:
-		        username - Required. User name of the user you want the image url of.
-		        size - Optional. Image size. Valid options include 'normal', 'mini' and 'bigger'. Defaults to 'normal' if not given.
-				version (number) - Optional. API version to request. Entire Twython class defaults to 1, but you can override on a function-by-function or class basis - (version=2), etc.
-		"""
 		url = "http://api.twitter.com/%s/users/profile_image/%s.json" % (version, username)
 		if size:
 			url = self.constructApiURL(url, {'size':size})
 		
-		client = httplib2.Http()
-		client.follow_redirects = False
-		resp, content = client.request(url, 'GET')
-		
-		if resp.status in (301,302,303,307):
+		try:
+			client = httplib2.Http()
+			client.follow_redirects = False
+			resp = client.request(url, 'HEAD')[0]
+			if resp['status'] not in ('301', '302', '303', '307'):
+				raise TwythonError("getProfileImageUrl() failed to get redirect.")
 			return resp['location']
-		elif resp.status == 200:
-			return simplejson.loads(content)
-		
-		raise TwythonError("getProfileImageUrl() failed with a %d error code." % resp.status, resp.status)
+
+		except HTTPError, e:
+			raise TwythonError("getProfileImageUrl() failed with a %d error code." % e.code, e.code)
 
 	@staticmethod
 	def encode_multipart_formdata(fields, files):
@@ -471,9 +449,3 @@ class Twython(object):
 		except:
 			pass
 		return text
-
-	@staticmethod
-	def encode(text):
-		if isinstance(text, (str,unicode)):
-			return Twython.unicode2utf8(text)
-		return str(text)
