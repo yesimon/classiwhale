@@ -38,32 +38,34 @@
     </script>
     
     <div class="follow-unfollow">
-    {% if is_true_friend %}
-	    <div class="unfollow-user">
-	      
-	      <div class = "buttons">
-		<a href="#" class="negative">
-		  <img src="/static/img/cross.png" alt=""/>
-		  Unfollow
-		</a>
-	      </div>
-	    </div>
-    {% else %}
-      {% if follow_request_sent %}
-        <span>Your follow request has been sent. </span>
-	    <span class="unfollow-user">
-	      <span>Cancel</span>
-	    </span>
-      {% else %}
-	    <div class="follow-user">
-	      <div class="buttons">
-		  <a href="#" class="positive">
-		  <img src="/static/img/tick.png" alt=""/>
-		  Follow
-		</a>
-	      </div>     
-	    </div>
-	  {% endif %}
+    {% if not is_me %}
+	    {% if is_true_friend %}
+		    <div class="unfollow-user">
+		      
+		      <div class = "buttons">
+			<a href="#" class="negative">
+			  <img src="/static/img/cross.png" alt=""/>
+			  Unfollow
+			</a>
+		      </div>
+		    </div>
+	    {% else %}
+	      {% if follow_request_sent %}
+	        <span>Your follow request has been sent. </span>
+		    <span class="unfollow-user">
+		      <span>Cancel</span>
+		    </span>
+	      {% else %}
+		    <div class="follow-user">
+		      <div class="buttons">
+			  <a href="#" class="positive">
+			  <img src="/static/img/tick.png" alt=""/>
+			  Follow
+			</a>
+		      </div>     
+		    </div>
+		  {% endif %}
+		{% endif %}
 	{% endif %}
 	</div>
 	

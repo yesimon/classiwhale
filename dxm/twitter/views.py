@@ -157,10 +157,11 @@ def public_profile(request, username):
     friend = api.showUser(screen_name=username)
     friends = api.getFriendsStatus()
     prof = request.user.get_profile()
-    print prof.name
     tp = TwitterUserProfile.objects.get(user=prof)
     follow_request_sent = True
     is_true_friend = friend['following']
+    is_me = tp.id == friend['id']
+    print(is_me)
     if not is_true_friend:
         is_true_friend = False
         outgoing = api.friendshipsOutgoing()
@@ -181,6 +182,7 @@ def public_profile(request, username):
         'username': username,
         'friend': friend,
         'is_true_friend' : is_true_friend,
+        'is_me' : is_me,
         'profile_protected' : friend['protected'],
         'follow_request_sent': follow_request_sent,
         'statuses' : statuses,
