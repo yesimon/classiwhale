@@ -92,6 +92,32 @@ static ClassiwhaleSingleton *sharedInstance = nil;
   return arr;
 }
 
+- (NSDictionary *) getSearchWithResponse:(NSURLResponse **)response andError:(NSError **)error andQuery:(NSString *)q
+{
+  if(!authenticated) return nil;
+	NSString* urlString = [NSString stringWithFormat:@"http://classiwhale.com/api/twitter/search?q=%@", q];
+
+  NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+  [request setHTTPMethod: @"POST"];
+  [request setHTTPShouldHandleCookies:NO];
+  
+  if(cookies != nil) {
+    [request setAllHTTPHeaderFields:[NSHTTPCookie requestHeaderFieldsWithCookies:self.cookies]];
+  }
+  
+  *response = nil;
+  *error = nil;
+  
+  NSData *dat = [NSURLConnection sendSynchronousRequest:request returningResponse:response error:error];
+  NSLog(@"Response = %@", *response);
+  NSLog(@"Error = %@", *error);
+  if(*error != nil) return nil;
+  NSString *json_string = [[NSString alloc] initWithData:dat encoding:NSUTF8StringEncoding];
+  NSDictionary *arr = [json_string JSONValue];
+  return arr;
+}
+
+
 - (NSArray *) getFriendsWithResponse:(NSURLResponse **)response andError:(NSError **)error
 {
   if(!authenticated) return nil;

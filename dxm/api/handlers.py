@@ -76,5 +76,23 @@ class FriendTimelineHandler(BaseHandler):
                     'statuses': statuses
                 }
         
-        
-        
+class SearchHandler(BaseHandler):
+    def read(self, request):
+        lex = request.GET
+	if (not lex.has_key(u'q')):
+            return HttpResponseBadRequest("q parameter missing")	
+ 	term = lex[u'q']
+
+	user = request.user
+        if not user.is_authenticated() or 'twitter_tokens' not in request.session:
+            return rc.FORBIDDEN
+
+	if term is not None:
+        	api = get_authorized_twython(request.session['twitter_tokens'])
+        	statuses = Status.construct_from_search_dicts(api.searchTwitter(q=term)[u'results'])
+                twitter_tokens = request.session['twitter_tokens']
+		tp = TwitterUserProfile.objects.get(id=twitter_tokens['user_id'])
+        	Rating.appendTo(statuses, tp)
+        	return {
+        	            'statuses': statuses
+        	       }
