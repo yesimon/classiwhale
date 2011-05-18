@@ -27,12 +27,16 @@ def cache_clean():
 
 
 
+
 @task
 def cache_timeline_backfill(tp, twitter_tokens, statuses):
     """ Backfill cached timeline from the oldest tweet in statuses to
     the cached_time in TwitterUserProfile or 72 hours, whichever is sooner"""
     api = get_authorized_twython(twitter_tokens)
     cutoff_time = datetime.utcnow()-timedelta(hours=72)
+
+    if not statuses:
+        statuses = Status.construct_from_dicts(api.getFriendsTimeline(include_rts=True))
 
     backfill_maxid = min(statuses, key=lambda x: x.id).id
     backfill_newestid = max(statuses, key=lambda x: x.id).id

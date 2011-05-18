@@ -1,5 +1,5 @@
 from celery.decorators import task, periodic_task
-from celery.task.schedules import crontab
+from celery.schedules import crontab
 from datetime import datetime, timedelta
 from django.db.models import Max
 from multinomialbayes.classifiers import MultinomialBayesClassifier

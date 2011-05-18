@@ -22,6 +22,7 @@ class TwitterUserProfile(models.Model):
     oauth_secret = models.CharField(max_length=255, blank=True, null=True, editable=False)
     name = models.CharField(max_length=255, blank=True, null=True)
     screen_name = models.CharField(max_length=32, blank=True, null=True)
+#    friends = models.ManyToManyField('self', symmetrical=False, blank=True, through='FriendDetail')
     profile_image_url = models.URLField(blank=True, null=True)
     profile_use_background_image = models.BooleanField(default=False)
     profile_sidebar_border_color = models.CharField(max_length=16, blank=True, null=True)
@@ -345,6 +346,12 @@ class Rating(models.Model):
             except KeyError:
                 continue
 
+#class FriendDetail(models.Model):
+#    user = models.ForeignKey('TwitterUserProfile')
+#    friend = models.ForeignKey('TwitterUserProfile', related_name='friend')
+#    prediction = models.FloatField(blank=True, null=True)
+                                         
+                                         
 class Hashtag(models.Model):
     text = models.CharField(max_length=140, unique=True)
     

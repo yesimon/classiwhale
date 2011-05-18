@@ -16,16 +16,7 @@ $(document).ready(function() {
         });
     $('a.track').click(linktrack());
 
-    $loading = $("<div class='loading'><p>Loading more items&hellip;</p></div>");
-    pageIndex = 2;
-
-    opts = { 
-        offset: function() {
-            return $.waypoints('viewportHeight') - $(this).outerHeight() + 200;
-        },
-    }
-    $("#statuses_end").waypoint(ajaxWaypointCallback, opts);
-
+    ajaxTimelineHandlers();
 });
 
 
@@ -35,30 +26,51 @@ function linktrack() {
     return true;    
 }
 
-function ajaxWaypointCallback(event, direction) {
-        maxid = $(".status:last").attr("data-id");
-	$("#statuses_end").waypoint('remove');
+function ajaxTimelineHandlers(){
+    $loading = $("<div class='loading'><p>Loading more items&hellip;</p><img src='/static/img/spinner.gif'></img></div>");
+
+    opts = { 
+        offset: function() {
+            return $.waypoints('viewportHeight') - $(this).outerHeight() + 200;
+        },
+    }
+
+    if (numStatuses == 0) {
+        pageIndex = 1;
         $(".statuses").append($loading);
-        waypointInterval = window.setInterval(ajaxGetTimeline, 1000);
+        ajaxGetTimeline(null);
+    }
+    else {
+        pageIndex = 2;
+    }
+
+    $("#statuses_end").waypoint(ajaxWaypointCallback, opts);
+}
+
+
+function ajaxWaypointCallback(event, direction) {
+    maxid = $(".status:last").attr("data-id");
+	$("#statuses_end").waypoint('remove');
+    $(".statuses").append($loading);
+    ajaxGetTimeline(null);
+    //    waypointInterval = window.setInterval(ajaxGetTimeline, 1000);
 }
 
 function ajaxGetTimeline(data){
     $.get("/status/ajax_timeline/", {page: pageIndex, id: maxid, timeline: pageType}, function(data) {
-	    if (data == 'Loading') {
-		return;
+            if (data == 'Loading') {
+                return;
             }
             if (data != '') {
-		window.clearInterval(waypointInterval);
+                // window.clearInterval(waypointInterval);
                 $loading.detach();
                 pageIndex++;
                 $(".statuses").append(data);
                 addRateLinkHandlers();
                 $("#statuses_end").waypoint(opts);
             }
-	});
+        });
 }
-
-
 
 function getFriendTimeline(user) {
     $.get(

@@ -10,6 +10,7 @@ class TwitterAuthentication:
     """Twitter backend for authentication
     """
     supports_anonymous_user = False
+    supports_object_permissions = False
     def authenticate(self, oauth_token=None, oauth_secret=None):
         '''
         Authenticates the oauth credentials by requesting user information

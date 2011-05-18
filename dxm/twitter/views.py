@@ -89,6 +89,9 @@ def ajax_timeline(request):
     # Get maxid for certain types of timelines
     try: maxid = int(g[u'id'])
     except KeyError: maxid = None
+    # Force cache fill if no statuses loaded originally
+    if page == 1:
+        cache_timeline_backfill(tp, twitter_tokens, None)
     if feedtype == 'normal':
         statuses = normal_timeline(api, tp, page, maxid)
     elif feedtype == 'reorder':
@@ -414,7 +417,7 @@ def rating_history(request):
 """
 
 def linktrack(request):
-    return ''
+    return HttpResponse('')
 
 
 def twitter_logout(request, next_page):
