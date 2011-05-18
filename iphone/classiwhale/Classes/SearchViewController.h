@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 
 
-@interface SearchViewController : UIViewController {
-
+@interface SearchViewController : UIViewController <UISearchDisplayDelegate, UITableViewDataSource, UITableViewDelegate> {
+	NSMutableArray* _data;
 }
+
+- (void)searchClassiwhale:(NSString*)query;
 
 @end

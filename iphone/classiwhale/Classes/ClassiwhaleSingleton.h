@@ -24,6 +24,7 @@
 - (void) loginToTwitter:(UIViewController*)vc;
 - (NSDictionary *) getFilteredTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error;
 - (NSDictionary *) getTimelineWithResponse:(NSURLResponse **)response andError:(NSError **)error;
+- (NSDictionary *) getSearchWithResponse:(NSURLResponse **)response andError:(NSError **)error andQuery:(NSString *)q;
 - (NSArray *) getFriendsWithResponse:(NSURLResponse **)response andError:(NSError **)error;
 - (NSArray *) rateTweetId:(NSString *)tweet_id up:(BOOL)rate_up withResponse:(NSURLResponse **)response andError:(NSError **)error;
 - (NSDictionary *) getFriendTimeline:(NSString *)friend_id withResponse:(NSURLResponse **)response andError:(NSError **)error;
