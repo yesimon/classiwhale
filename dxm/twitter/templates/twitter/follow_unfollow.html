@@ -37,18 +37,29 @@
     <div class="follow-unfollow">
     {% if is_true_friend %}
 	    <div class="unfollow-user">
-	      <div class="already-following">Unfollow {{ friend.name }} on Twitter</div>
+	      
+	      <div class = "buttons">
+		<a href="#" class="negative">
+		  <img src="/static/img/cross.png" alt=""/>
+		  Unfollow <br/><center>{{ friend.name}}</center>
+		</a>
+	      </div>
 	    </div>
     {% else %}
       {% if follow_request_sent %}
-        <span>Your follow request has been sent. <span>
+        <span>Your follow request has been sent. </span>
 	    <span class="unfollow-user">
 	      <span>Cancel</span>
 	    </span>
         <div>You've already requested to follow {{friend.name}}</div>
       {% else %}
 	    <div class="follow-user">
-	      <div>Follow {{ friend.name }} on Twitter</div>
+	      <div class="buttons">
+		<a href="#" class="positive">
+		  <img src="/static/img/tick.png" alt=""/>
+		  Follow <br/><center>{{friend.name}}</center>
+		</a>
+	      </div>     
 	    </div>
 	  {% endif %}
 	{% endif %}

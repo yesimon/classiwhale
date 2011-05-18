@@ -13,6 +13,7 @@
 
 .status:hover {
   background-color: #EAF3F7;
+  cursor: pointer;
 }
 
 
@@ -86,11 +87,11 @@
 }
 
 .follow-unfollow{
-	float:left;
+	float:right;
 	margin-left:10px;
 	margin-top:10px;
 	color: white;
-	width: 100px;
+	width: 150px;
 }
 
 .follow-unfollow .follow-user {
@@ -111,14 +112,12 @@
   cursor: pointer;
 }
 
-
 .status-container {
     width: 528px;
     float: left;
 	border:0px;
     padding:0px;
 }
-
 
 .status-container .status-prompt {
     color:#0D3867;
@@ -203,14 +202,10 @@
     background: url("/static/img/filter_btn.png") no-repeat top right;
 }
 
-
-
-
 .status-container .header .links a:link,
 .status-container .header .links a:visited {
     color: white;
 }
-
 
 .status-container .header .left-bg {
     background: url('/static/img/title_corners.png') no-repeat 0 0;
@@ -230,14 +225,11 @@
     height:38px;
 }
 
-
-
 .status-container .statuses {
 	border:1px solid #A0A0A0;
 	border-width: 0 1px 1px;
 	background-color: #fff;
 }
-
 
 .rating-container {
   float: left;
@@ -251,10 +243,11 @@
   padding: 0px 5px;
 }
 
-
 .rate-buttons {
   padding: 0px;
   margin: 6px 0 0px 4px;
+  float: left;
+  width: 80px;
 }
 
 .rate-buttons div.like,
@@ -267,19 +260,19 @@
 }
 
 .rate-buttons div.like {
-  	background: url('/static/img/like_btns.png') no-repeat 0 0;
+    background: url('/static/img/like_btns.png') no-repeat 0 0;
 }
 
 .rate-buttons div.dislike {
-  	background: url('/static/img/like_btns.png') no-repeat -72px 0px;
+    background: url('/static/img/like_btns.png') no-repeat -72px 0px;
 }
 
 .rate-buttons div.like.inactive {
-  	background: url('/static/img/like_btns.png') no-repeat 0 -44px;
+   background: url('/static/img/like_btns.png') no-repeat 0 -44px;
 }
 
 .rate-buttons div.dislike.inactive {
-  	background: url('/static/img/like_btns.png') no-repeat -72px -44px;
+    background: url('/static/img/like_btns.png') no-repeat -72px -44px;
 }
 
 
@@ -297,9 +290,9 @@
 
 .tweet-usr-profile {
   height: 48px;
+  width: 48px;
   margin-top: 5px;
   padding: 0px 4px;
-  width: 48px;
   float: left;
   overflow: hidden;
   position: relative;
@@ -327,6 +320,7 @@
 .tweet-body{
   float: left;
   opacity: 1;
+  width: 335px;
 }
 
 
@@ -336,7 +330,6 @@
   color: #333333;
   margin: 0;
   padding: 0px 4px;
-  width: 426px;
 }
 
 
@@ -361,4 +354,99 @@
   line-height: 20px;
   margin-top: 0;
   font-style: normal;
+}
+
+/*Buttons*/
+
+.buttons a, .buttons button{
+    display:block;
+    float:left;
+    margin:0 7px 0 0;
+    background-color:#f5f5f5;
+    border:1px solid #dedede;
+    border-top:1px solid #eee;
+    border-left:1px solid #eee;
+
+    font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
+    font-size:100%;
+    line-height:130%;
+    text-decoration:none;
+    font-weight:bold;
+    color:#565656;
+    cursor:pointer;
+    padding:5px 10px 6px 7px; /* Links */
+}
+
+.buttons button{
+    width:auto;
+    overflow:visible;
+    padding:4px 10px 3px 7px; /* IE6 */
+}
+
+.buttons button[type]{
+    padding:5px 10px 5px 7px; /* Firefox */
+    line-height:17px; /* Safari */
+}
+
+*:first-child+html button[type]{
+    padding:4px 10px 3px 7px; /* IE7 */
+}
+
+.buttons button img, .buttons a img{
+    margin:0 3px -3px 0 !important;
+    padding:0;
+    border:none;
+    width:16px;
+    height:16px;
+}
+
+
+/* STANDARD */
+
+button:hover, .buttons a:hover{
+    background-color:#dff4ff;
+    border:1px solid #c2e1ef;
+    color:#336699;
+}
+
+.buttons a:active{
+    background-color:#6299c5;
+    border:1px solid #6299c5;
+    color:#fff;
+}
+
+/* POSITIVE */
+
+button.positive, .buttons a.positive{
+    color:#529214;
+}
+
+.buttons a.positive:hover, button.positive:hover{
+    background-color:#E6EFC2;
+    border:1px solid #C6D880;
+    color:#529214;
+}
+
+.buttons a.positive:active{
+    background-color:#529214;
+    border:1px solid #529214;
+    color:#fff;
+}
+
+/* NEGATIVE */
+
+.buttons a.negative, button.negative{
+    color:#d12f19;
+}
+
+.buttons a.negative:hover, button.negative:hover{
+    background:#fbe3e4;
+    border:1px solid #fbc2c4;
+    color:#d12f19;
+}
+
+.buttons a.negative:active{
+    background-color:#d12f19;
+    border:1px solid #d12f19;
+    color:#fff;
 }

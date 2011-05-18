@@ -2,11 +2,11 @@ $(document).ready(function() {
     addRateLinkHandlers();
 });
 
-/* Hotkeys disabled for now*/
+/* Hotkeys reenabled*/
 $(document).keydown(function(event) {
     if(shouldUseHotkeys()) {
         if (event.keyCode == 74) { // 'j'
-            hotkeyRateLike();
+	    hotkeyRateLike();
         }
         if (event.keyCode == 75) { // 'k'
             hotkeyRateDislike();
@@ -18,35 +18,29 @@ $(document).keydown(function(event) {
 });
 
 function shouldUseHotkeys() {
-	if(window.$is_post_form_focused == undefined) return true;
+	if (window.$is_post_form_focused == undefined) {
+		return true;
+	}
     return !$is_post_form_focused;
-}
-
-jQuery.fn.center = function () {
-    this.css("position","absolute");
-    this.css("top", ( $(window).height() - this.height() ) / 2+$(window).scrollTop() + "px");
-    this.css("left", ( $(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px");
-    return this;
 }
 
 
 function hotkeyPrevEntry() {
     activeEntry = $(".entry-active");
-	var statusHeight = activeEntry.height();
+    var statusHeight = activeEntry.height();
     prevEntry = activeEntry.prev();
     if (prevEntry.length == 0) return;
     activeEntry.removeClass("entry-active");
     prevEntry.addClass("entry-active");
+    $("html, body").animate({"scrollTop":-200 + prevEntry.offset().top + "px"});
     
-  	$("html, body").animate({"scrollTop":-200 + prevEntry.offset().top + "px"});
-    
-
 }
 
 function hotkeyRateLike() {
     activeEntry = $(".entry-active");
     if (activeEntry.length == 0) {
         $(".status:first").addClass("entry-active");
+		$("html, body").animate({"scrollTop":-200 + $(".status:first").offset().top + "px"});
         return;
     }
     nextEntry = activeEntry.next();
@@ -101,7 +95,6 @@ function addRateLinkHandlers() {
 }
 
 function rate(kind, status){
-	
     $.post(
         "/status/ajax_rate/", 
         { rating: kind, status: status }, 
@@ -117,6 +110,8 @@ function rate(kind, status){
 
 function rateLike() {
     entry = $(this).closest(".status");
+
+    activeEntry = $(".entry-active");
     rate("up", entry.attr("data-id"));
 
     if ($(this).hasClass('inactive') && $(this).next().hasClass('inactive'))
@@ -129,13 +124,21 @@ function rateLike() {
     
     $(this).addClass('active');
     $(this).removeClass('inactive');
+
+    activeEntry.removeClass("entry-active");
+    entry.addClass("entry-active");
+
+   
+
+
     return false;
 }
 
 function rateDislike() {
     entry = $(this).closest(".status");
     rate("down", entry.attr("data-id"));
-    
+    activeEntry = $(".entry-active");
+ 
     if ($(this).hasClass('inactive') && $(this).next().hasClass('inactive'))
     {
 	setWhaleProgress(whaleExp++, minExp, maxExp);
@@ -146,5 +149,14 @@ function rateDislike() {
     
     $(this).addClass('active');
     $(this).removeClass('inactive');
+
+    activeEntry.removeClass("entry-active");
+    entry.addClass("entry-active");
+
+    entry.fadeOut('medium', function(){
+	    entry.remove();
+	});
+
+
     return false;	
 }

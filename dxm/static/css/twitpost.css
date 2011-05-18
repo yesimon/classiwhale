@@ -42,6 +42,8 @@
     cursor: pointer;
 }
 
+
+
 .status-post .status-post-button:hover {
     background-position: 0px -29px;
 }
