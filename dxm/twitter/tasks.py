@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta
 from celery.decorators import task, periodic_task
 from django.db import transaction, connection
-from twitter.models import Status, TwitterUserProfile, CachedStatus
+from twitter.models import Status, TwitterUserProfile, CachedStatus, Rating
 from twitter.utils import get_authorized_twython
 
-from algorithmio.interface import get_predictions
+from algorithmio.interface import get_predictions, force_train
 
 
 def cache_statuses(statuses, tp):
@@ -20,7 +20,7 @@ def cache_statuses(statuses, tp):
     predictions = get_predictions(tp, usercache_statuses)
     CachedStatus.objects.create_in_bulk(tp, usercache_statuses, predictions)
 
-#@periodic_task(run_every=timedelta(hours=2))
+@periodic_task(run_every=timedelta(hours=2))
 def cache_clean():
     Status.clear_cache()
 
@@ -79,5 +79,10 @@ def cache_timeline_backfill(tp, twitter_tokens, statuses):
         tp.cached_minid = oldest_status.id
     tp.cached_maxid = backfill_newestid
     tp.save()
+
+    # If less than 50 rated statuses: force train user classifier
+    if Rating.objects.filter(user=tp).count() < 50:
+        force_train(prof)
+
 #    print "num apicalls: " + str(num_apicalls)
     cache_statuses(statuses, tp)

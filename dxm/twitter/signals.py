@@ -49,8 +49,8 @@ def cache_timeline_backfill_callback(sender, **kwargs):
     except IndexError:
         backfill_minid = None
  
-    print "backfill minid: " + str(backfill_minid)
-    print "backfill maxid: " + str(backfill_maxid)
+#    print "backfill minid: " + str(backfill_minid)
+#    print "backfill maxid: " + str(backfill_maxid)
 
     cache_timeline_signal.send(sender=sender, statuses=statuses,
                                twitter_user_profile=tp)

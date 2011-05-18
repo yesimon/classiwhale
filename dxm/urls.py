@@ -19,7 +19,7 @@ nexus.autodiscover()
 
 
 urlpatterns = patterns('',
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
+    # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
@@ -38,12 +38,11 @@ urlpatterns = patterns('',
     (r'^twitterauth/login/(?P<window_type>\w+)/$', 'twitter.views.twitter_login'),
     (r'^twitterauth/return/(\w+)/$', 'twitter.views.twitter_return'),
     (r'^twitterauth/logout/$', 'twitter.views.twitter_logout', {'next_page': '/'}),
-    
+
     (r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name':
         'login.html'}),
-    (r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', 
+    (r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login',
         {'login_url': '/accounts/login/'}),
-        
 #    (r'^status/recent/$', 'twitter.views.public_timeline'),
     (r'^status/ajax_rate/$', 'twitter.views.ajax_rate'),
 #    (r'^status/ajax_public_timeline/$', 'twitter.views.ajax_public_timeline'),
@@ -71,7 +70,7 @@ urlpatterns += patterns('contact.views',
     (r'^contact/$', 'contact'),
 )
 
-if settings.STATIC_SERVE:    
+if settings.STATIC_SERVE:
     urlpatterns += patterns('',
         (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_DOC_ROOT}),
-    )                           
+    )
