@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 """Twitter Authentication backend for Django
 
@@ -33,12 +32,12 @@ class TwitterBackend:
     def authenticate(self, access_token):
         '''authenticates the token by requesting user information from twitter
         '''
-        twitter_api = python_twitter.Api(consumer_key=CONSUMER_KEY, 
+        twitter_api = python_twitter.Api(consumer_key=CONSUMER_KEY,
                                   consumer_secret=CONSUMER_SECRET,
                                   access_token_key=access_token.key,
                                   access_token_secret=access_token.secret)
-        
-         
+
+
         try:
             userinfo = twitter_api.VerifyCredentials()
         except:
@@ -62,17 +61,17 @@ class TwitterBackend:
         userprofile.location = userinfo.location
         userprofile.description = userinfo.description
         userprofile.profile_image_url = userinfo.profile_image_url
-        if not userprofile.whale:
-            whale = Whale(species=WhaleSpecies.getDefaultSpecies())
-            whale.save()
-            userprofile.whale = whale
+        # if not userprofile.whale:
+        #     whale = Whale(species=WhaleSpecies.getDefaultSpecies())
+        #     whale.save()
+        #     userprofile.whale = whale
         if not userprofile.active_classifier:
             userprofile.active_classifier = DEFAULT_CLASSIFIER
             userprofile.classifier_version = DEFAULT_CLASSIFIER_VERSION
         userprofile.save()
         return user
-        
-    
+
+
     def get_user(self, id):
         try:
             return User.objects.get(pk=id)

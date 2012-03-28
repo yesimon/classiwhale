@@ -24,10 +24,6 @@ def cache_statuses(statuses, tp):
 def cache_clean():
     Status.clear_cache()
 
-
-
-
-
 @task
 def cache_timeline_backfill(tp, twitter_tokens, statuses):
     """ Backfill cached timeline from the oldest tweet in statuses to
@@ -49,7 +45,7 @@ def cache_timeline_backfill(tp, twitter_tokens, statuses):
     if backfill_newestid == maxid: return
 
     # Only one page of new tweets - just cache these
-    if backfill_maxid < maxid: 
+    if backfill_maxid < maxid:
         cache_statuses(statuses, tp)
         return
 
@@ -63,7 +59,7 @@ def cache_timeline_backfill(tp, twitter_tokens, statuses):
 
 
         recieved_statuses = Status.construct_from_dicts(
-            api.getFriendsTimeline(count=200, include_rts=True, 
+            api.getFriendsTimeline(count=200, include_rts=True,
                                    max_id=backfill_maxid, min_id=maxid))
         num_apicalls += 1
         total_num_statuses += len(recieved_statuses)
@@ -86,7 +82,7 @@ def cache_timeline_backfill(tp, twitter_tokens, statuses):
 
     # If less than 50 rated statuses: force train user classifier
     if Rating.objects.filter(user=tp).count() < 50:
-        force_train(prof)
+        force_train(tp)
 
 #    print "num apicalls: " + str(num_apicalls)
     cache_statuses(statuses, tp)

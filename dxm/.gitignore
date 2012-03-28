@@ -1,8 +1,8 @@
 mydb.db
 local_settings.py
+celerybeat-schedule.db
 
 static/CACHE/
-
 classiwhale
 .project
 .pydevproject
@@ -29,4 +29,3 @@ classiwhale
 ehthumbs.db
 Icon?
 Thumbs.db
-

@@ -18,6 +18,4 @@ class WhaleSpecies(models.Model):
 class Whale(models.Model):
     name = models.CharField(default="My Whale", max_length=50, blank=True, null=True)
     exp = models.IntegerField(default=0, blank=True, null=True)
-    species = models.ForeignKey('whale.WhaleSpecies', default=DEFAULT_SPECIES_ID, blank=True, null=True) 
-
-
+    species = models.ForeignKey('whale.WhaleSpecies', default=DEFAULT_SPECIES_ID, blank=True, null=True)

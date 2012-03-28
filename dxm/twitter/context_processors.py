@@ -1,7 +1,11 @@
 from twitter.models import *
 
 def twitter_user(request):
-    if not request.user.is_authenticated():
+    try:
+        user = request.user
+    except AttributeError:
+        return {}
+    if not user.is_authenticated():
         return {}
     try:
         twitter_user = TwitterUserProfile.objects.get(id=request.session['twitter_tokens']['user_id'])

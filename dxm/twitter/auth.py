@@ -32,8 +32,8 @@ class TwitterAuthentication:
             # User wasn't been registered through this backend
             return None
         return user
-        
-    
+
+
     def get_user(self, user_id):
         try:
             return User.objects.get(id=user_id)

@@ -8,8 +8,8 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 import numpy as np
 import random
 import json
-from scikits.learn import svm, datasets
-from scikits.learn.metrics import roc_curve, auc
+from sklearn import svm, datasets
+from sklearn.metrics import roc_curve, auc
 
 from algorithmio.interface import classifier_library
 from corsair import conf
@@ -82,8 +82,8 @@ def benchmark_test(training_set, classifier):
     t = TwitterTrainingSet.objects.get(name=training_set)
     stats = t.benchmark(classifier, save=True)
     return stats
-   
-    
+
+
 
 
 @login_required

@@ -1,11 +1,13 @@
+{% load analytical %}
+{% load google_analytics %}
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html lang="en">
 
+{% google_analytics %}
 <head>
+    {% analytical_head_top %}
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <link rel="shortcut icon" href="/static/img/favicon.png"/>
-    {% load compress %}
-    {% compress css %}
 
     <link rel="stylesheet" href="/static/css/base.css" />
     <link rel="stylesheet" href="/static/css/about.css" />
@@ -14,57 +16,40 @@
     <link rel="stylesheet" href="/static/css/panes.css" />
     <link rel="stylesheet" href="/static/css/friends.css" />
     <link rel="stylesheet" href="/static/css/training_profile.css" />
-    <link rel="stylesheet" href="/static/css/jquery-ui-all.css" />
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/base/jquery-ui.css" />
     <link rel="stylesheet" href="/static/css/twitpost.css" />
     {% block extra_css %}
     {% endblock %}
-    {% endcompress %}
 
-    {% compress js %}
     <script type="text/javascript" src="/static/js/jquery-1.4.4.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery.scrollTo.js"></script>
     <script type="text/javascript" src="/static/js/jquery.infinitescroll.js"></script>
     <script type="text/javascript" src="/static/js/waypoints.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery.oauthpopup.js"></script>
-    <script type="text/javascript" src="/static/js/jquery-ui-all.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/static/js/base.js"></script>
     <script type="text/javascript" src="/static/js/rating.js"></script>
     <script type="text/javascript" src="/static/js/training_profile.js"></script>
     <script type="text/javascript" src="/static/js/uservoice.js"></script>
     <script type="text/javascript" src="/static/js/jquery.corner.js"></script>
-    
-    {% if GOOGLE_ANALYTICS_KEY %}
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-20334343-1']);
-      _gaq.push(['_setDomainName', '.classiwhale.com']);
-      _gaq.push(['_trackPageview']);
-      
-      (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
-    {% endif %}
 
     {% block extra_js %}
     {% endblock %}
-    {% endcompress %}
-    
+
     <title>
         {% block title %}
         {% endblock %}
     </title>
+    {% analytical_head_bottom %}
 </head>
 
-
 <body>
+    {% analytical_body_top %}
     {% include "navigation.html" %}
     <div id="background"></div>
     <div id="middle">
         <div id="content">
-        	
+
 			{% if errors %}
 			<ul>
 				{% for error in errors %}
@@ -75,15 +60,16 @@
 
 			{% block content %}
 			{% endblock %}
-            
+
         </div>
         <br/><br/>
     </div>
-    
+
     <div id="footer">
         {% block footer %}
         {% endblock %}
     </div>
+    {% analytical_body_bottom %}
 </body>
 
 

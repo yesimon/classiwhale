@@ -5,9 +5,7 @@ Recent Tweets
 {% endblock %}
 
 
-
-
-{% block middle %} 
+{% block middle %}
 
     <script type="text/javascript">
     $(function() {
@@ -15,7 +13,7 @@ Recent Tweets
             url: "/status/ajax_timeline/",
             appendTo: ".statuses"
         });
-        
+
         $(window).bind('infinitescroll.finish', function() {
             addRateLinkHandlers();
         });
@@ -23,7 +21,7 @@ Recent Tweets
     </script>
 
     <script type="text/javascript">
-    
+
     // Attaches the click handler for input text.
     // Gets input out of the text box and sends it
     // to the twitpost function (in twitpost.js).
@@ -36,9 +34,9 @@ Recent Tweets
               });
         $is_post_form_focused = false;
         $('#postinput').unbind('focus').focus(function() { $is_post_form_focused = true; });
-        $('#postinput').unbind('blur').blur(function() { $is_post_form_focused = false; });      
+        $('#postinput').unbind('blur').blur(function() { $is_post_form_focused = false; });
     }
-    $(document).ready(startPostHandler);	
+    $(document).ready(startPostHandler);
     </script>
 
 	<div class="status-prompt">
@@ -48,13 +46,12 @@ Recent Tweets
 		<div id="status-post-button"></div>
             </div>
 	</div>
-	
-	{% load base_extras %}
+
+        {% load base_extras %}
     {% load tweets %}
 
     <div class="statuses">
 	   {% include 'twitter/status_list.html' %}
     </div>
-    
-{% endblock %}
 
+{% endblock %}

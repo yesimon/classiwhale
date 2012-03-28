@@ -1,8 +1,8 @@
 from __future__ import division
 from django.db import models
 from picklefield.fields import PickledObjectField
-from scikits.learn import cross_val
-from scikits.learn.metrics import confusion_matrix, roc_curve, auc, precision_recall_curve, explained_variance_score
+from sklearn import cross_validation
+from sklearn.metrics import confusion_matrix, roc_curve, auc, precision_recall_curve, explained_variance_score
 from algorithmio.interface import classifier_library
 import numpy as np
 import random
@@ -11,7 +11,7 @@ from twitter.models import *
 from profile.models import *
 
 DEFAULT_MODEL = 'Rating'
-    
+
 def round_away(tup):
     num, split = tup[0], tup[1]
     if num >= split: return 1
@@ -36,10 +36,10 @@ class TwitterTrainingSet(models.Model):
     name = models.CharField(max_length=30, unique=True)
     users = models.ManyToManyField(TwitterUserProfile)
     ratings = models.ManyToManyField(Rating, blank=True, null=True)
-    
+
     def __unicode__(self):
         return self.name
-    
+
     def setup(self):
         profs = self.users.all()
         ratings = self.ratings.all()
@@ -60,13 +60,13 @@ class TwitterTrainingSet(models.Model):
         probas = []
         expected = []
         for prof_id, data in training_set.iteritems():
-            print "prof id {0}, data {1}".format(prof_id, data)
+            # print "prof id {0}, data {1}".format(prof_id, data)
             n = len(data['ratings'])
             if n_folds >= n:
                 continue
-            kf = cross_val.KFold(n, n_folds)
+            kf = cross_validation.KFold(n, n_folds)
             for train_index, test_index in kf:
-                train_ratings = [data['ratings'][i] for i in range(n) if 
+                train_ratings = [data['ratings'][i] for i in range(n) if
                                 train_index[i]]
                 test_ratings = [data['ratings'][i] for i in range(n) if
                                 test_index[i]]
@@ -74,13 +74,9 @@ class TwitterTrainingSet(models.Model):
                 classifier = classifier_library.classifiers[classifier_name]
                 c = classifier(data['user']).test_train(ratings=train_ratings)
                 y_pred = c.test_predict([rating.status for rating in test_ratings])
-#                print y_pred
                 probas.extend(map(round_proba, y_pred))
-#                print map(round_proba, y_pred)
                 expected.extend([rating.rating for rating in test_ratings])
         raw_data = {'y_true': np.array(expected), 'y_probas': np.array(probas)}
-#        print raw_data['y_probas']
-#        print raw_data
         stats = PredictionStatistics(training_set=self,
                                      classifier=classifier_name,
                                      model=DEFAULT_MODEL,
@@ -109,7 +105,7 @@ class TwitterTrainingSet(models.Model):
             ratings.append(random.sample(p.ratings, ratings_per_user))
         success = False
         while save and not success:
-            try: 
+            try:
                 t = TwitterTrainingSet(users=profs, ratings=ratings,
                     name='random_{0}'.format(random.randint(0, 100000000000)))
                 t.save()
@@ -171,5 +167,3 @@ class PredictionStatistics(models.Model):
         self.tnr = self.tn / n
         self.acc = (self.tp + self.tn) / (p + n)
         self.mcc = (self.tp*self.tn - self.fp*self.fn)/pow(p*n*p_prime*n_prime, 0.5)
-
-

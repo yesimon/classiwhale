@@ -7,16 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.simple import direct_to_template
 import mimetypes
 
-URL_LIST = {
-    'About'     : 'about/',
-    'Home'      : 'twitter/',
-    'Recent'    : 'twitter/recent/',
-    'Search'    : 'twitter/search/',
-}
-
 admin.autodiscover()
 nexus.autodiscover()
-
 
 urlpatterns = patterns('',
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
@@ -28,8 +20,8 @@ urlpatterns = patterns('',
     (r'^nexus/', include(nexus.site.urls)),
 #    (r'^doc/(?P<template>.*)$', login_required(direct_to_template), {'mimetype':mimetypes.guess_type(template)}),
     (r'^api/', include('dxm.api.urls')),
-    (r'^v1/', include('dxm.v1.urls')),
     (r'^sentry/', include('sentry.urls')),
+    (r'^contact/$', 'contact.views.contact'),
     (r'^corsair/', include('corsair.urls')),
     (r'^landing/$', direct_to_template, {'template': 'landing.html'}),
     (r'^about/$', direct_to_template, {'template': 'about.html' }),
@@ -66,11 +58,6 @@ urlpatterns = patterns('',
     (r'^twitter/reorder/$', 'prediction.views.reordered_friends_timeline'),
 )
 
-urlpatterns += patterns('contact.views',
-    (r'^contact/$', 'contact'),
-)
-
 if settings.STATIC_SERVE:
-    urlpatterns += patterns('',
-        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_DOC_ROOT}),
-    )
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+    urlpatterns += staticfiles_urlpatterns()

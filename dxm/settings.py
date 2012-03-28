@@ -30,7 +30,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'classiwhale',
-        'HOST': '109.169.56.133',
+        'HOST': '216.231.135.136',
+        # 'HOST': '109.169.56.133',
         'PORT': '',
         'USER': 'classiwhale',
         'PASSWORD': 'wombocombo',
@@ -43,18 +44,6 @@ DATABASES = {
 
 CONSTANTS = {
                 'local_js': False
-            }
-
-# These should be constant values that will always be
-# passed to templates (making this stuff more hot-swappable).
-# Since this gets passed as context each time this might make
-# things a bit slower, so we should metrics this before we
-# actually go live.
-TEMPLATES = {
-                 'base': 'v1/base/base.html',
-                 'basenav': 'v1/base/basenav.html',
-                 'basenavcontent': 'v1/base/basenavcontent.html',
-                 'navigation': 'v1/navigation.html',
             }
 
 try:
@@ -92,17 +81,32 @@ SERVER_EMAIL = 'server@classiwhale.com'
 
 # Absolute path to the directory that holds media. (this actually means uploaded media?? unsure about this using as regular media for now)
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(ROOT_PROJECT_PATH, 'static')
+MEDIA_ROOT = os.path.join(ROOT_PROJECT_PATH, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/static/'
+MEDIA_URL = '/media/'
 
 
-STATIC_DOC_ROOT = os.path.join(ROOT_PROJECT_PATH, 'static')
-STATIC_SERVE = True
+# STATIC_ROOT = ''
+STATIC_URL = '/static/'
+STATIC_SERVE = DEBUG
 
+# Additional locations of static files
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(ROOT_PROJECT_PATH, "static"),
+)
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+)
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -135,11 +139,11 @@ IGNORABLE_404_STARTS = ('/cgi-bin/', '/_vti_bin', '/_vti_inf', '/static/')
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.Loader',
-    'django.template.loaders.filesystem.load_template_source',
+    'django.template.loaders.filesystem.Loader',
 #     'django.template.loaders.eggs.load_template_source',
 )
 
-GOOGLE_ANALYTICS_KEY = False
+GOOGLE_ANALYTICS_PROPERTY_ID = 'UA-20334343-1'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
@@ -147,9 +151,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "django.core.context_processors.request",
-    "analytics.context_processors.google_analytics",
     "twitter.context_processors.twitter_user",
-    "v1.constant_context_processor.constants",
 )
 
 
@@ -165,14 +167,13 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'urls'
 
-COMPRESS_CSS_FILTERS = ['compressor.filters.yui.YUICSSFilter',]
-COMPRESS_JS_FILTERS = ['compressor.filters.yui.YUIJSFilter',]
-COMPRESS_YUI_BINARY = 'java -jar ' + os.path.join(ROOT_PROJECT_PATH, '..', 'lib', 'yuicompressor',  'yuicompressor-2.4.2.jar')
-COMPRESS_CLOSURE_COMPILER_BINARY = 'java -jar ' + os.path.join(ROOT_PROJECT_PATH, '..', 'lib', 'googleclosure', 'compiler.jar')
+# COMPRESS_CSS_FILTERS = ['compressor.filters.yui.YUICSSFilter',]
+# COMPRESS_JS_FILTERS = ['compressor.filters.yui.YUIJSFilter',]
+# COMPRESS_YUI_BINARY = 'java -jar ' + os.path.join(ROOT_PROJECT_PATH, '..', 'lib', 'yuicompressor',  'yuicompressor-2.4.2.jar')
+# COMPRESS_CLOSURE_COMPILER_BINARY = 'java -jar ' + os.path.join(ROOT_PROJECT_PATH, '..', 'lib', 'googleclosure', 'compiler.jar')
 
 TEMPLATE_DIRS = (
     os.path.join(ROOT_PROJECT_PATH, 'templates').replace('\\','/'),
-    os.path.join(ROOT_PROJECT_PATH, 'v1/templates').replace('\\','/'),
     os.path.join(ROOT_PROJECT_PATH, '..', 'doc', '_build', 'html').replace('\\', '/'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
@@ -187,12 +188,15 @@ DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
 }
 
-# Djcelery settings for rabbitmq broker
-BROKER_HOST = '109.169.56.133'
+# # Djcelery settings for mongo broker
+# CELERY_RESULT_BACKEND = "mongodb"
+# BROKER_URL = "mongodb://localhost:27017/celery"
+
+BROKER_HOST = "localhost"
 BROKER_PORT = 5672
-BROKER_USER = 'classiwhale'
-BROKER_PASSWORD = 'wombocombo'
-BROKER_VHOST = 'magicfilter'
+BROKER_USER = "classiwhale"
+BROKER_PASSWORD = "wombocombo"
+BROKER_VHOST = "classiwhale"
 
 CELERY_DISABLE_RATE_LIMITS = True
 
@@ -217,10 +221,12 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.comments',
     'django.contrib.markup',
+    'analytical',
     'annoying',
     'south',
     'compressor',
     'djcelery',
+    'djsupervisor',
     'indexer',
     'paging',
     'sentry',
@@ -232,18 +238,17 @@ INSTALLED_APPS = (
     'gargoyle',
     'tastypie',
     'base',
-    'corsair',
     'backends',
-    'feedback',
-    'twitter',
+    'whale',
     'profile',
+    'feedback',
     'prediction',
+    'api',
+    'twitter',
     'multinomialbayes',
     'confidence_bayes',
     'cylonbayes',
-    'whale',
-    'api',
-    'v1',
+    'corsair',
 )
 
 if DEBUG == True:

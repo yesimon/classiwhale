@@ -10,12 +10,12 @@ sys.path.extend(['../../dxm/', '../', '../../lib/'])
 
 import settings
 setup_environ(settings)
-    
+
 ######## Script Begin #######
 
 from operator import itemgetter
 import collections
-import copy 
+import copy
 import random
 from math import exp
 from django.core.cache import cache
@@ -50,15 +50,15 @@ class CylonBayesData(object):
         self.m = np.uint32(0)
         self.counts = {}
         self.totals = {}
-        self.modified = 1    
+        self.modified = 1
         self.statuses = set()
-        
-        
+
+
     def train(self, sr_tup):
         """Train a classifer with (status, rating) tuple, can be trained more"""
         self.modified += 1
         status = sr_tup[0]
-        try: 
+        try:
             if status.id in self.statuses or not status.text or not status.user: return
         except AttributeError: return
         self.statuses.add(sr_tup[0].id)
@@ -72,8 +72,8 @@ class CylonBayesData(object):
                 self.totals[token] = 0
             self.counts[token][i, 0] += 1
             self.totals[token] += 1
-            self.m += 1                
-            
+            self.m += 1
+
     def _freeze(self):
         """Freeze the classifier in a state to increase performance"""
         self.log_phi_y = np.log(self.counts_y/len(self.statuses))
@@ -81,15 +81,15 @@ class CylonBayesData(object):
         for token, counts in self.counts.iteritems():
             self.log_phi_x_y[token] = np.log(np.divide(counts + 1,
                              self.totals[token] + len(self.totals)))
-        self.modified = 0            
-            
+        self.modified = 0
+
     def predict(self, status):
         """Predict status using the classifier, returns list"""
         if self.modified > 0: self._freeze()
         log_proba = self.log_phi_y.copy()
         tokens = self.extractor.ExtractStatus(status)
         for token in tokens:
-            try: 
+            try:
                 log_proba += self.log_phi_x_y[token][:]
             except KeyError: continue
         return log_proba
@@ -100,11 +100,11 @@ class CylonBayesData(object):
         for token, counts in self.totals.iteritems():
             phi_y[token] = np.divide(self.counts[token] + 1,
                                      self.totals[token] + len(self.totals))
-            indicator = np.divide(np.amax(phi_y[token], axis=0), 
+            indicator = np.divide(np.amax(phi_y[token], axis=0),
                                   np.amin(phi_y[token], axis=0))[0]
             most_info.append((token, indicator))
         most_info = sorted(most_info, key=lambda x: x[1], reverse=True)[:num_features]
-        s = "Most Informative Features\n"        
+        s = "Most Informative Features\n"
         for token, indicator in most_info:
             try:
                 s += "{0}\t\t {1} : {2} = {3}\n".format(token,
@@ -113,8 +113,8 @@ class CylonBayesData(object):
                     indicator)
             except UnicodeEncodeError:
                 s += "Unprintable unicode token\n"
-        return s            
-                
+        return s
+
     def __add__(self, other):
         result = copy.copy(self)
         result.counts_y = np.add(self.counts_y, other.counts_y)
@@ -128,8 +128,8 @@ class CylonBayesData(object):
             try: result.totals[token] = np.add(result.totals[token], totals)
             except KeyError: result.totals[token] = totals
         return result
-                
-    def __iadd__(self, other):                
+
+    def __iadd__(self, other):
         self.counts_y = np.add(self.counts_y, other.counts_y)
         self.m = np.add(self.m, other.m)
         for token, counts in other.counts.iteritems():
@@ -139,7 +139,7 @@ class CylonBayesData(object):
             try: self.totals[token] = np.add(self.totals[token], totals)
             except KeyError: self.totals[token] = totals
         return self
-        
+
     def __mul__(self, factor):
         result = copy.copy(self)
         result.counts_y = np.multiply(self.counts_y, factor)
@@ -148,24 +148,24 @@ class CylonBayesData(object):
             result.counts[token] = np.multiply(self.counts[token], factor)
             result.totals[token] = np.multiply(self.totals[token], factor)
         return result
-        
-        
+
+
     __radd = __add__
-    __rmul__ = __mul__         
-
-        
+    __rmul__ = __mul__
 
 
 
 
 
-            
+
+
+
 class CylonBayesClassifier(Classifier):
     """Defines a multinomial bayes classifier. This classifier can be be trained
     multiple times via the train function. Use predict to make new predictions
     on inputs.
     Contains instance variable:
-    self.prof 
+    self.prof
     """
 
     def force_train(self):
@@ -198,13 +198,13 @@ class CylonBayesClassifier(Classifier):
 
     def predict(self, statuses, test=False):
         """Concrete method for Classifier"""
-        if test: mb = self.mb 
+        if test: mb = self.mb
         else:
             mb_model = self.get_cylon_bayes_model()
             mb = mb_model.data
         log_probas = map(mb.predict, statuses)
         indexes = range(len(log_probas[0]))
-        expects = [sorted([(mb.labels_lookup[i], log_proba[i, 0]) 
+        expects = [sorted([(mb.labels_lookup[i], log_proba[i, 0])
             for i in indexes], key=itemgetter(1), reverse=True)
             for log_proba in log_probas]
         a = map(self.renormalization, expects)
@@ -241,7 +241,7 @@ class CylonBayesClassifier(Classifier):
 
 
 
-    @staticmethod        
+    @staticmethod
     def test():
         c1 = CylonBayesData(extractor=BaltarExtractor)
         c2 = CylonBayesData(extractor=BaltarExtractor)
@@ -255,7 +255,7 @@ class CylonBayesClassifier(Classifier):
 
         tset1 = [(superman, 1), (batman, -1)]
         tset2 = [(superman, -1), (spiderman, 1)]
-        
+
         map(c1.train, tset1)
         map(c2.train, tset2)
         c3 = c1 + c2*2
@@ -272,7 +272,7 @@ class CylonBayesClassifier(Classifier):
         print c3.most_informative_features()
         print 'superman predict: {0}'.format(c3.predict(superman))
         print 'batman predict: {0}'.format(c3.predict(batman))
-        
+
 
 
 class CylonCollatedClassifier(CylonBayesClassifier):
@@ -281,7 +281,7 @@ class CylonCollatedClassifier(CylonBayesClassifier):
         for classifier in cwdict:
             weight = cwdict[classifier]
             self += classifier*weight
-            
+
 class TrainingStatistics(dict):
     """Subclasses dict so we can add / average statistics"""
     def __init__(self, classifier, classifications=None, labels=None):
@@ -299,39 +299,39 @@ class TrainingStatistics(dict):
                 if c == y and c == l: self['tp'][self.labels[l]] += 1
                 elif c != y and c == l: self['fp'][self.labels[l]] += 1
                 elif c == y and c != l: self['tn'][self.labels[l]] += 1
-                elif c != y and c != l: self['fn'][self.labels[l]] += 1        
-        
+                elif c != y and c != l: self['fn'][self.labels[l]] += 1
+
     def __add__(self, other):
         result = copy.copy(self)
         for key in self.keys():
             result[key] = self[key] + other[key]
         return result
-        
+
     def Precision(self, label):
         tp = self['tp'][self.labels[label]]
         fp = self['fp'][self.labels[label]]
         return tp / (tp + fp)
-    
+
     def Recall(self, label):
         tp = self['tp'][self.labels[label]]
         fn = self['fn'][self.labels[label]]
         return tp / (tp + fn)
-        
+
     def Accuracy(self, label):
         tp = self['tp'][self.labels[label]]
         fp = self['fp'][self.labels[label]]
         fn = self['fn'][self.labels[label]]
         tn = self['tn'][self.labels[label]]
         return (tp + tn) / (tp + tn + fp + fn)
-        
+
     def __str__(self):
         s = "Training Statistics\n"
         for label in self.labels:
             s += "{0} precision: {1} \t recall: {2}\n".format(label,
             self.Precision(label), self.Recall(label))
         s += "accuracy: {0}\n\n".format(self.Accuracy(self.labels.keys()[0]))
-        return s            
-            
+        return s
+
 
 if __name__ == '__main__':
     CylonBayesClassifier.test()

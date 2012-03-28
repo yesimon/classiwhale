@@ -1,5 +1,4 @@
 {% extends "panes.html" %}
-{% load compress %}
 
 {% block title %}
 Recent Tweets
@@ -12,13 +11,13 @@ numStatuses = {{ statuses|length }};
 </script>
 {% endblock %}
 
-{% block middle %} 
+{% block middle %}
 
 	<div class="status-prompt">
 	    <div class="status-post">
             <div id="post-input-text">
                 <textarea class="postinput" rows="1">What's happening?</textarea>
-            </div>   
+            </div>
             <div>
     			<span class="status-post-button"></span>
                 <span class="status-post-char-count">140</span>
@@ -33,22 +32,18 @@ numStatuses = {{ statuses|length }};
     </div>
     <div id="statuses_end">
     </div>
-    
-    {% compress js %}
+
     <script type="text/javascript" src="/static/js/twitpost.js"></script>
     <script type="text/javascript" src="/static/js/autoresize.jquery.js"></script>
-    {% endcompress %}
-    
+
     <script type="text/javascript">
-    
+
     var list_of_friends = new Array();
 	{% for friend in friends %}
 	list_of_friends.push({screen_name: "{{friend.screen_name}}", name: "{{friend.name}}", image_url: "{{friend.profile_image_url}}" });
 	{% endfor %}
-	
-    $(document).ready( function(){ startPostHandler(list_of_friends); } );	
+
+    $(document).ready( function(){ startPostHandler(list_of_friends); } );
     </script>
-    
+
 {% endblock %}
-
-

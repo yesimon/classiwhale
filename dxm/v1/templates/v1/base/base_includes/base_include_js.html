@@ -1,9 +1,0 @@
-{% include "v1/base/base_includes/googleapis.html" %}
-
-{% if not CONSTANTS.local_js %}
-	{% include "v1/base/base_includes/uservoice.html" %}
-	
-	{% if GOOGLE_ANALYTICS_KEY %}
-	{% include "v1/base/base_includes/google_analytics.html" %}
-	{% endif %}
-{% endif %}

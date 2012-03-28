@@ -40,7 +40,4 @@ def handle_ajax(request, url):
                 return HttpResponse(json.dumps({'error':'Failed to send email'}))
             return HttpResponse(json.dumps({}))
         else:
-            
             return HttpResponse(json.dumps({'errors':sanitize(form.errors)}))
-
-

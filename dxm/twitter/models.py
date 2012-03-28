@@ -9,7 +9,7 @@ from time import mktime
 import json
 
 from profile.models import UserProfile
-from twitter.managers import (TwitterUserProfileManager, StatusManager, 
+from twitter.managers import (TwitterUserProfileManager, StatusManager,
                               CachedStatusManager )
 
 
@@ -22,7 +22,7 @@ class TwitterUserProfile(models.Model):
     oauth_secret = models.CharField(max_length=255, blank=True, null=True, editable=False)
     name = models.CharField(max_length=255, blank=True, null=True)
     screen_name = models.CharField(max_length=32, blank=True, null=True)
-#    friends = models.ManyToManyField('self', symmetrical=False, blank=True, through='FriendDetail')
+    #    friends = models.ManyToManyField('self', symmetrical=False, blank=True, through='FriendDetail')
     profile_image_url = models.URLField(blank=True, null=True)
     profile_use_background_image = models.BooleanField(default=False)
     profile_sidebar_border_color = models.CharField(max_length=16, blank=True, null=True)
@@ -51,18 +51,18 @@ class TwitterUserProfile(models.Model):
     cached_time = models.DateTimeField(blank=True, null=True)
     cached_maxid = models.BigIntegerField(blank=True, null=True)
     cached_minid = models.BigIntegerField(blank=True, null=True)
-    available_fields = ('id', 'name', 'screen_name', 'profile_image_url', 
-                        'profile_use_background_image', 
-                        'profile_sidebar_border_color', 
-                        'profile_sidebar_fill_color', 
-                        'profile_background_image_url', 
-                        'profile_background_color', 
-                        'profile_link_color', 
-                        'verified', 'protected', 'location', 'url', 
-                        'friends_count', 'followers_count', 'statuses_count', 
+    available_fields = ('id', 'name', 'screen_name', 'profile_image_url',
+                        'profile_use_background_image',
+                        'profile_sidebar_border_color',
+                        'profile_sidebar_fill_color',
+                        'profile_background_image_url',
+                        'profile_background_color',
+                        'profile_link_color',
+                        'verified', 'protected', 'location', 'url',
+                        'friends_count', 'followers_count', 'statuses_count',
                         'description', 'utc_offset')
     internal_fields = ('user', 'oauth_token', 'oauth_secret',
-                       'active_classifier', 'classifier_version', 'whale', 
+                       'active_classifier', 'classifier_version', 'whale',
                        'cached_time')
 
     objects = TwitterUserProfileManager()
@@ -92,7 +92,7 @@ class TwitterUserProfile(models.Model):
         field_dict = {}
         for key, value in data.iteritems():
             if key in cls.available_fields:
-                field_dict[str(key)] = value       
+                field_dict[str(key)] = value
         user = cls(**field_dict)
         return user
 
@@ -104,10 +104,10 @@ class TwitterUserProfile(models.Model):
     def deconstruct_to_dict(self):
         data = {}
         for field in self.available_fields:
-            data[field] = getattr(self, field) 
+            data[field] = getattr(self, field)
         return data
 
-    
+
 
 
 class Status(models.Model):
@@ -137,7 +137,7 @@ class Status(models.Model):
     """
     # Override=True uses normal save
     def save(self, override=False, *args, **kwargs):
-        if override: 
+        if override:
             status = self
         else:
             field_dict = {}
@@ -159,7 +159,7 @@ class Status(models.Model):
         try: TwitterUserProfile.objects.get(id=self.user.id)
         except TwitterUserProfile.DoesNotExist:
             self.user.save()
-        try: 
+        try:
             s = Status.objects.get(id=self.id)
             s.is_cached = is_cached
             s.save()
@@ -226,7 +226,7 @@ class Status(models.Model):
     def deconstruct_to_dict(self):
         data = {}
         for field in self.available_fields:
-            data[field] = getattr(self, field) 
+            data[field] = getattr(self, field)
         data['user'] = TwitterUserProfile.deconstruct_to_dict(self.user)
         data['created_at'] = formatdate(timeval=mktime(self.created_at.timetuple()),
                                         localtime=False, usegmt=True)
@@ -270,7 +270,7 @@ class Status(models.Model):
         elif delta < (60 * 60 * 24 * fudge) or delta / (60 * 60 * 24) == 1:
           return 'about a day ago'
         else:
-          return 'about %d days ago' % (delta / (60 * 60 * 24))        
+          return 'about %d days ago' % (delta / (60 * 60 * 24))
 
     @staticmethod
     def fullCreate(data):
@@ -287,7 +287,7 @@ class Status(models.Model):
                                 content_length = data['content_length'],
                                 punctuation = data['punctuation']
                                       )
-        
+
         if 'hashtags' in data:
             for tag in data['hashtags']:
                 ht, created = Hashtag.objects.get_or_create(text = tag)
@@ -317,11 +317,11 @@ class CachedStatus(models.Model):
 
 
 class Rating(models.Model):
-    user = models.ForeignKey('TwitterUserProfile') 
-    status = models.ForeignKey('Status') 
+    user = models.ForeignKey('TwitterUserProfile')
+    status = models.ForeignKey('Status')
     rating = models.IntegerField(blank=True, null=True)
     rated_time = models.DateTimeField(auto_now_add=True)
-    
+
     class Meta:
         verbose_name_plural = "Ratings"
         get_latest_by = "rated_time"
@@ -350,18 +350,17 @@ class Rating(models.Model):
 #    user = models.ForeignKey('TwitterUserProfile')
 #    friend = models.ForeignKey('TwitterUserProfile', related_name='friend')
 #    prediction = models.FloatField(blank=True, null=True)
-                                         
-                                         
+
+
 class Hashtag(models.Model):
     text = models.CharField(max_length=140, unique=True)
-    
-    def __unicode__(self):
-        return unicode(self.text)
-    
-    
-class Hyperlink(models.Model):
-    text = models.CharField(max_length=255, unique=True)
-    
+
     def __unicode__(self):
         return unicode(self.text)
 
+
+class Hyperlink(models.Model):
+    text = models.CharField(max_length=255, unique=True)
+
+    def __unicode__(self):
+        return unicode(self.text)

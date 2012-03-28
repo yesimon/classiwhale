@@ -15,22 +15,21 @@ $(document).ready(function() {
 		}
 	    });
         });
-    $('a.track').click(linktrack());
+    // $('a.track').click(linktrack());
 
     if(numStatuses) ajaxTimelineHandlers();
 });
 
 
-
 function linktrack() {
     $.post('/status/linktrack/', {text:this.text});
-    return true;    
+    return true;
 }
 
 function ajaxTimelineHandlers(){
     $loading = $("<div class='loading'><p>Loading more items&hellip;</p><img src='/static/img/spinner.gif'></img></div>");
 
-    opts = { 
+    opts = {
         offset: function() {
             return $.waypoints('viewportHeight') - $(this).outerHeight() + 200;
         },
@@ -118,8 +117,3 @@ function relative_time(time_value) {
        return (parseInt(delta / 86400)).toString() + ' days ago';
    }
 }
-
-
-
-
-

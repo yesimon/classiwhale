@@ -1,13 +1,13 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
         # Adding model 'TwitterTrainingSet'
         db.create_table('corsair_twittertrainingset', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -55,9 +55,7 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('corsair', ['PredictionStatistics'])
 
-
     def backwards(self, orm):
-        
         # Deleting model 'TwitterTrainingSet'
         db.delete_table('corsair_twittertrainingset')
 
@@ -69,7 +67,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'PredictionStatistics'
         db.delete_table('corsair_predictionstatistics')
-
 
     models = {
         'auth.group': {
@@ -143,6 +140,13 @@ class Migration(SchemaMigration):
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
             'whale': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['whale.Whale']", 'unique': 'True', 'null': 'True', 'blank': 'True'})
         },
+        'twitter.cachedstatus': {
+            'Meta': {'ordering': "['status']", 'unique_together': "(('user', 'status'),)", 'object_name': 'CachedStatus'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'prediction': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'status': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['twitter.Status']"}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['twitter.TwitterUserProfile']"})
+        },
         'twitter.hashtag': {
             'Meta': {'object_name': 'Hashtag'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -172,7 +176,7 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.BigIntegerField', [], {'primary_key': 'True'}),
             'in_reply_to_status_id': ('django.db.models.fields.BigIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'in_reply_to_user_id': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'place': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'is_cached': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'punctuation': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'source': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'text': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
@@ -181,6 +185,10 @@ class Migration(SchemaMigration):
         'twitter.twitteruserprofile': {
             'Meta': {'object_name': 'TwitterUserProfile'},
             'active_classifier': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'cached_maxid': ('django.db.models.fields.BigIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'cached_minid': ('django.db.models.fields.BigIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'cached_statuses': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'cached_statuses'", 'to': "orm['twitter.Status']", 'through': "orm['twitter.CachedStatus']", 'blank': 'True', 'symmetrical': 'False', 'null': 'True'}),
+            'cached_time': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'classifier_version': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '160', 'null': 'True', 'blank': 'True'}),
             'followers_count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
