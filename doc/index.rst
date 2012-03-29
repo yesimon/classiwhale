@@ -8,13 +8,11 @@ Classiwhale Internal Documentation
 
 .. toctree::
    :maxdepth: 2
-   
+
    intro
    overview
    install
    quickstart
-   applications
-   servers
    algorithm
 
 Indices and tables
@@ -23,4 +21,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

@@ -1,0 +1,75 @@
+{% load analytical %}
+{% load google_analytics %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+
+{% google_analytics %}
+<head>
+    {% analytical_head_top %}
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <link rel="shortcut icon" href="/static/img/favicon.png"/>
+
+    <link rel="stylesheet" href="/static/css/base.css" />
+    <link rel="stylesheet" href="/static/css/about.css" />
+    <link rel="stylesheet" href="/static/css/navigation.css" />
+    <link rel="stylesheet" href="/static/css/feed.css" />
+    <link rel="stylesheet" href="/static/css/panes.css" />
+    <link rel="stylesheet" href="/static/css/friends.css" />
+    <link rel="stylesheet" href="/static/css/training_profile.css" />
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" href="/static/css/twitpost.css" />
+    {% block extra_css %}
+    {% endblock %}
+
+    <script type="text/javascript" src="/static/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.scrollTo.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.infinitescroll.js"></script>
+    <script type="text/javascript" src="/static/js/waypoints.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.oauthpopup.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/static/js/base.js"></script>
+    <script type="text/javascript" src="/static/js/rating.js"></script>
+    <script type="text/javascript" src="/static/js/training_profile.js"></script>
+    <script type="text/javascript" src="/static/js/uservoice.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.corner.js"></script>
+
+    {% block extra_js %}
+    {% endblock %}
+
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+    {% analytical_head_bottom %}
+</head>
+
+<body>
+  {% analytical_body_top %}
+  {% include "navigation.html" %}
+  <div id="background"></div>
+  <div id="middle">
+    <div id="content">
+
+      {% if errors %}
+      <ul>
+	{% for error in errors %}
+	<li>{{ error }}</li>
+	{% endfor %}
+      </ul>
+      {% endif %}
+
+      {% block content %}
+      {% endblock %}
+
+    </div>
+    <br/><br/>
+  </div>
+
+  <div id="footer">
+    {% block footer %}
+    {% endblock %}
+  </div>
+  {% analytical_body_bottom %}
+</body>
+
+</html>

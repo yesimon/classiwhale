@@ -1,1 +1,0 @@
-from classiwhale.models import Hashtag
