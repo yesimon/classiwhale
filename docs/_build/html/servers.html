@@ -1,0 +1,167 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Servers &mdash; Classiwhale v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Classiwhale v0.1 documentation" href="index.html" />
+    <link rel="prev" title="Django Applications" href="applications.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="applications.html" title="Django Applications"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Classiwhale v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="servers">
+<span id="ref-servers"></span><h1>Servers<a class="headerlink" href="#servers" title="Permalink to this headline">¶</a></h1>
+<p>Brief overview of current servers and architecture:</p>
+<div class="section" id="production-server-magicfilter">
+<h2>Production Server (magicfilter)<a class="headerlink" href="#production-server-magicfilter" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>OS: Ubuntu 10.10</li>
+<li>Host: 109.169.56.133</li>
+<li>Domains<ul>
+<li>www.classiwhale.com</li>
+</ul>
+</li>
+<li>Software<ul>
+<li>Nginx</li>
+<li>Django</li>
+<li>PostgreSQL</li>
+<li>RabbitMQ</li>
+<li>Celeryd</li>
+</ul>
+</li>
+<li>Description: This server currently runs pretty much everything. It runs the website server using nginx and fastCGI. It hosts the postgresql database for all data. It runs the RabbitMQ server for scheduling asynchronous tasks as well as the celery daemons that go about performing those tasks. As you can probably guess, separating out all of these server/daemons is one method of optimizing performance later down the line.</li>
+</ul>
+</div>
+<div class="section" id="code-review-server">
+<h2>Code/Review Server<a class="headerlink" href="#code-review-server" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>OS: Ubuntu 10.10</li>
+<li>Host: 204.236.131.199</li>
+<li>Domains<ul>
+<li>code.classiwhale.com (Reviewboard)</li>
+<li>repo.classiwhale.com (Gitweb)</li>
+</ul>
+</li>
+<li>Software<ul>
+<li>Nginx</li>
+<li>Django + Reviewboard</li>
+<li>Gitweb</li>
+<li>Gitosis</li>
+</ul>
+</li>
+<li>Description: This runs the git repository through ssh and two web interfaces on nginx. The repository contains two projects - classiwhale which is the main source and gitosis-admin, which controls which users can access the source. You may clone and modify gitosis-admin to add additional RSA keys if desired. The web interface repo.classiwhale.com contains a gitweb interface towards the repository. It is password protected with basic auth, and the username/password is a/wombocombo. Be careful considering that you can download the entire source from there. The second interface is code.classiwhale.com, which handles reviews. It runs a full instance of reviewboard which allows the handling of reviews. However, it is only an interface for running reviews. The integration of the patch into the repository must occur by hand and at the committer&#8217;s discretion.</li>
+</ul>
+</div>
+<div class="section" id="todo-server">
+<h2>Todo Server<a class="headerlink" href="#todo-server" title="Permalink to this headline">¶</a></h2>
+<p>Ken&#8217;s so I forgot the details</p>
+<ul class="simple">
+<li>Host: 204.236.232.194</li>
+<li>Domains<ul>
+<li>todo.classiwhale.com</li>
+</ul>
+</li>
+<li>Software<ul>
+<li>Drupal</li>
+<li>MySQL</li>
+<li>OpenAtrium</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Servers</a><ul>
+<li><a class="reference internal" href="#production-server-magicfilter">Production Server (magicfilter)</a></li>
+<li><a class="reference internal" href="#code-review-server">Code/Review Server</a></li>
+<li><a class="reference internal" href="#todo-server">Todo Server</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="applications.html"
+                        title="previous chapter">Django Applications</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/servers.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="applications.html" title="Django Applications"
+             >previous</a> |</li>
+        <li><a href="index.html">Classiwhale v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Simon Ye.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
+    </div>
+  </body>
+</html>
