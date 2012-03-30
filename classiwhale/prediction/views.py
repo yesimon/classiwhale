@@ -7,7 +7,8 @@ from django.core.cache import cache
 from twitter.models import *
 from twitter.utils import get_authorized_twython
 from twitter.views import reorder_timeline
-from twython import Twython, TwythonError
+from twython import Twython
+from twython.twython import TwythonError
 
 
 from algorithmio.interface import get_predictions, get_predictions_filter, force_train
@@ -53,7 +54,7 @@ def predicted_friends_timeline(request):
             s.dislikeClass = ' inactive'
         if r < 0:
             s.likeClass = ' inactive'
-            s.dislikeClass = ' active'            
+            s.dislikeClass = ' active'
     return {'statuses': statuses, 'friends': friends, 'feedtype': 'predict'}
 
 @login_required
@@ -82,7 +83,7 @@ def get_filtered_friends_timeline(request):
         if r >= 0: filtered_statuses.append(s)
     Rating.appendTo(statuses, tp)
     return {'statuses': filtered_statuses, 'feedtype': 'filter'}
-    
+
 @login_required
 @render_to('twitter/timeline.html')
 def filtered_friends_timeline(request):

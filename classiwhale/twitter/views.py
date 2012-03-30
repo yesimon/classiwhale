@@ -12,7 +12,8 @@ from django.contrib.auth import login, logout, authenticate
 from datetime import datetime, timedelta
 from email.utils import parsedate
 from time import mktime
-from twython import Twython, TwythonError
+from twython import Twython
+from twython.twython import TwythonError
 import json
 
 from profile.models import UserProfile
