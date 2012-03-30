@@ -1,3 +1,0 @@
-[submodule "twython-django"]
-	path = twython-django
-	url = git://github.com/ryanmcgrath/twython-django.git
